@@ -23,17 +23,12 @@ Update later by re-running the same command.
 | Skill | What it does |
 |---|---|
 | `ann-handley` | Create or audit marketing content with the Everybody Writes framework |
-| `brand-identity` | Build or audit a pest-control client brand identity (Wheeler ideals) |
 | `buyer-personas` | Build decision-focused buyer personas from real inputs (5 Rings method) |
 | `pesty-frontend` | Pesty dashboards/internal tools in the dark-navy design system |
 | `storybrand` | Write or audit customer-facing copy with the StoryBrand SB7 framework |
 | `storytelling` | Long-form narrative copy via Will Storr's Science of Storytelling |
 | `ui-design` | Build or audit interface designs (general-purpose, not Pesty-specific) |
 | `yt-structure` | Turn a YouTube video/talk/article into a clean, citable Markdown doc |
-
-Notes:
-- `brand-identity` expects the `brand-builder` asset repo at `~/Projects/Pesty/brand-builder/`.
-
 
 ## Adding a new skill
 
