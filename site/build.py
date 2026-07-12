@@ -3,11 +3,20 @@
 
 Parses each `<skill>/SKILL.md` YAML frontmatter (name, description), counts
 reference files per skill, and renders `dist/index.html` from the template
-string below. stdlib only. Deterministic: running this twice with unchanged
-inputs produces byte-identical output.
+string below. stdlib only. Deterministic for a given day: the footer stamps
+the build date, everything else is byte-identical across runs with unchanged
+inputs.
+
+Card copy: SKILL.md descriptions are written for AI agents, so each card
+shows human-facing copy from HUMAN_COPY below (title, tagline, category,
+example prompt) and tucks the agent description + install command behind a
+details disclosure. When adding a skill, add its HUMAN_COPY entry too —
+otherwise the card falls back to the raw agent description and the build
+prints a warning.
 
 Usage: python3 site/build.py
 """
+import datetime
 import html
 import re
 from pathlib import Path
@@ -19,9 +28,64 @@ DIST_DIR = SITE_DIR / "dist"
 # Folders in the repo root that are not skills.
 SKIP_DIRS = {"site", ".git", ".github"}
 
-BADGES = ["Claude Code", "Cursor", "Codex", "Gemini CLI"]
+AGENTS = ["Claude Code", "Cursor", "Codex", "Gemini CLI"]
 
 GLOBAL_INSTALL_CMD = "npx skills add Pesty-Marketing/agent-skills -g"
+
+# Category -> design-system accent token pair (chip text / chip background).
+CATEGORIES = {
+    "Writing & Messaging": ("var(--blue)", "var(--blue-dim)"),
+    "Research": ("var(--purple)", "var(--purple-dim)"),
+    "Design & Build": ("var(--green)", "var(--green-dim)"),
+    "Content Ops": ("var(--amber)", "var(--amber-dim)"),
+    "New": ("var(--text-secondary)", "var(--surface-raised)"),
+}
+
+# Human-facing card copy, keyed by skill folder name.
+HUMAN_COPY = {
+    "ann-handley": {
+        "title": "Everybody Writes",
+        "category": "Writing & Messaging",
+        "tagline": "Make any marketing copy sound human — blogs, emails, social — using Ann Handley's rules.",
+        "prompt": "Use the ann-handley skill to punch up this email draft.",
+    },
+    "buyer-personas": {
+        "title": "Buyer Personas",
+        "category": "Research",
+        "tagline": "Turn real call transcripts and reviews into a persona built on what actually drives buyers.",
+        "prompt": "Use the buyer-personas skill to build a persona from these sales call transcripts.",
+    },
+    "pesty-frontend": {
+        "title": "Pesty Frontend",
+        "category": "Design & Build",
+        "tagline": "Build dashboards and client reports in our dark-navy design system — on-brand by default.",
+        "prompt": "Use the pesty-frontend skill to build a one-page KPI dashboard from this data.",
+    },
+    "storybrand": {
+        "title": "StoryBrand (SB7)",
+        "category": "Writing & Messaging",
+        "tagline": "Write or audit homepage, landing-page, and ad copy so the customer is the hero and the message is clear.",
+        "prompt": "Use the storybrand skill to audit the copy on this homepage.",
+    },
+    "storytelling": {
+        "title": "Science of Storytelling",
+        "category": "Writing & Messaging",
+        "tagline": "Give founder stories, About pages, and case studies a real narrative arc that keeps people reading.",
+        "prompt": "Use the storytelling skill to turn these notes into a founder story.",
+    },
+    "ui-design": {
+        "title": "UI Design",
+        "category": "Design & Build",
+        "tagline": "Design or audit any interface — layout, type, color, forms — against professional UI standards.",
+        "prompt": "Use the ui-design skill to review this screenshot of our signup page.",
+    },
+    "yt-structure": {
+        "title": "YouTube to Markdown",
+        "category": "Content Ops",
+        "tagline": "Turn a YouTube video, talk, or article into a clean, citable Markdown doc for a knowledge library.",
+        "prompt": "Use the yt-structure skill to structure this YouTube video: <link>",
+    },
+}
 
 
 def parse_frontmatter(text):
@@ -84,14 +148,29 @@ def discover_skills():
         fm = parse_frontmatter(skill_md.read_text(encoding="utf-8"))
         name = fm.get("name", entry.name)
         description = fm.get("description", "")
+        copy = HUMAN_COPY.get(entry.name)
+        if copy is None:
+            print(f"WARNING: no HUMAN_COPY entry for '{entry.name}' — "
+                  f"card falls back to the agent-facing description. "
+                  f"Add one in site/build.py.")
+            copy = {
+                "title": name,
+                "category": "New",
+                "tagline": description,
+                "prompt": "",
+            }
         skills.append(
             {
                 "folder": entry.name,
                 "name": name,
                 "description": description,
                 "ref_count": count_reference_files(entry),
+                **copy,
             }
         )
+    # Group cards by category so related skills sit together.
+    order = list(CATEGORIES)
+    skills.sort(key=lambda s: (order.index(s["category"]), s["name"]))
     return skills
 
 
@@ -99,33 +178,46 @@ def esc(s):
     return html.escape(s, quote=True)
 
 
-def render_badges():
-    return "".join(f'<span class="badge">{esc(b)}</span>' for b in BADGES)
-
-
 def render_card(skill, index):
     name = skill["name"]
-    desc = skill["description"]
-    ref_count = skill["ref_count"]
     install_cmd = f'npx skills add Pesty-Marketing/agent-skills --skill "{name}" -g'
     code_id = f"cmd-skill-{index}"
+    prompt_id = f"prompt-skill-{index}"
+    color, bg = CATEGORIES[skill["category"]]
 
-    ref_html = ""
+    prompt_html = ""
+    if skill["prompt"]:
+        prompt_html = f"""        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="{prompt_id}" class="prompt-text">&ldquo;{esc(skill["prompt"])}&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('{prompt_id}', this)">Copy</button>
+          </div>
+        </div>
+"""
+
+    ref_count = skill["ref_count"]
+    ref_note = ""
     if ref_count > 0:
-        plural = "doc" if ref_count == 1 else "docs"
-        ref_html = (
-            f'<div class="ref-count">+ {ref_count} reference {plural}</div>'
-        )
+        plural = "guide" if ref_count == 1 else "guides"
+        ref_note = f"<p class=\"detail-refs\">Ships with {ref_count} reference {plural} the agent reads as it works.</p>"
 
     return f"""      <article class="skill-card">
-        <h3 class="skill-name">{esc(name)}</h3>
-        <p class="skill-desc">{esc(desc)}</p>
-        <div class="badge-row">{render_badges()}</div>
-        {ref_html}
-        <div class="code-row">
-          <code id="{code_id}" class="code-block">{esc(install_cmd)}</code>
-          <button class="copy-btn" type="button" onclick="copyCmd('{code_id}', this)">Copy</button>
+        <div class="card-top">
+          <span class="chip" style="color:{color};background:{bg}">{esc(skill["category"])}</span>
+          <code class="skill-slug">{esc(name)}</code>
         </div>
+        <h3 class="skill-title">{esc(skill["title"])}</h3>
+        <p class="skill-desc">{esc(skill["tagline"])}</p>
+{prompt_html}        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">{esc(skill["description"])}</p>
+          {ref_note}
+          <div class="code-row">
+            <code id="{code_id}" class="code-block">{esc(install_cmd)}</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('{code_id}', this)">Copy</button>
+          </div>
+        </details>
       </article>
 """
 
@@ -136,6 +228,7 @@ PAGE_TEMPLATE = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pesty Agent Skills</title>
+<meta name="description" content="The skills Pesty Marketing's AI agents run on — one command installs them into Claude Code, Cursor, Codex, and Gemini CLI.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Montserrat:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -235,11 +328,20 @@ body {
     margin: 0 0 8px;
 }
 .page-subtitle {
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     color: var(--text-secondary);
-    margin: 0 0 var(--space-12);
-    max-width: 640px;
+    margin: 0 0 var(--space-3);
+    max-width: 720px;
 }
+.works-with {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 var(--space-12);
+}
+.works-with strong { color: var(--text-secondary); font-weight: 600; }
 
 .section-header {
     font-family: var(--font-body);
@@ -253,21 +355,41 @@ body {
     margin: 0 0 var(--space-4);
 }
 
-.getting-started {
+.how-it-works {
     background: var(--surface-raised);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: var(--space-8);
     margin-bottom: var(--space-16);
 }
-.prereqs {
-    margin: 0 0 var(--space-6);
-    padding-left: var(--space-4);
-    color: var(--text);
-    font-size: var(--text-sm);
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-6);
 }
-.prereqs li { margin-bottom: var(--space-1); }
-.prereqs a { color: var(--blue); }
+.step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+}
+.step-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-md);
+    color: var(--white);
+    margin: 0 0 var(--space-2);
+}
+.step-body { margin: 0 0 var(--space-3); color: var(--text); }
+.step-note { font-size: var(--text-xs); color: var(--text-tertiary); margin: var(--space-2) 0 0; }
 
 .code-row {
     display: flex;
@@ -302,6 +424,14 @@ body {
 .copy-btn:hover { background: var(--surface-raised-hover); color: var(--white); }
 .copy-btn.copied { color: var(--green); border-color: var(--green-dim); background: var(--green-dim); }
 
+.how-it-works .code-block { white-space: pre-wrap; word-break: break-word; }
+
+.example-prompt {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -317,12 +447,35 @@ body {
     border-radius: var(--radius-md);
     padding: var(--space-6);
     box-shadow: var(--shadow-card);
+    transition: background-color var(--transition-std), border-color var(--transition-std);
 }
-.skill-name {
+.skill-card:hover { background: var(--surface-raised-hover); border-color: rgba(255, 255, 255, 0.12); }
+.card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+.chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+}
+.skill-slug {
     font-family: var(--font-mono);
-    font-size: var(--text-md);
+    font-size: 10px;
+    color: var(--text-tertiary);
+}
+.skill-title {
+    font-family: var(--font-display);
     font-weight: 700;
+    font-size: 18px;
     color: var(--white);
+    letter-spacing: -0.2px;
     margin: 0 0 var(--space-2);
 }
 .skill-desc {
@@ -331,26 +484,51 @@ body {
     margin: 0 0 var(--space-4);
     flex-grow: 1;
 }
-.badge-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1);
+.prompt-row {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
     margin-bottom: var(--space-3);
 }
-.badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
+.prompt-label {
     font-size: var(--text-xs);
     font-weight: 600;
-    background: var(--blue-dim);
-    color: var(--blue);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-1);
 }
-.ref-count {
+.prompt-line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+.prompt-text {
+    flex: 1;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-style: italic;
+}
+.skill-details summary {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: color var(--transition-std);
+}
+.skill-details summary:hover { color: var(--text-secondary); }
+.skill-details[open] summary { margin-bottom: var(--space-3); }
+.detail-desc {
     font-size: var(--text-xs);
     color: var(--text-tertiary);
-    margin-bottom: var(--space-3);
+    margin: 0 0 var(--space-3);
+}
+.detail-refs {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    margin: 0 0 var(--space-3);
 }
 .skill-card .code-row { padding: var(--space-2) var(--space-3); }
 .skill-card .code-block { font-size: 10px; }
@@ -363,22 +541,39 @@ footer {
     color: var(--text-tertiary);
 }
 footer a { color: var(--text-secondary); }
+footer p { margin: 0 0 var(--space-2); }
 </style>
 </head>
 <body>
 <main class="container">
   <h1 class="page-title">Pesty Agent Skills</h1>
-  <p class="page-subtitle">Shared skills for Claude Code, Cursor, Codex, and Gemini — one install, every agent.</p>
+  <p class="page-subtitle">The skills our team&#x27;s AI agents run on &mdash; StoryBrand copy audits, buyer personas, UI reviews, on-brand dashboards, and more. One command installs all of them into every agent on your machine.</p>
+  <p class="works-with">Works in <strong>Claude Code &middot; Cursor &middot; Codex &middot; Gemini CLI</strong></p>
 
-  <section class="getting-started">
-    <h2 class="section-header">Getting Started</h2>
-    <ul class="prereqs">
-      <li>Node.js installed</li>
-      <li>That&#x27;s it &mdash; the repo is public, no GitHub account needed</li>
-    </ul>
-    <div class="code-row">
-      <code id="cmd-global" class="code-block">__GLOBAL_INSTALL_CMD__</code>
-      <button class="copy-btn" type="button" onclick="copyCmd('cmd-global', this)">Copy</button>
+  <section class="how-it-works">
+    <h2 class="section-header">How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <h3 class="step-title">Install once</h3>
+        <p class="step-body">Copy this into your terminal. Only prereq is Node.js &mdash; no GitHub account needed.</p>
+        <div class="code-row">
+          <code id="cmd-global" class="code-block">__GLOBAL_INSTALL_CMD__</code>
+          <button class="copy-btn" type="button" onclick="copyCmd('cmd-global', this)">Copy</button>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <h3 class="step-title">Open your agent</h3>
+        <p class="step-body">Claude Code, Cursor, Codex, or Gemini CLI &mdash; every skill is now available in all of them, automatically.</p>
+        <p class="step-note">Re-run the install command anytime to pull the latest versions.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <h3 class="step-title">Ask for a skill by name</h3>
+        <p class="step-body example-prompt">&ldquo;Use the storybrand skill to audit the copy on this homepage.&rdquo;</p>
+        <p class="step-note">Every card below has a ready-to-paste example prompt.</p>
+      </div>
     </div>
   </section>
 
@@ -388,13 +583,14 @@ __CARDS__
   </div>
 
   <footer>
-    <p>Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a> &mdash; add new skills there, not in <code>~/.claude/skills</code>.</p>
+    <p>Updated __UPDATED__ &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
+    <p>Add new skills in the repo (not <code>~/.claude/skills</code>) &mdash; or drop skill ideas in #pesty-crew.</p>
   </footer>
 </main>
 <script>
 function copyCmd(id, btn) {
   var el = document.getElementById(id);
-  var text = el.textContent;
+  var text = el.textContent.replace(/^\\u201c|\\u201d$/g, '');
   var done = function () {
     var original = btn.textContent;
     btn.textContent = 'Copied!';
@@ -427,13 +623,14 @@ def build():
     cards = "".join(render_card(s, i) for i, s in enumerate(skills))
     page = PAGE_TEMPLATE.replace("__CARDS__", cards.rstrip("\n"))
     page = page.replace("__GLOBAL_INSTALL_CMD__", esc(GLOBAL_INSTALL_CMD))
+    page = page.replace("__UPDATED__", datetime.date.today().strftime("%B %Y"))
 
     DIST_DIR.mkdir(parents=True, exist_ok=True)
     out_path = DIST_DIR / "index.html"
     out_path.write_text(page, encoding="utf-8")
     print(f"Wrote {out_path} ({len(skills)} skills)")
     for s in skills:
-        print(f"  - {s['name']} (refs: {s['ref_count']})")
+        print(f"  - {s['name']} [{s['category']}] (refs: {s['ref_count']})")
 
 
 if __name__ == "__main__":
