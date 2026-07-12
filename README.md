@@ -2,7 +2,7 @@
 
 Cross-agent skills for the Pesty Marketing team, in the open [Agent Skills](https://agentskills.io) format — one folder per skill, each with a `SKILL.md` (plus optional `references/`). Works with Claude Code, Cursor, Codex, Gemini CLI, and any other agent that reads the spec.
 
-Browse the catalog: **pestymarketing.com/internal/agent-skills/**
+Browse the catalog: **pestymarketing.com/agent-skills/**
 
 ## Install
 

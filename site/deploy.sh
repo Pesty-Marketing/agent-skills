@@ -14,7 +14,7 @@ fi
 source "$ENV_FILE"
 
 SERVER="$PESTY_DEPLOY_SERVER"
-REMOTE_DIR="$PESTY_DEPLOY_APP_ROOT/internal/agent-skills"
+REMOTE_DIR="$PESTY_DEPLOY_APP_ROOT/agent-skills"
 LOCAL_DIR="dist"
 PASSWORD_FILE="$HOME/.cloudways_ssh_password"
 
@@ -59,7 +59,7 @@ expect -c "
 " > /dev/null 2>&1 || true
 
 echo "Verifying live URL..."
-URL="https://pestymarketing.com/internal/agent-skills/"
+URL="https://pestymarketing.com/agent-skills/"
 ok=0
 for attempt in 1 2 3 4 5 6; do
   code=$(curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0' "$URL")
