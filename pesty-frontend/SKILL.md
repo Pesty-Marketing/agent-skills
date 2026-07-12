@@ -1,6 +1,6 @@
 ---
 name: pesty-frontend
-description: Build or modify Pesty Marketing frontend — dashboards, internal tools, and client reports. Enforces the established dark navy design system (Epilogue + Montserrat, #001c28 background, CSS variable tokens). Use for Pesty dashboards, internal tools, and client reports. NOT for external client websites built in WordPress.
+description: "Build or modify Pesty Marketing frontend — dashboards, internal tools, and client reports. Enforces the established dark navy design system (Epilogue + Montserrat, #001c28 background, CSS variable tokens). NOT for external client websites built in WordPress."
 ---
 
 # Pesty Frontend Skill
