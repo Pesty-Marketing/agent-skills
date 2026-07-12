@@ -1,6 +1,6 @@
 # Pesty Design Tokens
 
-Source of truth: `~/Projects/Pesty/tokens.css`. Copy the `:root` block below into every new project's `<style>`.
+Source of truth: `~/Projects/Pesty/tokens.css` (Pesty-internal canonical location only). The `:root` block inlined below is the complete, authoritative portable copy — use it directly; you don't need the internal path to get the full token set. Copy the `:root` block below into every new project's `<style>`.
 
 ## Dark Theme (Default — dashboards, internal tools)
 

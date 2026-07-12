@@ -65,7 +65,7 @@ digraph persona {
    - *Whose perspective* — who does the work of evaluating? (Interview/transcript the person who actually compares options, not just the economic buyer.)
    One persona = one decision + one group of like-minded buyers. If the evidence clearly contains two different mindsets, build two personas.
 
-2. **Inventory and grade sources.** List every input and tag which buyer group it represents (chose-you / chose-competitor / status-quo / never-considered). Note recency. Flag thinness.
+2. **Inventory and grade sources.** List every input and tag which buyer group it represents (chose-you / chose-competitor / status-quo / never-considered). Note recency. Flag thinness. If the user needs to gather raw material themselves (e.g., run buyer interviews) before there's enough evidence to proceed, five-rings.md has an interview-technique section (~its lines 111-123).
 
 3. **Extract into the 5 Rings.** Read every source. Pull **verbatim quotes** that answer each Ring's question, tagging each `PI / SF / PB / DC / BJ` and recording its source. Use the per-Ring extraction prompts in five-rings.md. Pull more than you'll keep.
 
@@ -76,6 +76,16 @@ digraph persona {
 6. **Synthesize top themes.** Look *across* the first four Rings (PI, SF, PB, DC — not BJ) for 5–8 higher-order buyer needs that connect multiple insights. Tag each theme with the Rings that feed it. These are what messaging should lead with.
 
 7. **Faithfulness gate** (see five-rings.md): every insight traces to a quote; quotes only *lightly* edited (drop filler/half-phrases, never insert your words, sanitize, or summarize them away); sources annotated; thin or empty Rings flagged honestly; zero invented demographics, quotes, or numbers.
+
+## Auditing an existing persona
+
+When the ask is to refresh or audit a persona that already exists (rather than build one fresh):
+
+- Read the existing persona document in full before touching anything.
+- Gather the same evidence sources the build workflow uses (transcripts, interviews, reviews, won/lost notes) — prefer new/recent evidence over what the persona was originally built from.
+- Check each claim in the persona against the evidence: does a quote or paraphrase actually support it? Flag any claim with no supporting evidence.
+- Check for buying-insight gaps across the 5 Rings — has new evidence surfaced anything the existing Rings miss (new Priority Initiative, a Barrier that's disappeared, a shifted Decision Criterion)?
+- Deliver a verdict per claim: **keep** (well-supported), **revise** (partially supported, needs re-wording), or **unsupported** (no evidence found — recommend cutting).
 
 ## Output template
 
@@ -118,14 +128,11 @@ digraph persona {
 
 | Mistake | Fix |
 |--------|-----|
-| Demographic/biographical profile (age, "a day in the life", stock persona name with a backstory) | Focus on the decision. Profile stays lean and factual. Name/photo optional and gender-neutral if used. |
-| Inventing quotes or "representative" statements | Only verbatim quotes from real sources. No evidence → no insight. |
-| Building from the company's own messaging or your general knowledge | Persona comes from *buyers*. If inputs are missing, stop and ask. |
 | Leading with features/benefits you wish buyers cared about | Let Decision Criteria and Success Factors come from what buyers actually said. |
 | Confusing Success Factors with Decision Criteria | SF = the *why/outcome*; DC = the *what/how/capability compared*. See five-rings.md. |
 | Only interviewing happy customers (Group 1) | Flag the blind spot; prioritize chose-competitor and status-quo buyers. |
-| Over-sanitizing quotes | Light edits only (remove filler/repeats). Keep the buyer's real, colorful wording. |
-| Forcing one mindset when the data shows two | Split into two personas rather than blur them. |
+
+For the rest — inventing quotes, building from company messaging, demographic theater, over-sanitizing, blending two mindsets — see the Faithfulness rules in [references/five-rings.md](references/five-rings.md) (~its lines 99-107); that list is canonical, this table isn't a second copy of it.
 
 ## Andrew/Pesty note
 

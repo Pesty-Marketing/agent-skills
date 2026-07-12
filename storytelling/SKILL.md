@@ -1,6 +1,6 @@
 ---
 name: storytelling
-description: Apply Will Storr's Science of Storytelling framework (Sacred Flaw, theory of control, dramatic question, change-driven openings) to long-form narrative copy where engagement matters more than direct-response structure. Two modes — Write (founder narrative, brand story, About page, case study, blog hook, long-form sales) and Audit (review existing narrative for character flaw, change, curiosity gap, transformation arc). Invoke when user says "use Storr," "Science of Storytelling," "sacred flaw," "make this more compelling," or requests help with founder stories, About pages, case studies, brand origin, or any narrative where character + transformation is the point. Not for homepages, ad headlines, or scan-first marketing surfaces — use /storybrand for those.
+description: Apply Will Storr's Science of Storytelling framework (Sacred Flaw, theory of control, dramatic question, change-driven openings) to long-form narrative copy where engagement matters more than direct-response structure. Two modes — Write (founder narrative, brand story, About page, case study, blog hook, long-form sales) and Audit (review existing narrative for character flaw, change, curiosity gap, transformation arc). Invoke when user says "use Storr," "Science of Storytelling," "sacred flaw," "make this more compelling," or requests help with founder stories, About pages, case studies, brand origin, or any narrative where character + transformation is the point. Not for homepages, ad headlines, or scan-first marketing surfaces — use the storybrand skill for those.
 ---
 
 # Science of Storytelling Skill (Will Storr)
@@ -12,7 +12,7 @@ Determine mode before doing anything else:
 - **Write mode**: User wants to CREATE narrative copy (founder story, About page, brand origin, case study, long-form hook, character-driven blog opener).
 - **Audit mode**: User wants to EVALUATE existing narrative against Storr's framework.
 
-If the user is asking for a homepage, ad, one-liner, or scan-first marketing surface, stop and recommend `/storybrand` instead. This skill is for narrative engagement, not direct-response structure.
+If the user is asking for a homepage, ad, one-liner, or scan-first marketing surface, stop and recommend the storybrand skill instead. This skill is for narrative engagement, not direct-response structure.
 
 ---
 
@@ -44,7 +44,7 @@ Worksheet steps to complete:
 
 ### Step 2: Apply to the Output Surface
 
-Read `references/surfaces.md` for the full applications and templates.
+Read `references/surfaces.md` for the full applications and templates (it also has a per-surface effort-budget table — worksheet + drafting time by surface).
 
 Available surfaces:
 - **Founder narrative / About page** — flaw → ignition → transformation arc
@@ -71,6 +71,8 @@ Read `references/audit-checklist.md` for the full checklist.
 
 For each failed item: state what specifically is broken, quote the offending copy, and suggest the exact fix.
 
+If the user wants a numeric score, read `references/scoring.md`.
+
 ---
 
 ## Troubleshooting
@@ -85,16 +87,16 @@ For each failed item: state what specifically is broken, quote the offending cop
 
 **Customer copy: should the brand be the hero?** No. In every business application the customer (or founder-as-customer-of-their-own-vision) is the hero. The product is the agent that breaks or rebuilds their theory of control. Storr and StoryBrand agree on this. Brand-as-hero kills the story.
 
-**Conflict with /storybrand.** They don't conflict — they layer. StoryBrand structures the marketing surface. Storytelling deepens character and arc inside that structure. If asked to choose, use StoryBrand for scan-first surfaces (homepage, ad, one-liner) and Storytelling for read-first surfaces (founder story, About, case study, long-form).
+**Conflict with the storybrand skill.** They don't conflict — they layer. StoryBrand structures the marketing surface. Storytelling deepens character and arc inside that structure. If asked to choose, use StoryBrand for scan-first surfaces (homepage, ad, one-liner) and Storytelling for read-first surfaces (founder story, About, case study, long-form).
 
 ---
 
 ## Pairing with other skills
 
-- **`/storybrand`** for marketing structure (homepage, one-liner, email, CTA, plan). Run first if both apply.
-- **`/ann-handley`** for voice and quality polish on the draft Storytelling produces.
+- **the storybrand skill** for marketing structure (homepage, one-liner, email, CTA, plan). Run first if both apply.
+- **the ann-handley skill** for voice and quality polish on the draft Storytelling produces.
 
-Typical pipeline for long-form: `/storytelling` (character + arc) → `/ann-handley` (voice + line-edits) → `/storybrand` only if the piece also has to convert.
+Typical pipeline for long-form: the storytelling skill (character + arc) → the ann-handley skill (voice + line-edits) → the storybrand skill only if the piece also has to convert.
 
 ---
 

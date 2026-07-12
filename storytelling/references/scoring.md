@@ -43,8 +43,8 @@ Standard inputs for running spot checks or the autoresearch loop. Use at least 2
 
 These belong to other skills:
 
-- **Marketing structure** (CTA placement, plan, lead generator) → /storybrand audit
-- **Voice and line quality** (cadence, banned phrases, surprise) → /ann-handley audit
+- **Marketing structure** (CTA placement, plan, lead generator) → the storybrand skill's audit
+- **Voice and line quality** (cadence, banned phrases, surprise) → the ann-handley skill's audit
 - **SEO / keyword presence** → not in scope for narrative copy
 
 Don't try to score this skill on those criteria. Different brain mode, different tool.

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# yt-transcript <youtube-url> [output-dir]
+# Downloads YouTube auto-captions and produces a clean, LLM-ready text file.
+set -euo pipefail
+
+if [[ $# -lt 1 ]]; then
+  echo "usage: yt-transcript <youtube-url> [output-dir]" >&2
+  exit 1
+fi
+
+URL="$1"
+OUT_DIR="${2:-$PWD}"
+mkdir -p "$OUT_DIR"
+
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+yt-dlp \
+  --quiet --no-warnings --no-progress \
+  --skip-download \
+  --write-auto-sub \
+  --write-sub \
+  --sub-lang 'en.*,en' \
+  --sub-format vtt \
+  -o "$TMP/%(id)s.%(ext)s" \
+  --print-to-file "%(id)s|%(title)s" "$TMP/meta.txt" \
+  "$URL"
+
+ID="$(cut -d'|' -f1 < "$TMP/meta.txt" 2>/dev/null | head -1 || true)"
+TITLE="$(cut -d'|' -f2- < "$TMP/meta.txt" 2>/dev/null | head -1 || true)"
+
+VTT="$(ls "$TMP"/*.vtt 2>/dev/null | head -1 || true)"
+if [[ -z "$VTT" ]]; then
+  echo "no captions found for $URL" >&2
+  exit 2
+fi
+
+SLUG="$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' \
+  | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-80)"
+OUT="$OUT_DIR/${SLUG:-$ID}.txt"
+
+{
+  echo "# $TITLE"
+  echo "# $URL"
+  echo
+  awk '
+    /<[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/ {
+      gsub(/<[^>]*>/, "")
+      gsub(/&nbsp;/, " ")
+      gsub(/\r/, "")
+      sub(/^[[:space:]]+/, "")
+      sub(/[[:space:]]+$/, "")
+      if ($0 == "" || $0 == prev) next
+      prev = $0
+      printf "%s ", $0
+    }
+    END { print "" }
+  ' "$VTT" | fold -s -w 100
+} > "$OUT"
+
+echo "$OUT"

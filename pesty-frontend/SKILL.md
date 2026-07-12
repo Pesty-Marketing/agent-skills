@@ -1,6 +1,6 @@
 ---
 name: pesty-frontend
-description: Build or modify Pesty Marketing frontend — dashboards, internal tools, and client reports. Enforces the established dark navy design system (Epilogue + Montserrat, #001c28 background, CSS variable tokens). Use for any HTML/CSS work inside ~/Projects/Pesty/. NOT for external client websites built in WordPress.
+description: Build or modify Pesty Marketing frontend — dashboards, internal tools, and client reports. Enforces the established dark navy design system (Epilogue + Montserrat, #001c28 background, CSS variable tokens). Use for Pesty dashboards, internal tools, and client reports. NOT for external client websites built in WordPress.
 ---
 
 # Pesty Frontend Skill
@@ -42,6 +42,8 @@ Read `references/design-tokens.md` first. Then:
 ## Dashboard / Internal Tool Mode
 
 Standard rules apply. Additionally:
+
+**One-pager delta:** a single-page tool / one-pager follows this Dashboard Mode section as its base (dark navy, same token set, same fonts) — the only difference is scope: one file, one view, no topbar navigation between sections. If ambiguous whether a request is a full dashboard or a one-pager, confirm with the user before building.
 
 - Background: `var(--bg)` (#001c28 dark navy) — never light background for internal tools
 - Body font: Montserrat 13px, `--text` color, `-webkit-font-smoothing: antialiased`

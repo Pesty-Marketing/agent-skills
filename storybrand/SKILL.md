@@ -41,11 +41,13 @@ Available surfaces:
 - **One-liner** — 3-part formula (Problem → Product → Result)
 - **Email / Drip** — Curiosity / Enlightenment / Commitment stage mapping
 
+Deliverable: the finished copy for the requested surface, plus the BrandScript when one was built.
+
 ---
 
 ## AUDIT MODE
 
-Read `references/audit-checklist.md` for the full checklist.
+Read `references/audit-checklist.md` for the full checklist. If a numeric score is wanted, also read `references/scoring.md` for the rubric.
 
 For each failed item: state what specifically is broken, quote the offending copy, and suggest the exact fix.
 
@@ -72,3 +74,9 @@ Skill: Asks 8 BrandScript questions → hero = homeowner who wants peace of mind
 **Audit mode:**
 User: "Audit this homepage copy against SB7."
 Skill: Loads audit-checklist.md → runs each check → outputs a flagged list: "CTA check FAIL — 'Learn More' is passive. Change to 'Get a Free Quote.' Guide check FAIL — empathy is implied but never stated. Add: 'We know how unsettling it is to find pests in your home.'"
+
+---
+
+## Pairing
+
+Once SB7 structure is right, run the ann-handley skill for line-level voice and style polish on the output.

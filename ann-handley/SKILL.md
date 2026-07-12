@@ -1,6 +1,6 @@
 ---
 name: ann-handley
-description: Apply Ann Handley's Everybody Writes framework to create or audit marketing content — blog posts, emails, homepages, About Us pages, social copy, or any customer-facing writing. Invoke when user says "use Ann Handley," "Everybody Writes," "apply the Handley framework," or asks for help with content voice, writing quality, or copy that needs to sound more human. Not for structural/narrative frameworks (use /storybrand for that).
+description: Apply Ann Handley's Everybody Writes framework to create or audit marketing content — blog posts, emails, homepages, About Us pages, social copy, or any customer-facing writing. Invoke when user says "use Ann Handley," "Everybody Writes," "apply the Handley framework," or asks for help with content voice, writing quality, or copy that needs to sound more human, or defining a brand voice. Not for structural/narrative frameworks (use the storybrand skill for that).
 ---
 
 # Ann Handley Copywriting Skill
@@ -49,11 +49,13 @@ Read `references/voice-grammar.md` for:
 - Banned words (Frankenwords, Weblish, buzzwords)
 - Grammar defaults (present tense, active voice, strong verbs, no adverbs)
 
+Deliverable: the finished copy, plus a 2-3 bullet note on the Handley rules applied.
+
 ---
 
 ## AUDIT MODE
 
-Read `references/audit-checklist.md` for the full checklist.
+Read `references/audit-checklist.md` for the full checklist. If a numeric score is wanted, also read `references/scoring.md` for the rubric.
 
 For each failure: state what is broken, quote the offending copy, suggest the exact fix.
 
@@ -73,7 +75,7 @@ These two frameworks complement each other:
 - **StoryBrand** = structure and narrative (what to say, in what order)
 - **Ann Handley** = voice and quality (how to say it, at what standard)
 
-Run `/storybrand` first to build the BrandScript and structure, then apply Handley's rules to the output in the Shine phase.
+Run the storybrand skill first to build the BrandScript and structure, then apply Handley's rules to the output in the Shine phase.
 
 ---
 
