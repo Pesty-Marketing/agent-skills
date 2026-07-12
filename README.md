@@ -43,3 +43,7 @@ Notes:
 4. Everyone picks it up on their next `npx skills add Pesty-Marketing/agent-skills -g`.
 
 Don't create skills loose in `~/.claude/skills/` — this repo is the source of truth.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
