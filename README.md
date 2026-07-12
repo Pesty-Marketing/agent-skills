@@ -32,10 +32,13 @@ Update later by re-running the same command.
 
 ## Adding a new skill
 
+**Read [CONTRIBUTING.md](CONTRIBUTING.md) first** — it covers how to write a skill agents actually find and follow (description formula, structure, testing). The mechanics:
+
 1. Create `<skill-name>/SKILL.md` in this repo (kebab-case folder; frontmatter needs `name` matching the folder and a `description` that says what it does **and when to use it** — that's all agents see before loading it). Put supporting docs in `<skill-name>/references/`.
-2. Commit and push.
-3. Regenerate the catalog page: `python3 site/build.py && bash site/deploy.sh`.
-4. Everyone picks it up on their next `npx skills add Pesty-Marketing/agent-skills -g`.
+2. Add a `HUMAN_COPY` entry for it in `site/build.py` (title, category, tagline, example prompt).
+3. Commit and push.
+4. Regenerate the catalog page: `python3 site/build.py && bash site/deploy.sh`.
+5. Everyone picks it up on their next `npx skills add Pesty-Marketing/agent-skills -g`.
 
 Don't create skills loose in `~/.claude/skills/` — this repo is the source of truth.
 

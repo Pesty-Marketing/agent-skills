@@ -584,7 +584,7 @@ __CARDS__
 
   <footer>
     <p>Updated __UPDATED__ &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
-    <p>Add new skills in the repo (not <code>~/.claude/skills</code>) &mdash; or drop skill ideas in #pesty-crew.</p>
+    <p>Want to add a skill? Read the <a href="https://github.com/Pesty-Marketing/agent-skills/blob/main/CONTRIBUTING.md">skill-writing guide</a> and add it in the repo (not <code>~/.claude/skills</code>) &mdash; or drop skill ideas in #pesty-crew.</p>
   </footer>
 </main>
 <script>
