@@ -349,6 +349,114 @@ body {
 }
 .works-with strong { color: var(--text-secondary); font-weight: 600; }
 
+.title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+.agency-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 6px 12px;
+    margin-top: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color var(--transition-std), color var(--transition-std), border-color var(--transition-std);
+}
+.agency-badge:hover { background: var(--surface-raised-hover); color: var(--white); border-color: rgba(255, 255, 255, 0.12); }
+
+.lead-capture {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6) var(--space-8);
+    margin: 0 0 var(--space-8);
+}
+.lead-capture-copy { flex: 1 1 320px; }
+.lead-capture-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+    margin: 0 0 var(--space-1);
+}
+.lead-capture-sub {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 480px;
+}
+.lead-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    flex: 1 1 360px;
+    max-width: 420px;
+}
+.lead-input {
+    flex: 1;
+    min-width: 180px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--white);
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+}
+.lead-input::placeholder { color: var(--text-tertiary); }
+.lead-input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.lead-submit {
+    flex-shrink: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-4);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color var(--transition-std), border-color var(--transition-std);
+}
+.lead-submit:hover { background: #ec5c76; border-color: #ec5c76; }
+.lead-capture-secondary {
+    flex-basis: 100%;
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    margin: 0;
+}
+.lead-capture-secondary a { color: var(--text-secondary); }
+.lead-capture-secondary a:hover { color: var(--white); }
+
+.value-strip {
+    margin-top: var(--space-16);
+    padding: var(--space-4) var(--space-6);
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    text-align: center;
+}
+.value-strip a { color: var(--white); font-weight: 600; text-decoration: underline; }
+.value-strip a:hover { color: var(--text-secondary); }
+
 .section-header {
     font-family: var(--font-body);
     font-size: var(--text-sm);
@@ -552,9 +660,31 @@ footer p { margin: 0 0 var(--space-2); }
 </head>
 <body>
 <main class="container">
-  <h1 class="page-title">Pesty Agent Skills</h1>
+  <div class="title-row">
+    <h1 class="page-title">Pesty Agent Skills</h1>
+    <a class="agency-badge" href="https://pestymarketing.com/?utm_source=agent-skills-catalog&amp;utm_medium=web&amp;utm_campaign=agent-skills" target="_blank" rel="noopener">Built by Pesty Marketing &#x2197;</a>
+  </div>
   <p class="page-subtitle">The skills our team&#x27;s AI agents run on &mdash; StoryBrand copy audits, buyer personas, UI reviews, on-brand dashboards, and more. One command installs all of them into every agent on your machine.</p>
   <p class="works-with">Works in <strong>Claude Code &middot; Cursor &middot; Codex &middot; Gemini CLI</strong></p>
+
+  <!-- Email capture wired to beehiiv (The Pesty Playbook, pub_85b456ee-aaa7-46fe-ade2-fcfb25f36000)
+       via its magic-link subscribe endpoint. Plain GET form -> works with JS fully disabled (the
+       browser builds the query string from the named inputs itself; no submit handler needed).
+       beehiiv shows its own branded one-click confirm page, then bounces back here with
+       ?subscribed=1 (plus an appended &email=... we don't need). The inline script below only
+       swaps this band's copy on that return -- it never touches the submit path. -->
+  <section class="lead-capture" id="lead-capture">
+    <div class="lead-capture-copy" id="lead-capture-copy">
+      <h2 class="lead-capture-title">Get new skills as we ship them</h2>
+      <p class="lead-capture-sub">We add a new skill every few weeks. Drop your email and we&#x27;ll let you know &mdash; no spam, unsubscribe anytime.</p>
+    </div>
+    <form class="lead-form" id="lead-form" action="https://magic.beehiiv.com/v1/85b456ee-aaa7-46fe-ade2-fcfb25f36000" method="get">
+      <input type="hidden" name="redirect_to" value="https://pestymarketing.com/agent-skills/?subscribed=1">
+      <input class="lead-input" type="email" name="email" placeholder="you@company.com" required aria-label="Email address">
+      <button class="lead-submit" type="submit">Notify me</button>
+    </form>
+    <p class="lead-capture-secondary">Running a pest control company and want more than skills? <a href="https://pestymarketing.com/?utm_source=agent-skills-catalog&amp;utm_medium=web&amp;utm_campaign=agent-skills" target="_blank" rel="noopener">Talk to Pesty &rarr;</a></p>
+  </section>
 
   <section class="how-it-works">
     <h2 class="section-header">How it works</h2>
@@ -588,9 +718,14 @@ footer p { margin: 0 0 var(--space-2); }
 __CARDS__
   </div>
 
+  <section class="value-strip">
+    <p style="margin:0">Pesty Marketing is a pest-control marketing agency &mdash; these are the frameworks our own team&#x27;s agents run on for real client work. <a href="https://pestymarketing.com/?utm_source=agent-skills-catalog&amp;utm_medium=web&amp;utm_campaign=agent-skills" target="_blank" rel="noopener">Talk to Pesty &rarr;</a></p>
+  </section>
+
   <footer>
     <p>Updated __UPDATED__ &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
     <p>Want to add a skill? Read the <a href="https://github.com/Pesty-Marketing/agent-skills/blob/main/CONTRIBUTING.md">skill-writing guide</a> and add it in the repo (not <code>~/.claude/skills</code>) &mdash; or drop skill ideas in #pesty-crew.</p>
+    <p>Built by Pesty Marketing, a pest-control marketing agency &rarr; <a href="https://pestymarketing.com/?utm_source=agent-skills-catalog&amp;utm_medium=web&amp;utm_campaign=agent-skills" target="_blank" rel="noopener">pestymarketing.com</a></p>
   </footer>
 </main>
 <script>
@@ -618,6 +753,20 @@ function copyCmd(id, btn) {
     done();
   }
 }
+
+(function () {
+  // Runs on return from the beehiiv subscribe redirect (see the lead-capture
+  // form comment above). Swaps the band's copy in place; the submit path
+  // itself never depends on this script.
+  if (new URLSearchParams(window.location.search).get('subscribed') !== '1') return;
+  var copy = document.getElementById('lead-capture-copy');
+  var form = document.getElementById('lead-form');
+  if (copy) {
+    copy.innerHTML = '<h2 class="lead-capture-title">You&#39;re on the list.</h2>'
+      + '<p class="lead-capture-sub">We&#39;ll email you when the next skill ships.</p>';
+  }
+  if (form) { form.style.display = 'none'; }
+})();
 </script>
 </body>
 </html>
