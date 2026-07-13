@@ -3,7 +3,9 @@
 How to add a skill to this repo that agents actually find, load, and follow. The
 mechanical steps are in the [README](README.md#adding-a-new-skill); this is the
 craft guide. Distilled from Anthropic's skill-authoring best practices, the
-agentskills.io spec, and lessons from building the seven skills already here.
+agentskills.io spec, Matt Pocock's ["The Missing Manual" talk](https://www.youtube.com/watch?v=UNzCG3lw6O0)
+(trigger/structure/steering/pruning checklist), and lessons from building the
+seven skills already here.
 
 ## What a skill is (and isn't)
 
@@ -40,6 +42,16 @@ Agents load skills in three stages, and this shapes everything about how you wri
    them. Effectively unlimited depth lives here.
 
 Rule of thumb: description sells it, body steers it, references carry the weight.
+
+**Level 1 isn't free.** Every skill's description loads into *every* session —
+that's context load the agent pays whether or not the skill is used. Seven
+skills is cheap; seventy isn't. A skill only ever invoked deliberately by its
+owner (a personal workflow, a leadership-only process) can opt out of
+auto-triggering where the agent supports it (`disable-model-invocation: true`
+in Claude Code) — the trade is context load for cognitive load: the agent no
+longer carries the description, but now *you* have to remember the skill
+exists. Team skills in this repo should stay model-invoked; just make the
+call consciously.
 
 ## The description — the 500 characters that matter most
 
@@ -100,9 +112,50 @@ Guidelines:
 - **Keep SKILL.md under ~500 lines.** Approaching the limit? Move depth into
   `references/` with a clear pointer for each file: what's in it and when to
   read it. Unpointed reference files never get read.
+- **Split references by branch.** The deciding question for what stays inline:
+  does *every* run of the skill need it? Material used on every pass (a
+  template the skill always fills) belongs in SKILL.md; material only one mode
+  or branch touches (the Audit rubric, one framework's deep-dive) moves to
+  `references/` behind its pointer. That's why `ui-design` is a router over
+  six files while a single-purpose skill can be one self-contained page.
 - **Bundle scripts for repeated mechanical work.** If every use of the skill
   would rewrite the same helper, ship it in `scripts/` and tell the body to
   run it (see `yt-structure/scripts/`). State prereqs (e.g. yt-dlp) plainly.
+
+## Steering — when the agent won't do what the skill says
+
+Two techniques for the classic failure "I wrote it in the skill and the agent
+ignored it":
+
+- **Leading words.** Pack the behavior you want into a short, well-known term
+  and repeat it consistently through the skill. "Vertical slice" beats a
+  paragraph of "don't build layer by layer; get something small working
+  end-to-end first" — the term triggers everything the agent already knows
+  about the concept. Our skills lean on this already (SB7, Mode Detection,
+  5 Rings); do it on purpose. **Verification is built in:** watch the agent's
+  reasoning — when the technique lands, the agent echoes your term back
+  ("doing this as a thin vertical slice") while it works. If your term never
+  shows up in its thinking, it isn't steering; pick a stronger one.
+- **Manage leg work by hiding the goal.** Agents under-invest in early steps
+  when they can see the finish line — "ask clarifying questions, then write
+  the plan" reliably produces two shallow questions and an eager plan. When a
+  step needs real effort, split it into its own skill (or its own explicit
+  gate) so the agent sees only the current phase, not the payoff after it.
+
+## Pruning — keep the skill honest
+
+Big skills are a symptom. Three failure modes to sweep for, especially on
+skills an agent helped write:
+
+- **No-ops — run the deletion test.** For each paragraph ask: would the agent
+  behave any differently if this were deleted? "Write a clear commit message"
+  fails the test — agents do that anyway. Delete what doesn't change behavior.
+- **Sediment.** Shared docs accrete additions nobody feels brave enough to
+  delete. If material is stale or only relevant to one branch, move it to
+  that branch's reference file or kill it — don't let it pile up in SKILL.md.
+- **Duplication.** Every fact, template, and rule gets one home. If the same
+  guidance appears in the body and a reference file, one of them is wrong
+  by the next edit.
 
 ## Test before you ship
 
@@ -125,7 +178,10 @@ loop — worth it for skills the whole team will lean on.
 - [ ] Kebab-case folder; frontmatter `name` matches it exactly
 - [ ] Description: what + when + trigger phrases (+ not-for); YAML-safe quoting
 - [ ] Body lean and agent-neutral; references pointed-to; scripts' prereqs stated
-- [ ] Trigger-tested and follow-tested in a fresh session
+- [ ] Pruning pass: deletion-test every paragraph (no no-ops), no duplication,
+      branch-only material moved to `references/`
+- [ ] Trigger-tested and follow-tested in a fresh session; leading words show
+      up in the agent's reasoning
 - [ ] **No secrets, client credentials, or internal-only material** — this repo
       is public. Sensitive/Andrew-only skills stay out entirely.
 - [ ] Add a `HUMAN_COPY` entry in `site/build.py` (title, category, tagline,
