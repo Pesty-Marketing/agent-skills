@@ -142,3 +142,7 @@ These are the most cited specific values across both books:
 | Radio button threshold | Up to 10 options | Practical UI Ch.7 |
 | iOS standard title size | 17px | Master UI Typography |
 | Hamburger menu element minimum | 44px | Master UI Navigation |
+
+---
+
+> Maintained by [Pesty Marketing](https://pestymarketing.com) · Browse the [full skill catalog](https://pestymarketing.com/agent-skills/).

@@ -1,8 +1,10 @@
 # Pesty Agent Skills
 
+Built and battle-tested by [Pesty Marketing](https://pestymarketing.com?utm_source=github&utm_medium=readme&utm_campaign=agent-skills), a pest-control marketing agency — these are the actual frameworks we run client work through.
+
 Cross-agent skills for the Pesty Marketing team, in the open [Agent Skills](https://agentskills.io) format — one folder per skill, each with a `SKILL.md` (plus optional `references/`). Works with Claude Code, Cursor, Codex, Gemini CLI, and any other agent that reads the spec.
 
-Browse the catalog: **pestymarketing.com/agent-skills/**
+Browse the [full skill catalog](https://pestymarketing.com/agent-skills/?utm_source=github&utm_medium=readme&utm_campaign=agent-skills).
 
 ## Install
 
@@ -45,3 +47,7 @@ Don't create skills loose in `~/.claude/skills/` — this repo is the source of 
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+---
+
+If these are useful to you, we'd appreciate a ⭐ and a link back. Browse the [full skill catalog](https://pestymarketing.com/agent-skills/?utm_source=github&utm_medium=readme&utm_campaign=agent-skills) for more.

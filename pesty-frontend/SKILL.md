@@ -84,3 +84,7 @@ Read `references/patterns.md` for complete topbar, card, table, and pill boilerp
 | Bottom-border section separators | `border-left: 3px solid var(--accent)` |
 | Mixed border radii | 8px cards, 9999px pills, 4px bars |
 | `text-align: center` on topbar flex | Explicit `align-items: center` on flex containers |
+
+---
+
+> Maintained by [Pesty Marketing](https://pestymarketing.com) · Browse the [full skill catalog](https://pestymarketing.com/agent-skills/).

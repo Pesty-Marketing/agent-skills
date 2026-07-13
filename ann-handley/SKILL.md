@@ -101,3 +101,7 @@ Output applies: customer-centric language, present tense, no running start, stro
 **Audit mode:**
 User: "Audit this About Us page."
 Skill: Loads audit-checklist.md → flags: "Company-centric FAIL — first paragraph is entirely about founding history. Reader isn't in it until paragraph 3. Move the customer problem to the top. Cut 'we believe in excellence' — table stakes, not differentiating."
+
+---
+
+> Maintained by [Pesty Marketing](https://pestymarketing.com) · Browse the [full skill catalog](https://pestymarketing.com/agent-skills/).

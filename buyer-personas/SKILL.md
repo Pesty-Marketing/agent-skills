@@ -137,3 +137,7 @@ For the rest — inventing quotes, building from company messaging, demographic 
 ## Andrew/Pesty note
 
 Primary raw material here is usually **Fathom** sales/discovery/client call transcripts (use the Fathom MCP tools to pull them) plus reviews and CRM won/lost notes. A client's *prospects deciding on a pest-control provider* and the client's *own buying decision to hire Pesty* are two different personas — scope which one first.
+
+---
+
+> Maintained by [Pesty Marketing](https://pestymarketing.com) · Browse the [full skill catalog](https://pestymarketing.com/agent-skills/).

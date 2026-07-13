@@ -80,3 +80,7 @@ Skill: Loads audit-checklist.md → runs each check → outputs a flagged list: 
 ## Pairing
 
 Once SB7 structure is right, run the ann-handley skill for line-level voice and style polish on the output.
+
+---
+
+> Maintained by [Pesty Marketing](https://pestymarketing.com) · Browse the [full skill catalog](https://pestymarketing.com/agent-skills/).

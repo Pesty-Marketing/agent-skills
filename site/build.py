@@ -222,6 +222,12 @@ def render_card(skill, index):
 """
 
 
+# UTM convention for the page template below: any future outbound link added
+# to the <footer> (or elsewhere in this template) that points at a
+# pestymarketing.com page OTHER than this catalog page itself should append
+# utm_source=agent-skills-catalog&utm_medium=web&utm_campaign=agent-skills.
+# The GitHub/CONTRIBUTING links currently in the footer are external and
+# stay plain. No such internal links exist yet, so nothing is added here.
 PAGE_TEMPLATE = """<!doctype html>
 <html lang="en">
 <head>

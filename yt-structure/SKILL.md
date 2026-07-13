@@ -99,3 +99,7 @@ Append the new file to the library's `INDEX.md` / `index.md`. If the library is 
 | Inverting authorship in multi-speaker talks | Preserve attribution; agreement ≠ authorship |
 | Skipping the Recap / Editor's note | Both are required closers |
 </content>
+
+---
+
+> Maintained by [Pesty Marketing](https://pestymarketing.com) · Browse the [full skill catalog](https://pestymarketing.com/agent-skills/).

@@ -113,3 +113,7 @@ Skill: Customer = hero with sacred flaw ("A good host has a perfect house"). Ign
 **Audit mode:**
 User: "Audit this About page against Storr."
 Skill: Loads audit-checklist.md → runs each check → "Opening FAIL — 'Founded in 2014' has no change. Rewrite to open with the moment something broke. Flaw check FAIL — founder is described only by virtues. Storr: a character's value is in their imperfections. Add the flaw that made the company necessary."
+
+---
+
+> Maintained by [Pesty Marketing](https://pestymarketing.com) · Browse the [full skill catalog](https://pestymarketing.com/agent-skills/).
