@@ -47,16 +47,22 @@ expect -c "
   expect eof
 "
 
-expect -c "
-  spawn ssh $SERVER
+echo "Purging Varnish cache..."
+PURGE_OUT=$(expect -c "
+  set timeout 30
+  spawn ssh $SERVER \"curl -s -X PURGE -H 'Host: pestymarketing.com' -o /dev/null -w 'PURGE_HTTP_%{http_code}' http://127.0.0.1/PURGEALL\"
   expect \"password:\"
   send \"$PASSWORD\r\"
-  expect \"\\\$\"
-  send \"curl -s -X PURGE -H 'Host: pestymarketing.com' -o /dev/null http://127.0.0.1/PURGEALL\r\"
-  expect \"\\\$\"
-  send \"exit\r\"
   expect eof
-" > /dev/null 2>&1 || true
+")
+# The 200-check below can't catch a stale cache (Varnish serves stale with 200),
+# so a failed purge must fail the deploy here.
+echo "$PURGE_OUT" | grep -q "PURGE_HTTP_2" || {
+  echo "ERROR: Varnish purge failed — live page may be stale. Output:" >&2
+  echo "$PURGE_OUT" >&2
+  exit 1
+}
+echo "  purged"
 
 echo "Verifying live URL..."
 URL="https://pestymarketing.com/agent-skills/"
