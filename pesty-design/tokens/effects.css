@@ -1,0 +1,34 @@
+/* ============================================================
+   Pesty Marketing — Radius, Shadow & Motion Tokens
+   Cards: medium-soft corners, soft ink-tinted shadows.
+   CTAs: pill buttons, optional red "glow" on primary.
+   Motion: quick, confident easing — no bounce.
+   ============================================================ */
+:root {
+  /* ---- Corner radii ---- */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;   /* default card */
+  --radius-xl:   24px;   /* large feature panels */
+  --radius-2xl:  32px;
+  --radius-pill: 999px;  /* buttons, chips, tags */
+  --radius-card: var(--radius-lg);
+
+  /* ---- Shadows (cool ink tint, soft & layered) ---- */
+  --shadow-xs:  0 1px 2px rgba(0, 35, 48, 0.06);
+  --shadow-sm:  0 1px 3px rgba(0, 35, 48, 0.08), 0 1px 2px rgba(0, 35, 48, 0.06);
+  --shadow-md:  0 6px 16px rgba(0, 35, 48, 0.08), 0 2px 6px rgba(0, 35, 48, 0.06);
+  --shadow-lg:  0 16px 40px rgba(0, 35, 48, 0.12), 0 4px 12px rgba(0, 35, 48, 0.07);
+  --shadow-xl:  0 32px 70px rgba(0, 35, 48, 0.18), 0 8px 20px rgba(0, 35, 48, 0.08);
+  /* Brand glow — primary CTA hover emphasis */
+  --shadow-brand: 0 10px 28px rgba(217, 4, 41, 0.32);
+
+  /* ---- Motion ---- */
+  --dur-fast:  120ms; /* @kind other */
+  --dur-base:  200ms; /* @kind other */
+  --dur-slow:  320ms; /* @kind other */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); /* @kind other */
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --ease-in-out:   cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+}

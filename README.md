@@ -26,11 +26,13 @@ Update later by re-running the same command.
 |---|---|
 | `ann-handley` | Create or audit marketing content with the Everybody Writes framework |
 | `buyer-personas` | Build decision-focused buyer personas from real inputs (5 Rings method) |
-| `pesty-frontend` | Pesty dashboards/internal tools in the dark-navy design system |
+| `pesty-design` | The default Pesty design system — colors, type, components, and UI kit for on-brand pages, prototypes, and interfaces |
 | `storybrand` | Write or audit customer-facing copy with the StoryBrand SB7 framework |
 | `storytelling` | Long-form narrative copy via Will Storr's Science of Storytelling |
 | `ui-design` | Build or audit interface designs (general-purpose, not Pesty-specific) |
 | `yt-structure` | Turn a YouTube video/talk/article into a clean, citable Markdown doc |
+
+> **Deprecated:** `pesty-frontend` (dark-navy internal-tools system) was superseded by `pesty-design` as the default on 2026-07-17. Its folder stays in the repo as reference for maintaining the existing dark-navy dashboards, but it's excluded from the catalog and no longer installed by default.
 
 ## Adding a new skill
 

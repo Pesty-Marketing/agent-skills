@@ -79,7 +79,7 @@ Guidelines:
   and situations that should activate it, including ones where the user doesn't
   name the skill ("help with my homepage copy" should hit storybrand).
 - **Name what it's NOT for** when it borders on a sibling skill (see how
-  `ui-design` points general work to itself and Pesty work to `pesty-frontend`).
+  `ui-design` points general work to itself and Pesty work to `pesty-design`).
 - **Never summarize the internal workflow.** Testing shows agents will follow a
   workflow summary in the description *instead of reading the skill body*. Say
   what and when — never how.

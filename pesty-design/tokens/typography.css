@@ -1,0 +1,50 @@
+/* ============================================================
+   Pesty Marketing — Typography Tokens
+   Display: Poppins (geometric, confident — matches wordmark)
+   Body/UI: Figtree (humanist, legible)
+   Mono:    JetBrains Mono (data, metrics, code)
+   ============================================================ */
+:root {
+  /* ---- Families ---- */
+  --font-display: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    'Figtree', system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* ---- Weights ---- */
+  --fw-regular:  400; /* @kind font */
+  --fw-medium:   500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold:     700; /* @kind font */
+  --fw-extrabold:800; /* @kind font */
+
+  /* ---- Type scale (rem on 16px base) ---- */
+  --text-xs:   0.75rem;   /* 12 — labels, captions */
+  --text-sm:   0.875rem;  /* 14 — fine print, meta */
+  --text-base: 1rem;      /* 16 — body */
+  --text-md:   1.125rem;  /* 18 — lead body */
+  --text-lg:   1.25rem;   /* 20 — large body / small headings */
+  --text-xl:   1.5rem;    /* 24 — h4 */
+  --text-2xl:  1.875rem;  /* 30 — h3 */
+  --text-3xl:  2.25rem;   /* 36 — h2 */
+  --text-4xl:  3rem;      /* 48 — h1 / section title */
+  --text-5xl:  3.75rem;   /* 60 — hero */
+  --text-6xl:  4.5rem;    /* 72 — big hero */
+
+  /* Fluid hero display (clamps for marketing heroes) */
+  --display-1: clamp(2.75rem, 1.6rem + 5.2vw, 4.75rem); /* @kind other */
+  --display-2: clamp(2.25rem, 1.5rem + 3.4vw, 3.5rem); /* @kind other */
+
+  /* ---- Line heights ---- */
+  --leading-none:    1; /* @kind other */
+  --leading-tight:   1.08;  /* display headlines */
+  --leading-snug:    1.2;   /* headings */
+  --leading-normal:  1.5;   /* body */
+  --leading-relaxed: 1.65;  /* long-form */
+
+  /* ---- Letter spacing ---- */
+  --tracking-tighter: -0.03em; /* big display @kind other */
+  --tracking-tight:   -0.015em;/* headings */
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-wider:   0.12em;  /* uppercase eyebrows */
+}

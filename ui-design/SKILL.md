@@ -1,6 +1,6 @@
 ---
 name: ui-design
-description: Apply Master UI Design + Practical UI frameworks to build or audit interface designs (components, layouts, typography, color, forms, buttons, navigation, copywriting). Invoke when user says "use ui-design," "audit this UI," "review the design," or asks for help building/improving an interface, component, or screen. General-purpose (not Pesty-specific; use the pesty-frontend skill for that).
+description: Apply Master UI Design + Practical UI frameworks to build or audit interface designs (components, layouts, typography, color, forms, buttons, navigation, copywriting). Invoke when user says "use ui-design," "audit this UI," "review the design," or asks for help building/improving an interface, component, or screen. General-purpose (not Pesty-specific; use the pesty-design skill for that).
 ---
 
 # UI Design Skill

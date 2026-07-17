@@ -1,0 +1,35 @@
+<!-- @dsCard group="Colors" viewport="700x190" name="Brand Colors" subtitle="Pesty Red + Deep Teal — the two pillars of the identity" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg); padding: 24px; font-family: var(--font-body); }
+  .row { display: flex; gap: 16px; }
+  .sw { flex: 1; border-radius: var(--radius-lg); padding: 18px 18px 16px; min-height: 116px; display: flex; flex-direction: column; justify-content: flex-end; box-shadow: var(--shadow-sm); }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+  .hex { font-family: var(--font-mono); font-size: 12px; opacity: .85; margin-top: 2px; }
+  .role { font-size: 12px; opacity: .8; margin-bottom: auto; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw" style="background: var(--red-500); color:#fff;">
+      <div class="role">Primary · CTAs, urgency</div>
+      <div class="name">Pesty Red</div>
+      <div class="hex">#D90429</div>
+    </div>
+    <div class="sw" style="background: var(--ink-900); color:#fff;">
+      <div class="role">Dark surfaces, headings</div>
+      <div class="name">Deep Teal</div>
+      <div class="hex">#002330</div>
+    </div>
+    <div class="sw" style="background: var(--n-0); color: var(--ink-900); border:1px solid var(--border);">
+      <div class="role">Base canvas</div>
+      <div class="name">White</div>
+      <div class="hex">#FFFFFF</div>
+    </div>
+  </div>
+</body>
+</html>

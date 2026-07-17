@@ -1,0 +1,25 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Corner Radii" subtitle="Soft corners; pills for buttons, chips & tags" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg); padding: 24px 28px; font-family: var(--font-body); }
+  .row { display: flex; gap: 16px; align-items: flex-end; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+  .box { width: 100%; height: 70px; background: var(--teal-100); border: 1.5px solid var(--teal-300); }
+  .lab { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item"><div class="box" style="border-radius:var(--radius-xs)"></div><span class="lab">xs · 4</span></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-sm)"></div><span class="lab">sm · 8</span></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-md)"></div><span class="lab">md · 12</span></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-lg)"></div><span class="lab">lg · 16 (card)</span></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-xl)"></div><span class="lab">xl · 24</span></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-pill)"></div><span class="lab">pill · 999</span></div>
+  </div>
+</body>
+</html>

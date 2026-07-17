@@ -28,6 +28,12 @@ DIST_DIR = SITE_DIR / "dist"
 # Folders in the repo root that are not skills.
 SKIP_DIRS = {"site", ".git", ".github"}
 
+# Skills kept in the repo as archived reference but excluded from the catalog
+# and no longer the team default. pesty-frontend (dark-navy internal-tools
+# system) was superseded by pesty-design as the single default 2026-07-17;
+# its files stay for maintaining the existing dark-navy dashboards.
+DEPRECATED = {"pesty-frontend"}
+
 AGENTS = ["Claude Code", "Cursor", "Codex", "Gemini CLI"]
 
 GLOBAL_INSTALL_CMD = "npx skills add Pesty-Marketing/agent-skills -g"
@@ -55,6 +61,14 @@ HUMAN_COPY = {
         "tagline": "Turn real call transcripts and reviews into a persona built on what actually drives buyers.",
         "prompt": "Use the buyer-personas skill to build a persona from these sales call transcripts.",
     },
+    "pesty-design": {
+        "title": "Pesty Design System",
+        "category": "Design & Build",
+        "tagline": "The Pesty brand system — colors, type, components, and a full UI kit for on-brand pages, prototypes, and interfaces.",
+        "prompt": "Use the pesty-design skill to build a landing page for our new SEO offer.",
+    },
+    # Deprecated 2026-07-17 (superseded by pesty-design). Kept for reference;
+    # excluded from the catalog via DEPRECATED above.
     "pesty-frontend": {
         "title": "Pesty Frontend",
         "category": "Design & Build",
@@ -141,6 +155,8 @@ def discover_skills():
         if not entry.is_dir():
             continue
         if entry.name in SKIP_DIRS or entry.name.startswith("."):
+            continue
+        if entry.name in DEPRECATED:
             continue
         skill_md = entry / "SKILL.md"
         if not skill_md.is_file():

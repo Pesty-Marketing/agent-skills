@@ -1,0 +1,33 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Pesty Red Scale" subtitle="Tints & shades — 500 is the brand red; 600/700 for hover/press" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg); padding: 24px; font-family: var(--font-body); }
+  .scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 0; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); }
+  .cell { height: 76px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; }
+  .cap { font-family: var(--font-mono); font-size: 10.5px; }
+  .labels { display: grid; grid-template-columns: repeat(10, 1fr); margin-top: 8px; }
+  .labels span { text-align: center; font-family: var(--font-mono); font-size: 9.5px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="scale">
+    <div class="cell" style="background:var(--red-50)"></div>
+    <div class="cell" style="background:var(--red-100)"></div>
+    <div class="cell" style="background:var(--red-200)"></div>
+    <div class="cell" style="background:var(--red-300)"></div>
+    <div class="cell" style="background:var(--red-400)"></div>
+    <div class="cell" style="background:var(--red-500); color:#fff;"><span class="cap">★</span></div>
+    <div class="cell" style="background:var(--red-600)"></div>
+    <div class="cell" style="background:var(--red-700)"></div>
+    <div class="cell" style="background:var(--red-800)"></div>
+    <div class="cell" style="background:var(--red-900)"></div>
+  </div>
+  <div class="labels">
+    <span>50</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>600</span><span>700</span><span>800</span><span>900</span>
+  </div>
+</body>
+</html>

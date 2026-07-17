@@ -1,0 +1,28 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Logo Mark" subtitle="The red 'pest' mark — favicon, avatars, compact contexts" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg); padding: 28px; font-family: var(--font-body); display: flex; align-items: center; gap: 34px; }
+  .tile { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .swatch { display:flex; align-items:center; justify-content:center; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+  .lab { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-muted); }
+  .lg { width:120px; height:120px; background:var(--n-0); border:1px solid var(--border); }
+  .lg img { width:64px; }
+  .md { width:64px; height:64px; background:var(--ink-900); }
+  .md img { width:34px; }
+  .sm { width:40px; height:40px; background:var(--red-50); }
+  .sm img { width:22px; }
+  .info { margin-left:auto; max-width: 260px; }
+  .info p { font-size: 13px; color: var(--text-body); line-height:1.5; }
+</style>
+</head>
+<body>
+  <div class="tile"><div class="swatch lg"><img src="../assets/brand/pesty-mark.svg" alt="mark"></div><span class="lab">on white</span></div>
+  <div class="tile"><div class="swatch md"><img src="../assets/brand/pesty-mark.svg" alt="mark"></div><span class="lab">on teal</span></div>
+  <div class="tile"><div class="swatch sm"><img src="../assets/brand/pesty-mark.svg" alt="mark"></div><span class="lab">tinted</span></div>
+  <div class="info"><p>The mark always renders in Pesty Red. Keep clearspace equal to the antenna height; never recolor or stretch.</p></div>
+</body>
+</html>

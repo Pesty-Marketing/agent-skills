@@ -1,0 +1,33 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Deep Teal / Ink Scale" subtitle="Dark sections, headings & ink — 900 is the brand teal" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg); padding: 24px; font-family: var(--font-body); }
+  .scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 0; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); }
+  .cell { height: 76px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; }
+  .cap { font-family: var(--font-mono); font-size: 10.5px; color: #fff; }
+  .labels { display: grid; grid-template-columns: repeat(10, 1fr); margin-top: 8px; }
+  .labels span { text-align: center; font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="scale">
+    <div class="cell" style="background:var(--teal-100)"></div>
+    <div class="cell" style="background:var(--teal-200)"></div>
+    <div class="cell" style="background:var(--teal-300)"></div>
+    <div class="cell" style="background:var(--teal-400)"></div>
+    <div class="cell" style="background:var(--ink-500)"></div>
+    <div class="cell" style="background:var(--ink-600)"></div>
+    <div class="cell" style="background:var(--ink-700)"></div>
+    <div class="cell" style="background:var(--ink-800)"></div>
+    <div class="cell" style="background:var(--ink-900); "><span class="cap">★</span></div>
+    <div class="cell" style="background:var(--ink-950)"></div>
+  </div>
+  <div class="labels">
+    <span>t100</span><span>t200</span><span>t300</span><span>t400</span><span>500</span><span>600</span><span>700</span><span>800</span><span>900</span><span>950</span>
+  </div>
+</body>
+</html>
