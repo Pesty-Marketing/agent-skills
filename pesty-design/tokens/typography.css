@@ -1,13 +1,13 @@
 /* ============================================================
    Pesty Marketing — Typography Tokens
-   Display: Poppins (geometric, confident — matches wordmark)
-   Body/UI: Figtree (humanist, legible)
+   Display: Epilogue (geometric, confident — matches wordmark)
+   Body/UI: Montserrat (humanist, legible)
    Mono:    JetBrains Mono (data, metrics, code)
    ============================================================ */
 :root {
   /* ---- Families ---- */
-  --font-display: 'Poppins', 'Segoe UI', system-ui, sans-serif;
-  --font-body:    'Figtree', system-ui, -apple-system, sans-serif;
+  --font-display: 'Epilogue', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    'Montserrat', system-ui, -apple-system, sans-serif;
   --font-mono:    'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
 
   /* ---- Weights ---- */

@@ -12,7 +12,7 @@ If the user invokes this skill without any other guidance, ask them what they wa
 
 - **Brand:** Pesty Marketing — pest control marketing agency. Voice is confident, aggressive, results-obsessed ("dominate your market," lead with real numbers). See readme.md → CONTENT FUNDAMENTALS.
 - **Colors:** Pesty Red `#D90429` (primary/CTAs/accents, used sparingly), Deep Teal `#002330` (dark surfaces/headings), white canvas. Full token set in `tokens/colors.css`.
-- **Type:** Poppins (display, 700–800), Figtree (body), JetBrains Mono (data). See `tokens/typography.css`. NOTE: these are close substitutes for the unprovided licensed fonts.
+- **Type:** Epilogue (display, 700–800), Montserrat (body), JetBrains Mono (data). See `tokens/typography.css`. These are Pesty's actual brand fonts (loaded from Google Fonts).
 - **Foundations:** link `styles.css` to inherit every token. Cards 16px radius + soft cool shadow; buttons/badges/tags are pills; motion is quick with no bounce; primary buttons glow red on hover.
 - **Icons:** Lucide-based set in `components/core/Icon.jsx` (24px, 2px stroke). No emoji.
 - **Assets:** `assets/brand/` — logo (light/dark) + mark/favicon.

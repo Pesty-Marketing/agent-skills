@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IconName } from '../core/Icon';
 
-/** Primary action button — pill-shaped, Poppins, with optional icons. */
+/** Primary action button — pill-shaped, Epilogue, with optional icons. */
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Visual style. @default "primary" */
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'light';

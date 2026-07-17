@@ -1,4 +1,4 @@
-Status / metadata pill in Poppins. Six variants for different emphasis.
+Status / metadata pill in Epilogue. Six variants for different emphasis.
 
 ```jsx
 <Badge variant="soft">New</Badge>

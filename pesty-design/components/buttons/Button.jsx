@@ -46,7 +46,7 @@ if (typeof document !== 'undefined' && !document.getElementById('pesty-btn-css')
 }
 
 /**
- * Primary action button. Pill-shaped, Poppins, with optional leading/trailing icons.
+ * Primary action button. Pill-shaped, Epilogue, with optional leading/trailing icons.
  */
 export function Button({
   children,

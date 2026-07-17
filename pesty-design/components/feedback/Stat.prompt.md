@@ -1,4 +1,4 @@
-Oversized result metric — the case-study numbers Pesty leads with. Figure in Poppins extrabold, defaults to Pesty Red.
+Oversized result metric — the case-study numbers Pesty leads with. Figure in Epilogue extrabold, defaults to Pesty Red.
 
 ```jsx
 <Stat value="$100,000" label="of monthly ad spend saved after 6 months of SEO" icon="trending-up" />

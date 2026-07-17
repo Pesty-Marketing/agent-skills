@@ -75,10 +75,10 @@ Modern marketing-agency polish without trendy gimmicks.
   Deep teal anchors dark sections (the results/case-study band, footer). Neutrals are cool,
   faintly teal-tinted grays. Green (`#1F8A5B`) marks wins/positive metrics; amber for
   attention. Never wash a section in red — it's a spotlight, not a wall.
-- **Typography.** Display/headlines in **Poppins** (geometric, rounded, confident — matches the
+- **Typography.** Display/headlines in **Epilogue** (geometric, confident — matches the
   wordmark), weights 700–800, tight tracking (−0.015 to −0.03em) and tight leading (~1.05) at
-  large sizes. Body/UI in **Figtree** (humanist, legible), 400–500, line-height 1.5–1.65.
-  **JetBrains Mono** for data, labels, and code. Eyebrows are uppercase Poppins semibold with
+  large sizes. Body/UI in **Montserrat** (humanist, legible), 400–500, line-height 1.5–1.65.
+  **JetBrains Mono** for data, labels, and code. Eyebrows are uppercase Epilogue semibold with
   wide tracking, usually in red. Headlines often color one phrase in red for emphasis.
 - **Backgrounds.** Mostly flat white or flat deep teal. Subtle, restrained accents only: a soft
   radial red tint in the hero corner; an organic red "blob" shape behind hero imagery. **No**
@@ -143,7 +143,7 @@ Modern marketing-agency polish without trendy gimmicks.
 - `readme.md` — this file. `SKILL.md` — Agent-Skill wrapper for download/Claude Code use.
 
 **`tokens/`** — CSS custom properties, each `@import`ed by `styles.css`:
-- `fonts.css` (Google Fonts: Poppins / Figtree / JetBrains Mono — see caveat), `colors.css`,
+- `fonts.css` (Google Fonts: Epilogue / Montserrat / JetBrains Mono), `colors.css`,
   `typography.css`, `spacing.css`, `effects.css` (radius/shadow/motion), `base.css` (resets +
   `.pesty-container`, `.eyebrow`).
 
@@ -170,9 +170,10 @@ Photo areas use `<image-slot>` for the user to drop real imagery.
 
 ---
 
-## CAVEAT — fonts
+## Fonts
 
-The exact licensed brand fonts were not provided. Pesty's site uses Google Fonts via Elementor;
-the lowercase geometric wordmark is closely matched by **Poppins**, paired here with **Figtree**
-(body) and **JetBrains Mono** (data). **If you have the real licensed fonts, drop the files in and
-replace the `@import` in `tokens/fonts.css` with `@font-face` rules.**
+Pesty's brand fonts are **Epilogue** (display/headlines), **Montserrat** (body/UI), and
+**JetBrains Mono** (data/labels/code) — all loaded from Google Fonts (Pesty's site runs Elementor
++ Google Fonts). Confirmed by Pesty 2026-07-17, replacing the earlier Poppins/Figtree substitutes.
+If you ever self-host, drop the files in and replace the `@import` in `tokens/fonts.css` with
+`@font-face` rules.

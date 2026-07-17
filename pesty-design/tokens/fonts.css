@@ -1,10 +1,9 @@
 /* ============================================================
    Pesty Marketing — Webfonts
-   NOTE: The exact licensed brand fonts were not provided. Pesty's
-   site is built on Elementor with Google Fonts. The lowercase
-   "pesty" wordmark is a rounded geometric sans — Poppins is the
-   closest widely-available match and is used here for display.
-   Body is set in Figtree (clean, friendly humanist sans).
-   → SUBSTITUTION FLAGGED: replace with licensed fonts if available.
+   Brand fonts (confirmed): Epilogue for display/headlines
+   (geometric, confident — matches the lowercase "pesty" wordmark)
+   and Montserrat for body/UI. JetBrains Mono for data/metrics/code.
+   Loaded from Google Fonts (Pesty's site runs Elementor + Google
+   Fonts). Swap this @import for @font-face rules if you self-host.
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');

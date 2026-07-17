@@ -1,4 +1,4 @@
-A pill-shaped call-to-action button in Poppins. Five variants and three sizes; supports leading/trailing icons and link rendering.
+A pill-shaped call-to-action button in Epilogue. Five variants and three sizes; supports leading/trailing icons and link rendering.
 
 ```jsx
 <Button variant="primary" size="lg" iconRight="arrow-right">Get your free audit</Button>
