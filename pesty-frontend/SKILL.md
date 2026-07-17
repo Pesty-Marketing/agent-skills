@@ -1,6 +1,6 @@
 ---
 name: pesty-frontend
-description: "Build or modify Pesty Marketing frontend — dashboards, internal tools, and client reports. Enforces the established dark navy design system (Epilogue + Montserrat, #001c28 background, CSS variable tokens). NOT for external client websites built in WordPress."
+description: "DEPRECATED — superseded by the pesty-design skill, which is now the default for all new Pesty frontend work. Use this skill ONLY when maintaining an EXISTING dark-navy internal dashboard or tool that already uses these tokens (Epilogue + Montserrat, #001c28 background). For anything new, use pesty-design instead."
 ---
 
 > **⚠️ Deprecated (2026-07-17).** `pesty-design` is now the default Pesty design system for all new frontend work. Use this skill only when **maintaining an existing dark-navy internal tool or dashboard** that already uses these tokens. For anything new, use `pesty-design`.
