@@ -119,6 +119,29 @@
   .pesty-navitem--sub[aria-current="page"] { background: rgba(217,4,41,0.20); color: #fff; }
   .pesty-sidebar__foot { padding: 14px 16px; border-top: 1px solid var(--border-on-dark); display: flex; align-items: center; gap: 10px; }
 
+  /* CodeBlock */
+  .pesty-code__label { font-family: var(--font-mono); font-size: var(--text-2xs); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 0 0 8px; }
+  .pesty-code__panel { position: relative; background: var(--ink-900); border: 1px solid var(--ink-800); border-radius: var(--radius-md); overflow: hidden; }
+  .pesty-code__pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.65; color: rgba(255,255,255,0.90); }
+  .pesty-code__pre .c { color: var(--teal-300); }
+  .pesty-code__pre .k { color: var(--red-300); }
+  .pesty-code__pre .s { color: #8FE3B5; }
+  .pesty-code__copy { position: absolute; top: 8px; right: 8px; appearance: none; cursor: pointer; font-family: var(--font-mono); font-size: var(--text-2xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-on-dark-muted); background: rgba(255,255,255,0.08); border: 1px solid var(--border-on-dark); border-radius: var(--radius-sm); padding: 5px 10px; transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard); }
+  .pesty-code__copy:hover { background: rgba(255,255,255,0.16); color: #fff; }
+  .pesty-code__copy:focus-visible { outline: 2px solid var(--focus-ring-dark); outline-offset: 2px; }
+
+  /* SpecList */
+  .pesty-spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--pesty-spec-min, 260px), 1fr)); gap: 14px 24px; margin: 0; }
+  .pesty-spec__row { display: flex; flex-direction: column; gap: 3px; }
+  .pesty-spec__key { font-family: var(--font-mono); font-size: var(--text-2xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+  .pesty-spec__val { margin: 0; font-family: var(--font-body); font-size: var(--text-sm); color: var(--text-body); line-height: 1.5; }
+  .pesty-spec__val code { font-family: var(--font-mono); font-size: 0.92em; color: var(--text-strong); background: var(--n-100); padding: 1px 6px; border-radius: var(--radius-xs); }
+
+  /* Pipeline */
+  .pesty-pipeline { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .pesty-pipeline__step { background: var(--n-0); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 10px 14px; font-family: var(--font-body); font-weight: var(--fw-semibold); font-size: var(--text-sm); color: var(--text-strong); }
+  .pesty-pipeline__arrow { color: var(--text-faint); display: inline-flex; }
+
   /* Gallery specimens strip */
   .specimens { padding: 40px var(--dash-gutter) 64px; max-width: var(--container-dashboard); margin: 0 auto; }
   .specimens h3 { font-family: var(--font-display); font-weight: var(--fw-extrabold); color: var(--text-strong); font-size: var(--text-xl); margin: 0 0 4px; }
@@ -354,6 +377,50 @@ function SectionHeader({ title, subtitle, actions, style = {} }) {
   );
 }
 
+/* ---- CodeBlock / SpecList / Pipeline (mirrors — docs & reference patterns) ---- */
+function CodeBlock({ children, label, copyText, className = '', ...rest }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    const text = copyText != null ? copyText : (typeof children === 'string' ? children : '');
+    if (!text || !navigator.clipboard) return;
+    navigator.clipboard.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1600); });
+  };
+  return (
+    <div className={`pesty-code ${className}`} {...rest}>
+      {label && <div className="pesty-code__label">{label}</div>}
+      <div className="pesty-code__panel">
+        {copyText != null && <button type="button" className="pesty-code__copy" onClick={copy} aria-label="Copy code">{copied ? 'Copied' : 'Copy'}</button>}
+        <pre className="pesty-code__pre">{children}</pre>
+      </div>
+    </div>
+  );
+}
+function SpecList({ items = [], min = 260, className = '', style = {}, ...rest }) {
+  const minStr = typeof min === 'number' ? `${min}px` : min;
+  return (
+    <dl className={`pesty-spec ${className}`} style={{ '--pesty-spec-min': minStr, ...style }} {...rest}>
+      {items.map((it, i) => (
+        <div className="pesty-spec__row" key={it.key != null ? String(it.key) : i}>
+          <dt className="pesty-spec__key">{it.key}</dt>
+          <dd className="pesty-spec__val">{it.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+function Pipeline({ steps = [], className = '', ...rest }) {
+  return (
+    <div className={`pesty-pipeline ${className}`} {...rest}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <span className="pesty-pipeline__step">{typeof s === 'string' ? s : s.label}</span>
+          {i < steps.length - 1 && <span className="pesty-pipeline__arrow"><Icon name="arrow-right" size={16} /></span>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
 /* ---- Shell (mirrors) ---- */
 function Sidebar({ items = [], header, footer, activeId, onSelect }) {
   const select = (id) => () => { if (onSelect) onSelect(id); };
@@ -506,6 +573,22 @@ function App() {
           <div className="spec"><span className="lbl">KPI tile</span><div style={{ maxWidth: 280 }}>
             <KpiTile label="Cost per lead" value="$24.24" delta="-8%" deltaGoodDirection="down" icon="zap" />
           </div></div>
+          <div className="spec"><span className="lbl">Pipeline</span>
+            <Pipeline steps={['Scrape', 'Normalize', 'Enrich', 'Serve']} />
+          </div>
+          <div className="spec"><span className="lbl">Spec list</span>
+            <SpecList min={200} items={[
+              { key: 'Base URL', value: <code>https://api.example.com</code> },
+              { key: 'Auth', value: <><code>X-API-Key</code> header</> },
+              { key: 'Hosting', value: 'Fly.io (iad)' },
+            ]} />
+          </div>
+          <div className="spec"><span className="lbl">Code block</span>
+            <CodeBlock label="Example request" copyText={`curl -H "X-API-Key: <key>" https://api.example.com/companies?state=TX`}>
+              <span className="c"># interactive docs at /docs</span>{'\n'}
+              curl -H <span className="s">"X-API-Key: &lt;key&gt;"</span> <span className="s">"https://api.example.com/companies?state=TX"</span>
+            </CodeBlock>
+          </div>
         </div>
       </section>
     </>

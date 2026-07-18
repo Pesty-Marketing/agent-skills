@@ -174,9 +174,17 @@ controls, small headings — not the marketing site's generous whitespace. Token
 - **Accessibility.** Visible `:focus-visible` rings on every control; status conveyed by **color +
   text/icon**, never color alone; all text meets **WCAG AA 4.5:1**; numeric columns use `tabular-nums`.
 
-**Components:** `DataTable`, `KpiTile` + `KpiGrid` (`components/data/`); `StatusPill`, `DeltaPill`
-(`components/feedback/`); `Tabs` (`components/nav/`); `Chip` (`components/forms/`); `SectionHeader`
-(`components/surfaces/`); `DashboardShell` + `Sidebar` + `Topbar` (`components/layout/`).
+**Components:** `DataTable`, `KpiTile` + `KpiGrid`, `SpecList`, `Pipeline` (`components/data/`);
+`StatusPill`, `DeltaPill` (`components/feedback/`); `Tabs` (`components/nav/`); `Chip`
+(`components/forms/`); `SectionHeader`, `CodeBlock` (`components/surfaces/`); `DashboardShell` +
+`Sidebar` + `Topbar` (`components/layout/`).
+
+**Docs & reference pages** (API references, internal project showcases, tool docs) are a dashboard
+sub-case — a centered document rather than app chrome. Reach for `SectionHeader` to block it out,
+`KpiGrid`/`KpiTile` for headline stats, `DataTable` for endpoint/param tables, `SpecList` for
+key→value spec blocks, `Pipeline` for a process/flow strip, and `CodeBlock` for request/response
+snippets. Live example: the Pest Control Registry page (`internal-tools/internal/pest-registry/`),
+the first legacy dark-navy tool migrated onto this system.
 
 ---
 
@@ -198,8 +206,8 @@ controls, small headings — not the marketing site's generous whitespace. Token
 - `buttons/` — **Button**, **IconButton**
 - `feedback/` — **Badge**, **Tag** (checkmark trust pill), **Stat** (big result metric), **StatusPill**, **DeltaPill**
 - `forms/` — **Input**, **Textarea**, **Select**, **Checkbox**, **Chip**
-- `surfaces/` — **Card**, **Avatar**, **SectionHeader**
-- `data/` — **DataTable**, **KpiTile**, **KpiGrid** _(dashboards)_
+- `surfaces/` — **Card**, **Avatar**, **SectionHeader**, **CodeBlock** _(dashboards/docs)_
+- `data/` — **DataTable**, **KpiTile**, **KpiGrid**, **SpecList**, **Pipeline** _(dashboards/docs)_
 - `nav/` — **Tabs** _(dashboards)_
 - `layout/` — **DashboardShell**, **Sidebar**, **Topbar** _(dashboards)_
 
