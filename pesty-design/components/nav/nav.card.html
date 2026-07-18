@@ -1,0 +1,51 @@
+<!-- @dsCard group="Dashboard" viewport="700x300" name="Tabs, chips & section header" subtitle="Dense-view navigation & filtering" -->
+<!--
+  In-convention specimen: pulls components from the upstream global bundle
+  (window.PestyMarketingDesignSystem_3e0158). These were added directly to the
+  repo, so this card renders only AFTER the skill is next processed by the
+  upstream design bundler. Renders-today showcase: ../../ui_kits/dashboard/index.html.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; background: var(--bg); padding: 26px 28px; font-family: var(--font-body); }
+  .stack { display: flex; flex-direction: column; gap: 24px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { Tabs, Chip, SectionHeader } = window.PestyMarketingDesignSystem_3e0158;
+    function Demo() {
+      const [tab, setTab] = React.useState('all');
+      const [f, setF] = React.useState('all');
+      return (
+        <div className="stack">
+          <SectionHeader title="Client portfolio" subtitle="128 active accounts" />
+          <Tabs value={tab} onChange={setTab} tabs={[
+            { id: 'all', label: 'All', count: 128 },
+            { id: 'seo', label: 'SEO', icon: 'bar-chart' },
+            { id: 'paid', label: 'Paid' },
+            { id: 'risk', label: 'At risk', count: 3 },
+          ]} />
+          <div className="row">
+            <Chip selected={f === 'all'} onClick={() => setF('all')}>All</Chip>
+            <Chip selected={f === 'seo'} icon="filter" onClick={() => setF('seo')}>SEO</Chip>
+            <Chip selected={f === 'paid'} onClick={() => setF('paid')}>Paid</Chip>
+            <Chip removable onRemove={() => {}}>Atlanta, GA</Chip>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+  </script>
+</body>
+</html>

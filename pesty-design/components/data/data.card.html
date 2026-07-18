@@ -1,0 +1,59 @@
+<!-- @dsCard group="Dashboard" viewport="820x460" name="Data table & KPIs" subtitle="Dense table, KPI tiles, status & delta pills" -->
+<!--
+  In-convention specimen: pulls components from the upstream global bundle
+  (window.PestyMarketingDesignSystem_3e0158), exactly like the other
+  *.card.html files. These dashboard components were added directly to the
+  repo, so this card renders only AFTER the skill is next processed by the
+  upstream design bundler. For a self-contained, renders-today showcase see
+  ../../ui_kits/dashboard/index.html.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; background: var(--bg-subtle); padding: 24px; font-family: var(--font-body); }
+  .stack { display: flex; flex-direction: column; gap: 20px; }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .tablewrap { background: var(--n-0); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { DataTable, KpiTile, KpiGrid, StatusPill, DeltaPill } = window.PestyMarketingDesignSystem_3e0158;
+    const rows = [
+      { id: 1, name: "Native Pest", city: "Orlando, FL", mrr: 8200, cpl: -8, status: "Active", sv: "success" },
+      { id: 2, name: "Sage Pest", city: "Charlotte, NC", mrr: 7300, cpl: -12, status: "Active", sv: "success" },
+      { id: 3, name: "Smart Solutions", city: "Detroit, MI", mrr: 3900, cpl: 9, status: "At risk", sv: "warning" },
+      { id: 4, name: "Holper's", city: "St. Louis, MO", mrr: 2100, cpl: 14, status: "At risk", sv: "warning" },
+    ];
+    const columns = [
+      { key: "name", label: "Client", strong: true, sortable: true, sub: (r) => r.city },
+      { key: "mrr", label: "MRR", numeric: true, sortable: true, render: (r) => `$${r.mrr.toLocaleString()}` },
+      { key: "cpl", label: "CPL Δ", numeric: true, sortable: true, render: (r) => <DeltaPill value={`${r.cpl}%`} goodDirection="down" /> },
+      { key: "status", label: "Status", render: (r) => <StatusPill variant={r.sv}>{r.status}</StatusPill> },
+    ];
+    function Demo() {
+      return (
+        <div className="stack">
+          <KpiGrid className="kpis">
+            <KpiTile label="Active clients" value="1,284" delta="+12%" icon="users" />
+            <KpiTile label="Blended CPL" value="$24.24" delta="-8%" deltaGoodDirection="down" icon="zap" />
+            <KpiTile label="MRR" value="$182K" delta="+4%" icon="trending-up" accent />
+          </KpiGrid>
+          <div className="tablewrap">
+            <DataTable columns={columns} rows={rows} separators="zebra" defaultSort={{ key: "mrr", dir: "desc" }} />
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+/* ============================================================
+   Pesty Marketing — Dashboard / Data-Density Tokens
+   Extends the light brand system for dense internal tools,
+   admin panels, analytics dashboards & client reports.
+   Same white canvas, same Pesty Red / Deep Teal — just tuned
+   for information density. Density is a DELIBERATE choice
+   (Kholmatova): tight spacing, compact controls, small
+   headings. Body/cell text stays >= 12px; 11px is reserved
+   for UPPERCASE MONO labels only.
+   ============================================================ */
+:root {
+  /* ---- Dense type additions (the base scale still applies) ---- */
+  --text-2xs: 0.6875rem;  /* 11 — UPPERCASE MONO ONLY: table headers, status pills. Never body copy. */
+  --text-kpi: 1.75rem;    /* 28 — KPI / big-number data value */
+
+  /* ---- Data-table geometry (Practical UI / Master UI Design) ---- */
+  --row-condensed: 40px;  /* dense, spreadsheet-style */
+  --row-regular:   48px;  /* default */
+  --row-relaxed:   56px;  /* comfortable */
+  --cell-pad-x:    16px;  /* >=16px horizontal cell padding -> 32px between columns */
+
+  /* ---- Table surfaces (cool, faintly teal-tinted) ---- */
+  --table-header-bg: var(--n-50);   /* subtle header fill */
+  --table-zebra:     var(--n-25);   /* faint stripe for large data sets */
+  --table-row-hover: var(--n-50);   /* row hover */
+
+  /* ---- Dashboard layout ---- */
+  --container-dashboard: var(--container-wide); /* 1320px cap; shell supports full-bleed for true analytics */
+  --sidebar-w:  248px;  /* fixed sidebar; content region flexes (implicit grid) */
+  --topbar-h:   60px;
+  --dash-gutter: var(--space-6);    /* 24px — dense-view gutter */
+}

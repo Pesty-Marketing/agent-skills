@@ -3,7 +3,9 @@ import * as React from 'react';
 export type IconName =
   | 'arrow-right' | 'arrow-up-right' | 'check' | 'phone' | 'search'
   | 'menu' | 'x' | 'star' | 'chevron-right' | 'chevron-down'
-  | 'map-pin' | 'trending-up' | 'shield-check' | 'target' | 'zap';
+  | 'chevron-up' | 'arrow-up' | 'arrow-down'
+  | 'map-pin' | 'trending-up' | 'trending-down' | 'shield-check' | 'target' | 'zap'
+  | 'home' | 'bar-chart' | 'users' | 'filter' | 'bell' | 'more-horizontal' | 'calendar';
 
 export interface IconProps extends React.SVGProps<SVGSVGElement> {
   /** Icon to render, from the curated Lucide-based set. */

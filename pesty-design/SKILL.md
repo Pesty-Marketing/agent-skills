@@ -17,7 +17,8 @@ If the user invokes this skill without any other guidance, ask them what they wa
 - **Icons:** Lucide-based set in `components/core/Icon.jsx` (24px, 2px stroke). No emoji.
 - **Assets:** `assets/brand/` — logo (light/dark) + mark/favicon.
 - **Components:** React primitives under `components/` — Button, IconButton, Icon, Badge, Tag, Stat, Card, Avatar, Input, Textarea, Select, Checkbox. Each has a `.prompt.md`.
-- **UI kit:** `ui_kits/marketing-site/` — full interactive recreation of pestymarketing.com to copy patterns from.
+- **Dashboards / data-dense UI** (internal tools, admin panels, analytics dashboards, client reports): the same light system tuned for density. Components — DataTable, KpiTile, KpiGrid, StatusPill, DeltaPill, Tabs, Chip, SectionHeader, DashboardShell (+ Sidebar, Topbar). Rules + density spec in readme.md → DASHBOARDS & DATA-DENSE INTERFACES; density tokens in `tokens/dashboard.css`. Copy the working example at `ui_kits/dashboard/index.html`.
+- **UI kits:** `ui_kits/marketing-site/` — interactive recreation of pestymarketing.com; `ui_kits/dashboard/` — self-contained dense-dashboard example. Copy patterns from either.
 - **Templates:** `templates/` — ready-to-seed starting points.
 
 When building static artifacts, copy the assets and the relevant CSS into your output folder and link `styles.css` (or inline the tokens you need).

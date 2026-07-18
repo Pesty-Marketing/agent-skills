@@ -49,6 +49,7 @@
   --amber-100: #FCEFCE;
   --amber-500: #E8A317; /* highlight / attention */
   --amber-600: #C0850B;
+  --amber-700: #8A5E00; /* text on amber-100 — WCAG AA (dense status pills) */
 
   /* ============================================================
      Semantic aliases — reference THESE in components

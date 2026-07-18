@@ -120,9 +120,12 @@ Modern marketing-agency polish without trendy gimmicks.
   `components/core/Icon.jsx` so the whole system shares one language: **24px grid, 2px rounded
   stroke, `currentColor`.** This matches Elementor's default icon feel (clean line icons) on the
   live site.
-- **Available names:** `arrow-right`, `arrow-up-right`, `check`, `phone`, `search`, `menu`, `x`,
-  `star`, `chevron-right`, `chevron-down`, `map-pin`, `trending-up`, `shield-check`, `target`,
-  `zap`. `star` is the only filled glyph.
+- **Available names:** `arrow-right`, `arrow-up-right`, `arrow-up`, `arrow-down`, `check`, `phone`,
+  `search`, `menu`, `x`, `star`, `chevron-right`, `chevron-down`, `chevron-up`, `map-pin`,
+  `trending-up`, `trending-down`, `shield-check`, `target`, `zap`, `home`, `bar-chart`, `users`,
+  `filter`, `bell`, `more-horizontal`, `calendar`. `star` is the only filled glyph. (The dashboard
+  set — `chevron-up`, `arrow-up/down`, `trending-down`, `home`, `bar-chart`, `users`, `filter`,
+  `bell`, `more-horizontal`, `calendar` — powers sort indicators, sidebar nav, and deltas.)
 - **Usage:** Icons are functional, not decorative-heavy. Common pairings: `arrow-right` on CTAs,
   `map-pin` in the city-search field, `phone` in nav/footer, `shield-check`/`trending-up`/`target`/
   `zap` on trust tags, service cards, and stats. Check marks (`check`) bullet feature/trust lists.
@@ -133,6 +136,47 @@ Modern marketing-agency polish without trendy gimmicks.
   badge; otherwise rely on the Icon set.
 - **Logo mark** (`assets/brand/pesty-mark.svg`) doubles as the favicon and compact avatar mark;
   always rendered in Pesty Red.
+
+---
+
+## DASHBOARDS & DATA-DENSE INTERFACES
+
+The same light brand system, tuned for **information density** — internal tools, admin panels,
+analytics dashboards, and client-facing reports. White canvas, deep-teal sidebar, Pesty Red for
+accents and active state. Density is a *deliberate* choice (Kholmatova): tighter spacing, compact
+controls, small headings — not the marketing site's generous whitespace. Tokens live in
+`tokens/dashboard.css`; components live under `components/{data,nav,layout}/` plus the pills in
+`components/feedback/`. A full, self-contained, renders-today example is
+`ui_kits/dashboard/index.html` — copy it as a starting point.
+
+**When to reach for these:** any screen whose job is to show a lot of structured data at once
+(tables, KPI rows, filters, multi-view nav). For marketing pages, keep using the marketing-site kit.
+
+**Density spec** (grounded in Dannaway's *Practical UI*, *Master UI Design*, Kholmatova's *Design Systems*):
+
+- **Type.** Cell/body text stays **≥ 12px** (`--text-xs`). **11px** (`--text-2xs`) is reserved for
+  UPPERCASE MONO only — table headers, status/delta pills. KPI figures are **28px** (`--text-kpi`).
+  Use a small step between sizes; carry hierarchy with **weight and color**, not size alone.
+- **Tables.** Row height **40 / 48 / 56px** (`condensed` / `regular` / `relaxed`); **≥16px**
+  horizontal cell padding (→ 32px between columns). **Right-align numeric comparison columns** and
+  set `tabular-nums` so digits line up. Header alignment matches its column. Separator style follows
+  data size: **grid** (spreadsheet) · **horizontal** (default) · **zebra** (large sets) · **freeform**
+  (small sets). Condense a second field into cell **subtext** (e.g. a city under a client name).
+  Add sticky headers / search / sort for large sets; keep status pills to **2–3 states** per table.
+- **KPIs.** Drop the label where the value is self-evident; otherwise a muted mono label over an
+  extrabold ink (or red `accent`) value. Pair with a `DeltaPill` — flip `goodDirection="down"` for
+  cost metrics (CPL, CAC) so a falling number reads green.
+- **Layout.** Fixed **deep-teal sidebar** (nesting ≤ 2 levels) + sticky white topbar + flexing
+  content region (the "implicit grid" — sidebar fixed, main area fills the rest). Content caps at
+  **1320px** (`--container-dashboard`) or goes **full-bleed** for always-on analytics.
+- **Depth on light.** Hairline `--border` (#DDE3E6) + subtle navy-tinted `--shadow-xs/sm`. No heavy
+  shadows; cards don't lift in a dashboard the way marketing cards do.
+- **Accessibility.** Visible `:focus-visible` rings on every control; status conveyed by **color +
+  text/icon**, never color alone; all text meets **WCAG AA 4.5:1**; numeric columns use `tabular-nums`.
+
+**Components:** `DataTable`, `KpiTile` + `KpiGrid` (`components/data/`); `StatusPill`, `DeltaPill`
+(`components/feedback/`); `Tabs` (`components/nav/`); `Chip` (`components/forms/`); `SectionHeader`
+(`components/surfaces/`); `DashboardShell` + `Sidebar` + `Topbar` (`components/layout/`).
 
 ---
 
@@ -152,17 +196,26 @@ Modern marketing-agency polish without trendy gimmicks.
 **`components/`** — reusable React primitives (namespace from `check_design_system`):
 - `core/` — **Icon** (Lucide-based set)
 - `buttons/` — **Button**, **IconButton**
-- `feedback/` — **Badge**, **Tag** (checkmark trust pill), **Stat** (big result metric)
-- `forms/` — **Input**, **Textarea**, **Select**, **Checkbox**
-- `surfaces/` — **Card**, **Avatar**
+- `feedback/` — **Badge**, **Tag** (checkmark trust pill), **Stat** (big result metric), **StatusPill**, **DeltaPill**
+- `forms/` — **Input**, **Textarea**, **Select**, **Checkbox**, **Chip**
+- `surfaces/` — **Card**, **Avatar**, **SectionHeader**
+- `data/` — **DataTable**, **KpiTile**, **KpiGrid** _(dashboards)_
+- `nav/` — **Tabs** _(dashboards)_
+- `layout/` — **DashboardShell**, **Sidebar**, **Topbar** _(dashboards)_
 
-Each component ships `.jsx` + `.d.ts` (props) + `.prompt.md` (usage) and a `*.card.html` showcase.
+Each component ships `.jsx` + `.d.ts` (props) + `.prompt.md` (usage). Foundation/marketing components
+have a `*.card.html` showcase; the dashboard components are shown in `ui_kits/dashboard/index.html`
+(the `.card.html` cards under `data/` and `nav/` render once the skill is next built upstream).
 
 **`ui_kits/marketing-site/`** — high-fidelity recreation of pestymarketing.com. `index.html` is the
 interactive home page (sticky nav + mobile menu, hero with live "check your city" lead form,
 trust cloud, services, dark results/case-study band, red CTA band, footer). Composed from the DS
 components: `SiteNav`, `Hero`, `CityCheck`, `TrustBar`, `Services`, `Results`, `Footer` (+ `kit.css`).
 Photo areas use `<image-slot>` for the user to drop real imagery.
+
+**`ui_kits/dashboard/`** — self-contained dense-dashboard example (`index.html`): deep-teal sidebar,
+sticky topbar, KPI row, sortable/zebra data table, tabs + filter chips, and an isolated component
+strip. Renders and deploys as-is (no bundle dependency); the migration exemplar for internal tools.
 
 **`guidelines/`** — foundation specimen cards (Colors, Type, Spacing, Brand) shown in the Design System tab.
 
