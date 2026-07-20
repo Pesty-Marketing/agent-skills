@@ -1,9 +1,10 @@
 <!-- @dsCard group="Dashboard" viewport="700x300" name="Tabs, chips & section header" subtitle="Dense-view navigation & filtering" -->
 <!--
-  In-convention specimen: pulls components from the upstream global bundle
-  (window.PestyMarketingDesignSystem_3e0158). These were added directly to the
-  repo, so this card renders only AFTER the skill is next processed by the
-  upstream design bundler. Renders-today showcase: ../../ui_kits/dashboard/index.html.
+  Self-contained specimen: INLINES the dashboard components below (no dependency
+  on the upstream _ds_bundle.js), so it renders in every context. The inlined
+  definitions mirror the canonical sources under
+  ../../components/{nav,forms,surfaces,core}/ — edit those for the library;
+  this card is a runnable specimen. Full kit: ../../ui_kits/dashboard/index.html.
 -->
 <!doctype html>
 <html lang="en">
@@ -14,6 +15,35 @@
   body { margin: 0; background: var(--bg); padding: 26px 28px; font-family: var(--font-body); }
   .stack { display: flex; flex-direction: column; gap: 24px; }
   .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  /* Tabs */
+  .pesty-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .pesty-tab {
+    appearance: none; background: none; border: none; cursor: pointer;
+    font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--text-sm);
+    color: var(--text-muted); padding: 12px 24px; display: inline-flex; align-items: center; gap: 8px;
+    border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+  }
+  .pesty-tab:hover { color: var(--text-strong); }
+  .pesty-tab[aria-selected="true"] { color: var(--brand); border-bottom-color: var(--brand); }
+  .pesty-tab:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; border-radius: var(--radius-xs); }
+  .pesty-tab__count { font-family: var(--font-mono); font-size: var(--text-2xs); line-height: 1; background: var(--n-100); color: var(--n-600); padding: 3px 7px; border-radius: var(--radius-pill); }
+  .pesty-tab[aria-selected="true"] .pesty-tab__count { background: var(--brand-subtle); color: var(--brand-press); }
+
+  /* Chip */
+  .pesty-chip {
+    appearance: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-body); font-weight: var(--fw-medium); font-size: var(--text-sm);
+    color: var(--text-body); background: var(--n-0); border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-pill); padding: 6px 14px; line-height: 1;
+    transition: background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
+  }
+  .pesty-chip:hover { border-color: var(--n-400); color: var(--text-strong); }
+  .pesty-chip[aria-pressed="true"] { background: var(--brand-subtle); border-color: var(--brand); color: var(--brand-press); }
+  .pesty-chip:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .pesty-chip__x { display: inline-flex; margin: 0 -3px 0 1px; opacity: 0.6; }
+  .pesty-chip__x:hover { opacity: 1; }
 </style>
 </head>
 <body>
@@ -21,9 +51,65 @@
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script src="../../_ds_bundle.js"></script>
   <script type="text/babel">
-    const { Tabs, Chip, SectionHeader } = window.PestyMarketingDesignSystem_3e0158;
+    const { useState } = React;
+
+    /* ---- Icon (mirror of components/core/Icon.jsx) ---- */
+    const ICON_PATHS = {
+      x: <><path d="M18 6 6 18" /><path d="m6 6 12 12" /></>,
+      'bar-chart': <><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></>,
+      filter: <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />,
+    };
+    function Icon({ name, size = 20, strokeWidth = 2, style, ...rest }) {
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
+          style={{ display: 'block', flexShrink: 0, ...style }} aria-hidden="true" {...rest}>
+          {ICON_PATHS[name] || null}
+        </svg>
+      );
+    }
+
+    /* ---- Tabs (mirror) ---- */
+    function Tabs({ tabs, value, defaultValue, onChange }) {
+      const [internal, setInternal] = useState(defaultValue != null ? defaultValue : (tabs[0] && tabs[0].id));
+      const active = value != null ? value : internal;
+      const select = (id) => { if (value == null) setInternal(id); if (onChange) onChange(id); };
+      return (
+        <div role="tablist" className="pesty-tabs">
+          {tabs.map((t) => (
+            <button key={t.id} type="button" role="tab" aria-selected={active === t.id} className="pesty-tab" onClick={() => select(t.id)}>
+              {t.icon && <Icon name={t.icon} size={16} />}{t.label}{t.count != null && <span className="pesty-tab__count">{t.count}</span>}
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    /* ---- Chip (mirror) ---- */
+    function Chip({ children, selected = false, removable = false, onRemove, icon, ...rest }) {
+      return (
+        <button type="button" className="pesty-chip" aria-pressed={selected} {...rest}>
+          {icon && <Icon name={icon} size={14} />}{children}
+          {removable && <span className="pesty-chip__x" role="button" aria-label="Remove" onClick={(e) => { e.stopPropagation(); if (onRemove) onRemove(e); }}><Icon name="x" size={14} /></span>}
+        </button>
+      );
+    }
+
+    /* ---- SectionHeader (mirror) ---- */
+    function SectionHeader({ title, subtitle, actions, style = {} }) {
+      return (
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-4)', borderLeft: '3px solid var(--brand)', paddingLeft: 'var(--space-4)', margin: '0 0 var(--space-5)', ...style }}>
+          <div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 'var(--fw-bold)', fontSize: 'var(--text-lg)', lineHeight: 1.2, letterSpacing: '-0.01em', color: 'var(--text-strong)', margin: 0 }}>{title}</h2>
+            {subtitle && <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--text-sm)', color: 'var(--text-muted)', margin: '4px 0 0', lineHeight: 1.4 }}>{subtitle}</p>}
+          </div>
+          {actions && <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', flexShrink: 0 }}>{actions}</div>}
+        </div>
+      );
+    }
+
+    /* ---- Demo ---- */
     function Demo() {
       const [tab, setTab] = React.useState('all');
       const [f, setF] = React.useState('all');
