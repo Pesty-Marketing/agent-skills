@@ -1,4 +1,10 @@
 <!-- @dsCard group="Components" viewport="700x340" name="Badges, Tags & Stats" subtitle="Status pills, checkmark trust points & big result metrics" -->
+<!--
+  Self-contained specimen: INLINES the components below (no dependency on the
+  upstream _ds_bundle.js), so it renders in every context. The inlined
+  definitions mirror the canonical sources under ../../components/{feedback,core}/
+  — edit those for the library; this card is a runnable specimen.
+-->
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,9 +23,86 @@
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script src="../../_ds_bundle.js"></script>
   <script type="text/babel">
-    const { Badge, Tag, Stat } = window.PestyMarketingDesignSystem_3e0158;
+    /* ---- Icon (mirror of components/core/Icon.jsx) ---- */
+    const PATHS = {
+      check: <path d="M20 6 9 17l-5-5" />,
+      'shield-check': <><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></>,
+      'trending-up': <><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></>,
+      target: <><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></>,
+      zap: <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />,
+    };
+    function Icon({ name, size = 20, strokeWidth = 2, className, style, ...rest }) {
+      const filled = name === 'star';
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"
+          fill={filled ? 'currentColor' : 'none'} stroke={filled ? 'none' : 'currentColor'}
+          strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
+          className={className} style={{ display: 'block', flexShrink: 0, ...style }} aria-hidden="true" {...rest}>
+          {PATHS[name] || null}
+        </svg>
+      );
+    }
+
+    /* ---- Badge (mirror of components/feedback/Badge.jsx) ---- */
+    function Badge({ children, variant = 'soft', size = 'md', className = '', ...rest }) {
+      const variants = {
+        solid:   { background: 'var(--brand)', color: '#fff', border: '1px solid transparent' },
+        soft:    { background: 'var(--brand-subtle)', color: 'var(--brand-press)', border: '1px solid transparent' },
+        neutral: { background: 'var(--n-100)', color: 'var(--n-700)', border: '1px solid transparent' },
+        outline: { background: 'transparent', color: 'var(--ink-900)', border: '1px solid var(--border-strong)' },
+        dark:    { background: 'var(--ink-900)', color: '#fff', border: '1px solid transparent' },
+        success: { background: 'var(--success-bg)', color: 'var(--green-600)', border: '1px solid transparent' },
+      };
+      const sizes = { sm: { fontSize: '11px', padding: '3px 9px' }, md: { fontSize: 'var(--text-sm)', padding: '5px 12px' } };
+      return (
+        <span className={`pesty-badge ${className}`} style={{
+          display: 'inline-flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-display)',
+          fontWeight: 'var(--fw-semibold)', lineHeight: 1, borderRadius: 'var(--radius-pill)',
+          letterSpacing: '0.01em', whiteSpace: 'nowrap', ...sizes[size], ...variants[variant],
+        }} {...rest}>{children}</span>
+      );
+    }
+
+    /* ---- Tag (mirror of components/feedback/Tag.jsx) ---- */
+    function Tag({ children, icon = 'check', tone = 'brand', className = '', ...rest }) {
+      const tones = {
+        brand:   { iconColor: 'var(--brand)', ring: 'var(--border)' },
+        neutral: { iconColor: 'var(--n-500)', ring: 'var(--border)' },
+        onDark:  { iconColor: 'var(--brand)', ring: 'var(--border-on-dark)' },
+      };
+      const t = tones[tone];
+      const onDark = tone === 'onDark';
+      return (
+        <span className={`pesty-tag ${className}`} style={{
+          display: 'inline-flex', alignItems: 'center', gap: '9px', fontFamily: 'var(--font-body)',
+          fontWeight: 'var(--fw-medium)', fontSize: 'var(--text-sm)', lineHeight: 1.2,
+          color: onDark ? '#fff' : 'var(--text-strong)',
+          background: onDark ? 'rgba(255,255,255,0.06)' : 'var(--n-0)',
+          border: `1.5px solid ${t.ring}`, borderRadius: 'var(--radius-pill)', padding: '9px 16px 9px 13px', whiteSpace: 'nowrap',
+        }} {...rest}>
+          <Icon name={icon} size={16} style={{ color: t.iconColor }} strokeWidth={2.5} />
+          {children}
+        </span>
+      );
+    }
+
+    /* ---- Stat (mirror of components/feedback/Stat.jsx) ---- */
+    function Stat({ value, label, icon, accent = true, align = 'left', onDark = false, className = '', ...rest }) {
+      return (
+        <div className={`pesty-stat ${className}`} style={{ textAlign: align, display: 'flex', flexDirection: 'column', gap: '6px', alignItems: align === 'center' ? 'center' : 'flex-start' }} {...rest}>
+          {icon && (
+            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: 'var(--radius-md)', marginBottom: '4px', background: onDark ? 'rgba(255,255,255,0.08)' : 'var(--brand-subtle)', color: 'var(--brand)' }}>
+              <Icon name={icon} size={24} />
+            </span>
+          )}
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 'var(--fw-extrabold)', fontSize: 'var(--text-4xl)', lineHeight: 1, letterSpacing: '-0.025em', color: accent ? 'var(--brand)' : (onDark ? '#fff' : 'var(--ink-900)') }}>{value}</span>
+          <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--fw-medium)', lineHeight: 1.4, maxWidth: '24ch', color: onDark ? 'var(--text-on-dark-muted)' : 'var(--text-muted)' }}>{label}</span>
+        </div>
+      );
+    }
+
+    /* ---- Demo ---- */
     function Demo() {
       return (
         <div className="stack">

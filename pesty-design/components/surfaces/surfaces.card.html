@@ -1,4 +1,10 @@
 <!-- @dsCard group="Components" viewport="700x300" name="Cards & Avatars" subtitle="Surface variants + team avatars" -->
+<!--
+  Self-contained specimen: INLINES the components below (no dependency on the
+  upstream _ds_bundle.js), so it renders in every context. The inlined
+  definitions mirror the canonical sources under ../../components/{surfaces,feedback}/
+  — edit those for the library; this card is a runnable specimen.
+-->
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,9 +24,69 @@
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script src="../../_ds_bundle.js"></script>
   <script type="text/babel">
-    const { Card, Avatar, Badge } = window.PestyMarketingDesignSystem_3e0158;
+    /* ---- Card (mirror of components/surfaces/Card.jsx) ---- */
+    function Card({ children, variant = 'default', padding = 'lg', interactive = false, className = '', style = {}, ...rest }) {
+      const variants = {
+        default: { background: 'var(--n-0)', border: '1px solid var(--border)', color: 'var(--text-body)' },
+        subtle:  { background: 'var(--n-50)', border: '1px solid var(--border)', color: 'var(--text-body)' },
+        deep:    { background: 'var(--ink-900)', border: '1px solid var(--border-on-dark)', color: 'var(--text-on-dark-muted)' },
+        outline: { background: 'transparent', border: '1.5px solid var(--border-strong)', color: 'var(--text-body)' },
+      };
+      const pads = { none: 0, sm: 'var(--space-4)', md: 'var(--space-6)', lg: 'var(--space-8)' };
+      return (
+        <div className={`pesty-card ${interactive ? 'pesty-card--interactive' : ''} ${className}`}
+          style={{
+            borderRadius: 'var(--radius-lg)', padding: pads[padding],
+            boxShadow: variant === 'default' ? 'var(--shadow-md)' : 'none',
+            transition: 'transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard)',
+            ...variants[variant], ...style,
+          }}
+          onMouseEnter={interactive ? (e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-lg)'; } : undefined}
+          onMouseLeave={interactive ? (e) => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = variant === 'default' ? 'var(--shadow-md)' : 'none'; } : undefined}
+          {...rest}>
+          {children}
+        </div>
+      );
+    }
+
+    /* ---- Avatar (mirror of components/surfaces/Avatar.jsx) ---- */
+    function Avatar({ src, alt = '', name, size = 56, ring = false, className = '', ...rest }) {
+      const initials = name ? name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : '';
+      return (
+        <span className={`pesty-avatar ${className}`} style={{
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          width: size, height: size, borderRadius: 'var(--radius-pill)', overflow: 'hidden', flexShrink: 0,
+          background: 'var(--ink-700)', color: '#fff', fontFamily: 'var(--font-display)',
+          fontWeight: 'var(--fw-semibold)', fontSize: size * 0.36,
+          boxShadow: ring ? '0 0 0 3px var(--n-0), 0 0 0 5px var(--brand)' : 'none',
+        }} {...rest}>
+          {src ? <img src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : initials}
+        </span>
+      );
+    }
+
+    /* ---- Badge (mirror of components/feedback/Badge.jsx) ---- */
+    function Badge({ children, variant = 'soft', size = 'md', className = '', ...rest }) {
+      const variants = {
+        solid:   { background: 'var(--brand)', color: '#fff', border: '1px solid transparent' },
+        soft:    { background: 'var(--brand-subtle)', color: 'var(--brand-press)', border: '1px solid transparent' },
+        neutral: { background: 'var(--n-100)', color: 'var(--n-700)', border: '1px solid transparent' },
+        outline: { background: 'transparent', color: 'var(--ink-900)', border: '1px solid var(--border-strong)' },
+        dark:    { background: 'var(--ink-900)', color: '#fff', border: '1px solid transparent' },
+        success: { background: 'var(--success-bg)', color: 'var(--green-600)', border: '1px solid transparent' },
+      };
+      const sizes = { sm: { fontSize: '11px', padding: '3px 9px' }, md: { fontSize: 'var(--text-sm)', padding: '5px 12px' } };
+      return (
+        <span className={`pesty-badge ${className}`} style={{
+          display: 'inline-flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-display)',
+          fontWeight: 'var(--fw-semibold)', lineHeight: 1, borderRadius: 'var(--radius-pill)',
+          letterSpacing: '0.01em', whiteSpace: 'nowrap', ...sizes[size], ...variants[variant],
+        }} {...rest}>{children}</span>
+      );
+    }
+
+    /* ---- Demo ---- */
     function Demo() {
       return (
         <div className="grid">
