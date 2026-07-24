@@ -30,6 +30,7 @@ Update later by re-running the same command.
 | `storybrand` | Write or audit customer-facing copy with the StoryBrand SB7 framework |
 | `storytelling` | Long-form narrative copy via Will Storr's Science of Storytelling |
 | `ui-design` | Build or audit interface designs (general-purpose, not Pesty-specific) |
+| `website-launch-impact-report` | Build a before/after report on whether a website relaunch helped or hurt SEO, conversions, and UX |
 | `yt-structure` | Turn a YouTube video/talk/article into a clean, citable Markdown doc |
 
 > **Deprecated:** `pesty-frontend` (dark-navy internal-tools system) was superseded by `pesty-design` as the default on 2026-07-17. Its folder stays in the repo as reference for maintaining the existing dark-navy dashboards, but it's excluded from the catalog and no longer installed by default.
