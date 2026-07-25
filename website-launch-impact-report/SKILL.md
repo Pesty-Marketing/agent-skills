@@ -7,7 +7,17 @@ description: "Build a client-facing before/after report answering whether a webs
 
 A before/after report anchored on a launch date: did the new site help or hurt? You compare a pre-launch window against an equal-length post-launch window across three lenses — **SEO** (Search Console), **conversions** (analytics + call tracking), and **UX** — and you split every lens by page type (money/service pages vs. blog), because a relaunch almost always moves those two groups in opposite directions.
 
-A capable agent already knows the obvious moves: match window lengths, add a year-over-year window for seasonality, split branded vs. non-branded queries, confirm old URLs 301 to new ones and new ones are indexed, isolate organic from other channels, lead with a verdict and keep tables in an appendix, and recommend a 60/90-day re-check. **Do all that.** This skill exists for the five things that quietly wreck these reports if you don't know them — they are the reason to read on.
+A capable agent already knows the obvious moves: match window lengths, split branded vs. non-branded queries, confirm old URLs 301 to new ones and new ones are indexed, isolate organic from other channels, lead with a verdict and keep tables in an appendix, and recommend a 60/90-day re-check. **Do all that.** This skill exists for what a capable agent still gets wrong by default: **which comparison to headline** (next), and **five data-integrity traps** that quietly wreck the numbers.
+
+## Headline the comparison that isn't seasonal
+
+For anything with seasonal demand — home services, retail, travel, tax — a plain before/after around the launch **conflates the launch with the season**. Launch in spring, measure into summer, and a pest-control site shows a big "lift" that is mostly rising demand, not the new site.
+
+Lead with **year-over-year, per page-group**: this year's post-launch window vs. the *same calendar window last year*. That cancels the season out and is the truest measure of the launch's effect on the pages that matter — the commercial/"money" pages. Keep the before/after too (the daily chart shows launch *timing*), but label it seasonally-influenced and never let it headline a seasonal group.
+
+> Real case: a service-area group showed **+78% impressions** before/after; **year-over-year it was +9%** — most of the "launch lift" was just the season. Clicks held up YoY (+37%), so the honest headline was "up year-over-year," with the before/after flagged as mostly seasonal.
+
+**Corollary — split by intent, and don't over-weight content pages.** Informational blog traffic is being eroded industry-wide (AI overviews absorbing informational clicks), so a blog-clicks decline is usually a category trend, not a launch failure. Report it as context, mark it low-priority, and put the commercial pages front and center.
 
 ## The five things that go wrong
 
@@ -44,10 +54,20 @@ Build a **slug-stable page key** that maps a page to the *same* identity before 
 
 Once pages are keyed, add the redirect + indexation audit the obvious checklist already calls for — but now it's per-matched-page (did *this* page's equity survive?), which is the question the client actually has.
 
-### 3. An instant, identical step-change at cutover is a tracking artifact, not real UX
-The dangerous UX metric is one that jumps the moment the new site goes live and jumps **identically across every device**. Engagement rate doubling and pages-per-session doubling at the exact cutover, same on mobile and desktop, is a tagging/config change (new template, new measurement setup), not users suddenly loving the site. Report it as real and you've lied to the client.
+**Three refinements that materially change the redirect audit:**
+- **Partial migrations.** Often only some page-types change slugs — the money pages move, the blog keeps its URLs. A page that kept its slug and still returns 200 is **unchanged (healthy)**, not an "old URL still live (duplicate)." Only call it a duplicate when the slug was *supposed* to change but the old URL still serves 200. Getting this wrong turned a genuinely clean migration into a false "12% clean" alarm (really ~86%).
+- **Strip URL fragments before classifying.** Search Console reports in-page jump links (`/blog/foo/#section-2`) as separate "pages"; they resolve to the same page and are never a real slug change or duplicate. Strip `#…` or they flood the "problems" list with non-issues.
+- **Watch for content duplication at migration.** A relaunch can silently republish pages at duplicate URLs (e.g. every post re-created at a `…-2` slug). Detect and surface it — two live copies of one article split its search signals and need consolidating.
 
-Gate every UX metric with a **cutover step-test**: if a metric shows a sustained, instant level-shift at the launch date (rather than a gradual move), exclude it from the verdict and instead *show the step as evidence of the tagging change*. Metrics that move gradually (e.g. average engaged time) are the ones you can trust. If load-speed data (Core Web Vitals) isn't available, say you couldn't measure it — don't proxy it with a tainted engagement metric.
+### 3. Tracking changes at launch — it fools UX metrics *and* conversions
+A relaunch re-tags the site, and new tags don't behave like the old ones. This shows up in two places.
+
+**UX metrics.** The dangerous one jumps the moment the new site goes live and jumps **identically across every device** — engagement rate doubling, pages-per-session doubling at the exact cutover, same on mobile and desktop. That's a tagging/config change, not users suddenly loving the site. Gate every UX metric with a **cutover step-test**: a sustained, instant level-shift at the launch date (rather than a gradual move) is excluded from the verdict and *shown as evidence of the tagging change*. Metrics that move gradually (e.g. average engaged time) you can trust. (When a metric genuinely moves gradually, that's a *real* change — don't reflexively call every shift an artifact; the test is the instant cross-device step.) If load-speed data (Core Web Vitals) isn't available, say you couldn't measure it — don't proxy it with a tainted metric.
+
+**Conversions, same root cause.** A conversion event breaks (a website "click-to-call" tag that drops ~90% overnight — a tag change, not a real call collapse), a form event gets replaced by a new one, or a whole new tracking system appears at launch. Before trusting any conversion delta:
+- **Pick one source of truth and one *continuous* signal across the launch.** If calls run through a call-tracking system (CallRail, CallTrackingMetrics, …), trust *its* inbound-call counts over a website click event. Sum multiple events when one conversion spans several (e.g. first-time + repeat calls).
+- **Show the broken/replaced events as excluded artifacts**, not as results — the same "show the step, exclude it from the verdict" move as the UX gate.
+- **Report conversions site-wide, not per landing-page group, for call/form businesses.** The visitor lands on a service page but calls or submits from the homepage/contact page, so per-page attribution dumps conversions into "other" and understates the money pages. Tradeoff to state plainly: site-wide conversions can't be split money-pages-vs-blog, so when the client asks specifically whether the service pages convert, lean on their SEO clicks/impressions as the page-group signal and say conversions are proven only in aggregate.
 
 ### 4. Write the client copy with zero internal-context hedging
 The client never saw your analysis history, your earlier draft, or the classification bug you fixed. Phrases that reference that history read as confusing non-sequiturs. Ban them:
@@ -67,13 +87,14 @@ The report is the same shape every time; these knobs change. Establish all of th
 
 | Knob | Notes |
 |---|---|
+| Seasonal demand? | Almost always yes for home services. → headline **year-over-year per page-group**; treat before/after as seasonally-influenced (see "Headline the comparison that isn't seasonal"). |
 | Search Console property | Domain property (`sc-domain:…`) vs. URL-prefix (`https://…/`) — affects the query and whether www/protocol variants are covered. |
-| Analytics property ID | Or none — some clients have no GA at all; then conversions come from call tracking / events only. |
+| Analytics property ID | Or none. If it isn't in your configs, discover it programmatically from the analytics account rather than guessing. |
 | Brand-term regex | Splits branded from non-branded. Mind spelling variants (e.g. "defense" vs. "defence"). |
 | Launch/cutover date | Threaded through every window and every sentence of copy. |
 | Window length + refresh cadence | Equal pre/post lengths; plan the ~4-day-later re-pull (gotcha #1) and the 60/90-day re-check. |
-| Did URLs migrate? | If yes → you need the slug-stable page key (gotcha #2) and the redirect/indexation audit. If no → skip both. |
-| Call tracking present? | If yes → **first** confirm the dynamic-number swap survived the launch; a broken swap target silently misattributes calls. Restrict post-launch call attribution to swap-independent sources, or use all-channel totals only. If no → conversions are analytics events only. |
+| Did URLs migrate? | If yes → you need the slug-stable page key (gotcha #2) and the redirect/indexation audit. Note whether *all* page-types moved or only some (partial migration). If no → skip both. |
+| Conversion tracking system | Which system owns conversions — CallRail, CallTrackingMetrics, GA4 events, a form tool? Map the money events (calls, forms) and **check whether tracking changed at launch** — events die/appear/break (gotcha #3). For CallRail specifically, confirm the dynamic-number swap survived the launch; a broken swap target silently misattributes calls. Report call/form conversions site-wide. |
 | Geo/state filter? | Some clients scope analytics to operating states; others don't — check account-manager notes, prior audits, or the analytics property config to decide. |
 
 ## Deliverable
