@@ -93,6 +93,12 @@ HUMAN_COPY = {
         "tagline": "Design or audit any interface — layout, type, color, forms — against professional UI standards.",
         "prompt": "Use the ui-design skill to review this screenshot of our signup page.",
     },
+    "website-launch-impact-report": {
+        "title": "Launch Impact Report",
+        "category": "Research",
+        "tagline": "Show a client whether their website relaunch helped or hurt — before/after on SEO, conversions, and UX.",
+        "prompt": "Use the website-launch-impact-report skill to build a before/after report for our client's new site.",
+    },
     "yt-structure": {
         "title": "YouTube to Markdown",
         "category": "Content Ops",
