@@ -26,6 +26,7 @@ Update later by re-running the same command.
 |---|---|
 | `ann-handley` | Create or audit marketing content with the Everybody Writes framework |
 | `buyer-personas` | Build decision-focused buyer personas from real inputs (5 Rings method) |
+| `linkedin-guest-kit` | Turn an episode into a share kit a podcast guest will actually post — post options in their voice + portrait graphics with their face |
 | `pesty-design` | The default Pesty design system — colors, type, components, and UI kit for on-brand pages, prototypes, and interfaces |
 | `storybrand` | Write or audit customer-facing copy with the StoryBrand SB7 framework |
 | `storytelling` | Long-form narrative copy via Will Storr's Science of Storytelling |

@@ -61,6 +61,12 @@ HUMAN_COPY = {
         "tagline": "Turn real call transcripts and reviews into a persona built on what actually drives buyers.",
         "prompt": "Use the buyer-personas skill to build a persona from these sales call transcripts.",
     },
+    "linkedin-guest-kit": {
+        "title": "LinkedIn Guest Kit",
+        "category": "Content Ops",
+        "tagline": "Give a podcast guest everything they need to share the episode — post options in their own voice plus graphics with their face on them.",
+        "prompt": "Use the linkedin-guest-kit skill to build a share kit for our guest on this episode: <transcript>",
+    },
     "pesty-design": {
         "title": "Pesty Design System",
         "category": "Design & Build",
