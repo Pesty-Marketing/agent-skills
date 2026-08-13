@@ -99,6 +99,12 @@ HUMAN_COPY = {
         "tagline": "Show a client whether their website relaunch helped or hurt — before/after on SEO, conversions, and UX.",
         "prompt": "Use the website-launch-impact-report skill to build a before/after report for our client's new site.",
     },
+    "youtube-thumbnails": {
+        "title": "YouTube Thumbnails",
+        "category": "Content Ops",
+        "tagline": "Go from episode transcript to click-worthy title + photoreal AI thumbnail — hooks, CTR gate, and Nano Banana generation from real headshots.",
+        "prompt": "Use the youtube-thumbnails skill to make thumbnails for this episode: <transcript>",
+    },
     "yt-structure": {
         "title": "YouTube to Markdown",
         "category": "Content Ops",
