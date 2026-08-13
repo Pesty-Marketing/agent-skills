@@ -153,3 +153,7 @@ This pattern has been built many times, and the reused-vs-bespoke boundary is no
 - **Pin the window for re-pulls.** The window derives from "latest reported date," i.e. from when you run. Support a `LATEST=YYYY-MM-DD` override so a deliberate re-pull can reproduce the shipped windows.
 
 When you build one, fork the most complete existing internal instance rather than starting fresh — then **grep the fork for the previous client's hardcoded numbers and names and purge them before you build.** Prior-run figures get baked into KPI tiles and prose and will silently ship as the new client's numbers (a hardcoded "159 pages / was ~11" carried across two clients before it was caught). Note what you reused unchanged vs. what you had to build custom. Once the edges stop surprising you, extract a config-driven template; until then, favor copying the latest instance and reparameterizing over rebuilding.
+
+---
+
+> Maintained by [Pesty Marketing](https://pestymarketing.com) · Browse the [full skill catalog](https://pestymarketing.com/agent-skills/).

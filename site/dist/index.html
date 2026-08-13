@@ -656,6 +656,30 @@ footer p { margin: 0 0 var(--space-2); }
       <article class="skill-card">
         <div class="card-top">
           <span class="chip" style="color:var(--amber);background:var(--amber-dim)">Content Ops</span>
+          <code class="skill-slug">youtube-thumbnails</code>
+        </div>
+        <h3 class="skill-title">YouTube Thumbnails</h3>
+        <p class="skill-desc">Go from episode transcript to click-worthy title + photoreal AI thumbnail — hooks, CTR gate, and Nano Banana generation from real headshots.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-7" class="prompt-text">&ldquo;Use the youtube-thumbnails skill to make thumbnails for this episode: &lt;transcript&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-7', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Build a complete YouTube title + thumbnail package from a video&#x27;s content — extract hooks from the transcript, write title/thumbnail-text combos, gate them for click-through potential, then generate photorealistic thumbnails with Google&#x27;s Nano Banana image models using real headshots and past thumbnails as style references. Invoke on &#x27;make a thumbnail&#x27;, &#x27;thumbnail for this episode/video&#x27;, &#x27;YouTube packaging&#x27;, &#x27;title ideas for this video&#x27;, &#x27;title and thumbnail ideas&#x27;, &#x27;generate thumbnails with nano banana&#x27;. Titles-only requests use Steps 1–2 and skip generation. Not for channel strategy audits or general-purpose image generation.</p>
+          <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-7" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;youtube-thumbnails&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-7', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--amber);background:var(--amber-dim)">Content Ops</span>
           <code class="skill-slug">yt-structure</code>
         </div>
         <h3 class="skill-title">YouTube to Markdown</h3>
@@ -663,8 +687,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-7" class="prompt-text">&ldquo;Use the yt-structure skill to structure this YouTube video: &lt;link&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-7', this)">Copy</button>
+            <span id="prompt-skill-8" class="prompt-text">&ldquo;Use the yt-structure skill to structure this YouTube video: &lt;link&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-8', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -672,8 +696,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Use when turning a YouTube video, talk, podcast, or web article into a clean, citable Markdown document for an LLM knowledge library or RAG/OKF bundle — triggers like &quot;transcribe and structure this video&quot;, &quot;structure this transcript&quot;, &quot;add this talk/article to the library&quot;. Covers pulling captions, faithful structuring, and editor&#x27;s-note / [?] flagging.</p>
           
           <div class="code-row">
-            <code id="cmd-skill-7" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;yt-structure&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-7', this)">Copy</button>
+            <code id="cmd-skill-8" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;yt-structure&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-8', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -684,7 +708,7 @@ footer p { margin: 0 0 var(--space-2); }
   </section>
 
   <footer>
-    <p>Updated July 2026 &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
+    <p>Updated August 2026 &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
     <p>Want to add a skill? Read the <a href="https://github.com/Pesty-Marketing/agent-skills/blob/main/CONTRIBUTING.md">skill-writing guide</a> and add it in the repo (not <code>~/.claude/skills</code>) &mdash; or drop skill ideas in #pesty-crew.</p>
     <p>Built by Pesty Marketing, a pest-control marketing agency &rarr; <a href="https://pestymarketing.com/?utm_source=agent-skills-catalog&amp;utm_medium=web&amp;utm_campaign=agent-skills" target="_blank" rel="noopener">pestymarketing.com</a></p>
   </footer>

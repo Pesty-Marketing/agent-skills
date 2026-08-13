@@ -13,10 +13,10 @@ Turn a video's content into clickable **packaging** — title + thumbnail design
 
 ## Inputs to collect before starting
 
-1. **The content** — transcript preferred (episode, video script, or detailed outline).
+1. **The content** — transcript preferred (episode, video script, or detailed outline). No transcript yet? The `yt-structure` skill in this repo bundles `scripts/yt-transcript` to pull captions from a YouTube URL.
 2. **Headshots** of everyone appearing — for the main subject, 2–4 well-lit photos with *different expressions* (shocked, skeptical, pointing…); guests need 1 clear front-facing photo (a LinkedIn photo works).
 3. **Style references** — 1–2 of the channel's past thumbnails (the models replicate layout language, text-block style, and logo from these).
-4. **Gemini API key** — in `GEMINI_API_KEY` or at `~/.gemini_api_key`. Must be from a **billing-enabled** project (see Gotchas).
+4. **Gemini API key** — in `GEMINI_API_KEY` or at `~/.gemini_api_key`. Must be from a **billing-enabled** project (see Gotchas). Starting from zero: create a key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey), click **Set up billing** on its project (image models have no free tier — a text-only key will 429), then save it: `echo '<key>' > ~/.gemini_api_key && chmod 600 ~/.gemini_api_key`.
 
 ## Step 1 — Extract hooks and draft packaging concepts
 
@@ -57,7 +57,7 @@ Present the surviving concepts to the user with a ranked recommendation. Generat
 
 ## Step 3 — Generate drafts
 
-Use the bundled script (prereq: Python 3, no packages needed):
+Use the bundled script (prereq: Python 3.9+, no packages needed):
 
 ```
 scripts/generate.py --model gemini-2.5-flash-image --prompt concept.txt \
@@ -68,7 +68,7 @@ Run it with `--help` for all flags. Reference-image **order matters** and the pr
 
 Write each concept's prompt using the five-block template in `references/prompt-template.md` (PERSON / STYLE / TEXT / GRAPHIC / LOGO — read it before writing your first prompt; it includes a complete worked example). The three highest-leverage lines: pin the person's identity to the reference photo ("use the man from attached photo 1 EXACTLY"), spell the text strings character-for-character with their colors, and cap the scene at the concept's 3 elements.
 
-Model tiers (per-image cost is pennies; a full job runs well under $2):
+Model tiers. Every call is billed — there is no free tier — but per-image cost is pennies; a full episode job (drafts + edit passes + 2K finals) lands around $1:
 
 | Model | Use for | ~Cost |
 |---|---|---|
@@ -93,7 +93,7 @@ Two edit-pass lessons that save iterations:
 ## Step 5 — Finals
 
 1. Re-render the approved composition on the Pro model at 2K (`--size 2K`): pass the approved image as the only reference with a "reproduce EXACTLY, maximum sharpness" prompt.
-2. Resize to **1280×720** and confirm <2MB (`sips -z 720 1280 in.jpg --out final.jpg` on macOS, or any image tool).
+2. Resize to **1280×720** and confirm <2MB (`sips -z 720 1280 in.jpg --out final.jpg` on macOS, `magick in.jpg -resize 1280x720! final.jpg` with ImageMagick, or any image tool).
 3. **Glance test**: downscale a copy to 320px wide and look at it — all text must read at phone-feed size. A thumbnail is edited on a 4K monitor but consumed at postage-stamp size; verify in the viewing environment, not the editing one.
 4. Save finals next to the video's other assets and deliver both/all variants for platform A/B testing.
 
@@ -103,7 +103,7 @@ Two edit-pass lessons that save iterations:
 |---|---|
 | Image models return 429 "limit: 0" while text models work fine | **Image generation has ZERO free-tier quota.** The key's Google Cloud project needs billing enabled (aistudio.google.com/apikey → Set up billing). Text calls succeeding proves nothing about image access. |
 | 403 PERMISSION_DENIED right after enabling billing | Propagation lag (~1–5 min). Poll with a cheap probe call until 200, then generate. |
-| Gemini CLI login exists but API calls fail | CLI OAuth ≠ API access. Image generation needs an actual API key; the official nanobanana CLI extension also requires one (`NANOBANANA_API_KEY`). |
+| Gemini CLI login exists but API calls fail | CLI OAuth ≠ API access. Image generation needs an actual API key; even the official nanobanana CLI extension requires one (via its own `NANOBANANA_API_KEY` var — the bundled `scripts/generate.py` reads only `GEMINI_API_KEY` / `~/.gemini_api_key`). |
 | Output is 1344×768, not 1280×720 | Expected — models generate at their native 16:9 grid. Resize in post. |
 | Brand logo is almost-right | Models approximate logos from style references. Accept, or patch the real logo file over it in post. |
 
