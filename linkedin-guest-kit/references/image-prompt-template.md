@@ -114,8 +114,10 @@ other words anywhere in the image:
    "[line 2]"
    "[line 3]"
    For emphasis, set "[the punch line]" in white on a solid [accent] block that sits behind
-   just those words — the letters themselves stay white, never [accent]. Do not add
-   quotation marks around these lines.
+   just those words — the letters themselves stay white, never [accent]. If the emphasised
+   phrase wraps onto a second line, the [accent] block must continue behind the wrapped
+   words too: EVERY word of that phrase sits on the block. No word of it may end up as
+   [accent] letters on the background. Do not add quotation marks around these lines.
 3. A short thick [accent] horizontal rule below the quote.
 4. "[GUEST NAME]" — small white extra-bold sans-serif caps, lower left beside the photo.
 5. "[TITLE, COMPANY]" — smaller light-gray sans-serif caps directly beneath the name.
@@ -201,3 +203,8 @@ rest, which is exactly when a head slides into a headline.
 - **Emphasis stated as a block, not a colour** — "white on an accent block" renders legibly;
   "in [accent] for emphasis" renders 2.6:1 and reads as a smudge on a phone. The model does
   exactly what the colour instruction says, so the instruction has to be the accessible one.
+- **The wrapped-emphasis clause** — verified against real renders: with the block instruction
+  but no wrapping rule, 1 of 2 candidates put the block behind the first line and dropped the
+  orphaned last word ("twice.") back to accent letters on navy, 2.35:1. The model treats the
+  block as belonging to a *line*, not a *phrase*, unless told otherwise. Always generate at
+  least two and run `scripts/contrast.py` on each.

@@ -117,8 +117,10 @@ scripts/contrast.py out/final.png --accent "#D90429"   # scan a card for accent-
 scripts/contrast.py --pair "#FFFFFF" "#D90429"         # check any two colours
 ```
 
-A flagged card isn't automatically wrong — accent pixels are expected where a filled block
-sits behind white letters. Look at what it flagged. If they're letters, it's the defect.
+It distinguishes a red *block* (correct) from red *letters* (the defect) by stroke width, so
+a passing card is genuinely clean rather than merely un-flagged. Verified 6/6 against the
+known-good and known-bad cards from Ep 31. Still look at the render — it checks the accent
+trap specifically, not spelling, likeness, or collisions.
 
 Then: re-render the approved image on the Pro model at 2K, resize to **1200×1500**, and view it again at ~400px wide. If a headline doesn't survive that, it fails — the phone feed is the viewing environment.
 

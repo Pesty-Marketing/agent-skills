@@ -39,6 +39,40 @@ def ratio(a, b):
     return (la + 0.05) / (lb + 0.05)
 
 
+# p90 horizontal run of accent pixels, as % of frame width, above which the accent is
+# being used as a filled block rather than as letterforms. Measured separation on real
+# cards: red letters 3.0-3.6%, a proper white-on-red block 9.2%.
+BLOCK_RUN_PCT = 6.0
+
+
+def _run_profile(im, accent):
+    """90th-percentile horizontal run length of accent-coloured pixels, as % of width.
+
+    Letterforms are thin, so their runs are short even at large point sizes; a filled
+    emphasis block spans whole words. This is what separates "white on a red block"
+    (correct) from "red letters on navy" (the defect) — the pixel colours are identical.
+    """
+    ar, ag, ab = accent
+    W, H = im.size
+    px = im.load()
+    runs = []
+    for y in range(H):
+        run = 0
+        for x in range(W):
+            r, g, b = px[x, y]
+            if abs(r - ar) < 70 and r - g > 45 and r - b > 35 and r > 110:
+                run += 1
+            elif run:
+                runs.append(run)
+                run = 0
+        if run:
+            runs.append(run)
+    if not runs:
+        return 0.0
+    runs.sort()
+    return runs[int(len(runs) * 0.9) - 1] / W * 100.0
+
+
 def parse_hex(s):
     s = s.strip().lstrip("#")
     if len(s) == 3:
@@ -82,19 +116,31 @@ def scan(path, accent, threshold):
     d = Counter(dark).most_common(1)[0][0]
     r = ratio(a, d)
     share = 100.0 * len(acc) / len(px)
+    p90 = _run_profile(im, accent)
 
     print(f"{path}")
     print(f"  dominant accent pixel : {hexof(a)}  ({share:.2f}% of frame)")
     print(f"  dominant dark ground  : {hexof(d)}")
-    print(f"  contrast              : {r:.2f}:1   (threshold {threshold})")
+    print(f"  accent-on-dark ratio  : {r:.2f}:1   (threshold {threshold})")
+    print(f"  accent run width (p90): {p90:.2f}% of frame width")
 
     if r >= threshold:
-        print("  PASS — accent is not being used as low-contrast text")
+        print("  PASS — the accent itself clears the threshold against the dark ground")
         return True
-    print("  ⚠️  Accent this close to the dark ground is unreadable AS TEXT.")
-    print("     If those pixels are a filled block behind white letters, you're fine —")
-    print("     check the render. If they are letters, this is the defect: set the word in")
-    print("     white on an accent block instead. See references/image-prompt-template.md.")
+
+    # The ratio alone can't tell a red BLOCK (fine) from red LETTERS (the defect):
+    # both are accent pixels on a dark ground. Stroke width can. Letters produce short
+    # horizontal runs; a filled block behind text produces long ones.
+    if p90 >= BLOCK_RUN_PCT:
+        print(f"  PASS — accent appears as filled blocks (runs >= {BLOCK_RUN_PCT}% wide),")
+        print("         not as letterforms. White-on-accent is the correct treatment.")
+        return True
+
+    print("  FAIL — accent is rendered as LETTERFORMS on the dark ground.")
+    print(f"         Short runs ({p90:.2f}% < {BLOCK_RUN_PCT}%) mean glyph strokes, not a block,")
+    print(f"         and at {r:.2f}:1 they are unreadable in a phone feed.")
+    print("         Fix: set the word in white on an accent block instead — see the")
+    print("         colour contract in references/image-prompt-template.md.")
     return False
 
 
