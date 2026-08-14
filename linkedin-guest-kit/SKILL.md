@@ -117,10 +117,14 @@ scripts/contrast.py out/final.png --accent "#D90429"   # scan a card for accent-
 scripts/contrast.py --pair "#FFFFFF" "#D90429"         # check any two colours
 ```
 
-It distinguishes a red *block* (correct) from red *letters* (the defect) by stroke width, so
-a passing card is genuinely clean rather than merely un-flagged. Verified 6/6 against the
-known-good and known-bad cards from Ep 31. Still look at the render — it checks the accent
-trap specifically, not spelling, likeness, or collisions.
+It distinguishes a red *block* (correct) from red *letters* (the defect) by asking what each
+accent region encloses — a block has pale letters sitting inside it, letterforms enclose the
+dark page background. Verified 8/8 on the known-good and known-bad Ep 31 cards.
+
+**It checks the accent trap and nothing else.** A PASS says no accent letterforms; it says
+nothing about spelling, likeness, collisions, or a leaked face — one card in testing passed
+contrast cleanly while rendering the wrong labels and a face borrowed from the style
+reference. Checks 1 and 4–6 are still yours to make.
 
 Then: re-render the approved image on the Pro model at 2K, resize to **1200×1500**, and view it again at ~400px wide. If a headline doesn't survive that, it fails — the phone feed is the viewing environment.
 

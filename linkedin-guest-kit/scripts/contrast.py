@@ -39,38 +39,76 @@ def ratio(a, b):
     return (la + 0.05) / (lb + 0.05)
 
 
-# p90 horizontal run of accent pixels, as % of frame width, above which the accent is
-# being used as a filled block rather than as letterforms. Measured separation on real
-# cards: red letters 3.0-3.6%, a proper white-on-red block 9.2%.
-BLOCK_RUN_PCT = 6.0
+# Share of the frame (%) occupied by accent-coloured LETTERFORMS above which the card fails.
+# Measured separation on real cards: correct cards (accent used only as blocks/rules) land at
+# 0.00-0.34%, cards containing accent letters at 0.69-5.11%.
+LETTERFORM_PCT = 0.5
+
+# A region is treated as an emphasis BLOCK if this share of the non-accent pixels inside its
+# bounding box are light — i.e. it has pale letters sitting on it. Accent letterforms instead
+# enclose the dark page background.
+BLOCK_INNER_BRIGHT = 0.25
+MIN_REGION = 0.0004          # ignore specks below this share of the frame
 
 
-def _run_profile(im, accent):
-    """90th-percentile horizontal run length of accent-coloured pixels, as % of width.
+def _accent_mask(a):
+    r, g, b = a[:, :, 0], a[:, :, 1], a[:, :, 2]
+    return (r > 70) & (r - g > 30) & (r - b > 25) & (r > g * 1.5)
 
-    Letterforms are thin, so their runs are short even at large point sizes; a filled
-    emphasis block spans whole words. This is what separates "white on a red block"
-    (correct) from "red letters on navy" (the defect) — the pixel colours are identical.
+
+def _letterform_share(im, _accent):
+    """% of the frame taken by accent pixels that are LETTERS rather than blocks.
+
+    Ratio alone cannot tell "white on a red block" from "red letters on navy" — the accent
+    pixels are the same colour on the same background either way. What separates them is what
+    the accent region *encloses*: a block has pale letters sitting inside its bounding box,
+    while accent letterforms enclose the dark page background. Stroke width and pixel-density
+    heuristics both fail here, because correct cards legitimately contain blocks and rules.
     """
-    ar, ag, ab = accent
-    W, H = im.size
-    px = im.load()
-    runs = []
-    for y in range(H):
-        run = 0
-        for x in range(W):
-            r, g, b = px[x, y]
-            if abs(r - ar) < 70 and r - g > 45 and r - b > 35 and r > 110:
-                run += 1
-            elif run:
-                runs.append(run)
-                run = 0
-        if run:
-            runs.append(run)
-    if not runs:
-        return 0.0
-    runs.sort()
-    return runs[int(len(runs) * 0.9) - 1] / W * 100.0
+    import numpy as np
+
+    W0, H0 = im.size
+    sc = max(1, W0 // 450)                      # downscale: this is a shape test, not a colour one
+    small = im.resize((W0 // sc, H0 // sc))
+    a = np.array(small).astype(int)
+    m = _accent_mask(a)
+    lum = 0.2126 * a[:, :, 0] + 0.7152 * a[:, :, 1] + 0.0722 * a[:, :, 2]
+
+    H, W = m.shape
+    seen = -np.ones((H, W), int)
+    total = H * W
+    letter_area = 0
+    regions = letters = 0
+
+    for sy in range(H):
+        for sx in range(W):
+            if not m[sy, sx] or seen[sy, sx] >= 0:
+                continue
+            stack = [(sy, sx)]
+            seen[sy, sx] = 1
+            pts = []
+            while stack:                        # flood fill, 4-connected
+                y, x = stack.pop()
+                pts.append((y, x))
+                for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    ny, nx = y + dy, x + dx
+                    if 0 <= ny < H and 0 <= nx < W and m[ny, nx] and seen[ny, nx] < 0:
+                        seen[ny, nx] = 1
+                        stack.append((ny, nx))
+            if len(pts) < MIN_REGION * total:
+                continue
+            regions += 1
+            ys = [p[0] for p in pts]
+            xs = [p[1] for p in pts]
+            box = lum[min(ys):max(ys) + 1, min(xs):max(xs) + 1]
+            boxm = m[min(ys):max(ys) + 1, min(xs):max(xs) + 1]
+            inner = box[~boxm]
+            bright = float((inner > 140).mean()) if inner.size else 1.0
+            if bright < BLOCK_INNER_BRIGHT:     # encloses dark background -> letterforms
+                letter_area += len(pts)
+                letters += 1
+
+    return 100.0 * letter_area / total, letters, regions
 
 
 def parse_hex(s):
@@ -116,29 +154,29 @@ def scan(path, accent, threshold):
     d = Counter(dark).most_common(1)[0][0]
     r = ratio(a, d)
     share = 100.0 * len(acc) / len(px)
-    p90 = _run_profile(im, accent)
+    lf_pct, n_letters, n_regions = _letterform_share(im, accent)
 
     print(f"{path}")
     print(f"  dominant accent pixel : {hexof(a)}  ({share:.2f}% of frame)")
     print(f"  dominant dark ground  : {hexof(d)}")
     print(f"  accent-on-dark ratio  : {r:.2f}:1   (threshold {threshold})")
-    print(f"  accent run width (p90): {p90:.2f}% of frame width")
+    print(f"  accent letterforms    : {lf_pct:.2f}% of frame ({n_letters} of {n_regions} regions)")
 
     if r >= threshold:
         print("  PASS — the accent itself clears the threshold against the dark ground")
         return True
 
-    # The ratio alone can't tell a red BLOCK (fine) from red LETTERS (the defect):
-    # both are accent pixels on a dark ground. Stroke width can. Letters produce short
-    # horizontal runs; a filled block behind text produces long ones.
-    if p90 >= BLOCK_RUN_PCT:
-        print(f"  PASS — accent appears as filled blocks (runs >= {BLOCK_RUN_PCT}% wide),")
-        print("         not as letterforms. White-on-accent is the correct treatment.")
+    # Ratio alone cannot separate a red BLOCK (fine) from red LETTERS (the defect) — both are
+    # accent pixels on a dark ground. What separates them is whether the region encloses pale
+    # letters (a block) or the dark page background (letterforms).
+    if lf_pct < LETTERFORM_PCT:
+        print("  PASS — accent appears only as blocks/rules, not as letterforms.")
+        print("         White-on-accent is the correct emphasis treatment.")
         return True
 
     print("  FAIL — accent is rendered as LETTERFORMS on the dark ground.")
-    print(f"         Short runs ({p90:.2f}% < {BLOCK_RUN_PCT}%) mean glyph strokes, not a block,")
-    print(f"         and at {r:.2f}:1 they are unreadable in a phone feed.")
+    print(f"         {n_letters} region(s) enclose the dark background rather than pale text,")
+    print(f"         and at {r:.2f}:1 those letters are unreadable in a phone feed.")
     print("         Fix: set the word in white on an accent block instead — see the")
     print("         colour contract in references/image-prompt-template.md.")
     return False
