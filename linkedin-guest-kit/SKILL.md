@@ -72,6 +72,12 @@ Three concepts, so the guest has a genuine choice rather than three near-identic
 
 **Clean the reference photo first.** If it has sunglasses on the head, a hat, a busy background — fix that on the *source photo* in its own edit pass before any compositing. Attributes that survive into a composite are far harder to remove later, and editing a finished composite tends to wreck it.
 
+**Read the colour contract at the top of `references/image-prompt-template.md` before writing
+a prompt.** The short version: the accent colour is a background, never a foreground, and every
+text element clears 4.5:1. If your brand has a design system, it almost certainly already says
+this — Pesty's `pesty-design` skill mandates WCAG AA 4.5:1 on all text, and these graphics are
+covered by it.
+
 Write prompts from `references/image-prompt-template.md`, then:
 
 ```
@@ -91,9 +97,28 @@ scripts/generate.py --aspect 4:5 --model gemini-2.5-flash-image \
 **Look at every render yourself before showing anyone.** Check in order:
 
 1. **Text** — exact spelling, no duplicated or dropped words (the #1 failure mode)
-2. **Likeness** — recognizably the guest, and still wearing what they wore in the source photo
-3. **Collisions** — no head, hair, or graphic touching any letter
-4. **Logo** — present and actually the brand's mark, not an invention
+2. **Contrast** — every text element clears **4.5:1** against what sits directly behind it.
+   No exemption for accent-coloured, "decorative," or emphasis text. Measure it, don't eyeball
+   it — sample the glyph and background pixels and compute the WCAG ratio.
+3. **Size** — the smallest text is at least **3% of frame height** (~45px at 1200×1500).
+   Below that it renders under ~19px in the mobile feed and stops being readable.
+4. **Likeness** — recognizably the guest, and still wearing what they wore in the source photo
+5. **Collisions** — no head, hair, or graphic touching any letter
+6. **Logo** — present and actually the brand's mark, not an invention
+
+Checks 2 and 3 are pass/fail numbers on purpose. They replaced a "does this look legible?"
+judgement that shipped a 2.31:1 element because it got logged as a cosmetic preference.
+
+`scripts/contrast.py` does check 2 for you — it exits non-zero on a failure, so it can gate a
+build rather than rely on someone remembering:
+
+```
+scripts/contrast.py out/final.png --accent "#D90429"   # scan a card for accent-on-dark text
+scripts/contrast.py --pair "#FFFFFF" "#D90429"         # check any two colours
+```
+
+A flagged card isn't automatically wrong — accent pixels are expected where a filled block
+sits behind white letters. Look at what it flagged. If they're letters, it's the defect.
 
 Then: re-render the approved image on the Pro model at 2K, resize to **1200×1500**, and view it again at ~400px wide. If a headline doesn't survive that, it fails — the phone feed is the viewing environment.
 
@@ -133,6 +158,8 @@ The guest gets **one link**, not an email of attachments and instructions.
 | Marketing-team voice | Rebuild from phrases the guest actually said |
 | Shipping renders unviewed | Read every image — text corruption and likeness drift are common |
 | Sending a link the guest can't open | Verify access from outside the org before sending |
+| Logging a contrast failure as a "cosmetic nit" | Measure it. Under 4.5:1 is a defect, not a preference — and a reviewer who downgrades it is how the defect ships |
+| Setting a word in the accent colour for emphasis | Accent is a background. Put a block behind the word and set the word in white — see the colour contract in `references/image-prompt-template.md` |
 
 ---
 

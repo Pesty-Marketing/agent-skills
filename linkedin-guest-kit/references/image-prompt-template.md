@@ -3,6 +3,28 @@
 All three concepts render at **4:5 portrait**. Refer to reference images by position
 ("attached photo 1") — the order you pass `--refs` is the order the model sees.
 
+## The colour contract — read before writing any prompt
+
+**The accent colour is a background. It is never a foreground.** Every text element must
+clear **4.5:1** against whatever sits behind it, with no exemption for a word that is
+"just an accent" or "decorative."
+
+Measured on the brand's own dark-navy card, which is where this went wrong:
+
+| Treatment | Ratio | Verdict |
+|---|---|---|
+| Off-white text on navy | 11.72:1 | use freely |
+| Dark navy text on an off-white block | 11.72:1 | use freely |
+| White text on an accent block | 5.35:1 | **this is how you emphasise** |
+| **Accent text on navy** | **2.60:1** | **never — fails AA outright** |
+
+A lighter accent is not the fix: Pesty Red measures 4.43:1 even on cream, so it is under AA
+as body text on *any* ground in this system. To emphasise a word, put a block behind it and
+set the word in white. Never recolour the letters themselves.
+
+Earlier versions of this file instructed accent-coloured text directly on the dark ground in
+Concepts 2 and 3. Every kit built from them shipped a 2.3–2.7:1 element. Don't reintroduce it.
+
 ## Step 0 — Clean the reference photo first
 
 Do this before any concept, in its own pass, on the *source photo*. One change only.
@@ -91,8 +113,9 @@ other words anywhere in the image:
    "[line 1]"
    "[line 2]"
    "[line 3]"
-   Render "[the punch word]" in [accent] for emphasis. Do not add quotation marks around
-   these lines.
+   For emphasis, set "[the punch line]" in white on a solid [accent] block that sits behind
+   just those words — the letters themselves stay white, never [accent]. Do not add
+   quotation marks around these lines.
 3. A short thick [accent] horizontal rule below the quote.
 4. "[GUEST NAME]" — small white extra-bold sans-serif caps, lower left beside the photo.
 5. "[TITLE, COMPANY]" — smaller light-gray sans-serif caps directly beneath the name.
@@ -128,7 +151,9 @@ render any other words or numbers anywhere in the image:
    Row 1 number "[13-18]", label "[STOPS PER DAY]"
    Row 2 number "[UNDER 20%]", label "[DRIVE TIME]"
    Row 3 number "[80%+]", label "[PROFIT PER ROUTE]"
-   Numbers in off-white, except the percent symbols which are [accent].
+   Every number and every label in off-white, including the percent symbols. No word,
+   digit or symbol anywhere in this card is rendered in [accent] — [accent] appears only
+   as the title block behind white text.
 3. "[GUEST NAME]" — small white extra-bold sans-serif caps, lower left beside the photo.
 4. "[TITLE, COMPANY]" — smaller light-gray sans-serif caps beneath the name.
 The numbers and labels must be crisp, perfectly spelled, correctly punctuated, and
@@ -173,3 +198,6 @@ rest, which is exactly when a head slides into a headline.
   descriptions produce mangled or duplicated words.
 - **"Do not render any other words"** — otherwise the model invents captions and taglines.
 - **Element cap in the closer** — stops it decorating empty space.
+- **Emphasis stated as a block, not a colour** — "white on an accent block" renders legibly;
+  "in [accent] for emphasis" renders 2.6:1 and reads as a smudge on a phone. The model does
+  exactly what the colour instruction says, so the instruction has to be the accessible one.
