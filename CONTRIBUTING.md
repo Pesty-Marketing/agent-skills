@@ -187,7 +187,11 @@ loop — worth it for skills the whole team will lean on.
 - [ ] Add a `HUMAN_COPY` entry in `site/build.py` (title, category, tagline,
       example prompt) — without it the catalog card falls back to raw
       frontmatter with a build warning
-- [ ] `python3 site/build.py && bash site/deploy.sh` to refresh the catalog
+- [ ] `python3 site/build.py`, then **commit the rebuilt `site/dist/index.html`
+      along with your skill** — CI fails the push if the committed page does not
+      match a fresh build, and deploying it is CI's job now, not yours (see
+      `.github/workflows/catalog.yml`). Run `bash site/deploy.sh` by hand only if
+      you need to push the page outside a commit.
 - [ ] Commit + push (`gitleaks protect --staged` first)
 - [ ] Re-run the install command so your agents pick it up:
       `npx skills add Pesty-Marketing/agent-skills -g`

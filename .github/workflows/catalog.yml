@@ -1,0 +1,195 @@
+name: catalog
+
+# Rebuilds the public skills catalog (pestymarketing.com/agent-skills/) from
+# SKILL.md frontmatter and deploys it, so a skill change can no longer ship with
+# a stale page. Replaces the hand-run `python3 site/build.py && ./site/deploy.sh`.
+#
+# The build job runs everywhere, including fork PRs — it needs no secrets. The
+# deploy job runs only on pushes to main, and only when the three deploy secrets
+# are present; without them it is skipped, not failed. See the "Deploy secrets"
+# note in site/deploy.sh's sibling docs / README.
+#
+# NOTE: this repo is PUBLIC, so the deploy target is never hardcoded here the way
+# it is in the private repos — server and app root come from secrets, matching the
+# reason they were externalized to ~/.pesty-deploy.env before the repo went public.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*/SKILL.md'
+      - 'site/**'
+      - '.github/workflows/catalog.yml'
+  pull_request:
+    paths:
+      - '*/SKILL.md'
+      - 'site/**'
+      - '.github/workflows/catalog.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: catalog-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      can_deploy: ${{ steps.secret_check.outputs.can_deploy }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Keep the committed copy before build.py overwrites it in place.
+      - name: Stash the committed dist
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f site/dist/index.html ]; then
+            echo "::error::site/dist/index.html is missing. It is a committed artifact — run 'python3 site/build.py' and commit the result."
+            exit 1
+          fi
+          cp site/dist/index.html /tmp/committed.html
+
+      - name: Rebuild the catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 site/build.py 2>&1 | tee /tmp/build.log
+
+      # build.py prints this and exits 0, so the warning is invisible in a hand
+      # run. A skill with no HUMAN_COPY entry falls back to raw agent frontmatter
+      # on the card, which is exactly the regression the catalog UX pass removed.
+      - name: Every catalogued skill needs a HUMAN_COPY entry
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -q 'WARNING: no HUMAN_COPY entry' /tmp/build.log; then
+            echo "::error::A skill has no HUMAN_COPY entry in site/build.py, so its card would render raw agent text. Add one (title/category/tagline/example prompt)."
+            grep 'WARNING: no HUMAN_COPY entry' /tmp/build.log
+            exit 1
+          fi
+          echo "All catalogued skills have human copy."
+
+      # The post-ship audit found this is one of the two easiest steps to drop:
+      # 6cd9a1e deployed a dist that was never committed. The footer stamp is
+      # month-granular, so it is normalized out — otherwise this would go red on
+      # the first push of every month for a page whose content had not changed.
+      - name: Committed dist must match a fresh build
+        shell: bash
+        run: |
+          set -euo pipefail
+          norm() { sed -E 's/Updated [A-Za-z]+ [0-9]{4}/Updated <STAMP>/' "$1"; }
+          if diff -u <(norm /tmp/committed.html) <(norm site/dist/index.html); then
+            echo "Committed dist is current."
+          else
+            echo "::error::site/dist/index.html is stale (diff above, month stamp ignored). Run 'python3 site/build.py' and commit the rebuilt file."
+            exit 1
+          fi
+
+      - name: Upload the built page
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-skills-catalog-${{ github.run_id }}
+          path: site/dist/index.html
+          if-no-files-found: warn
+          retention-days: 30
+
+      # `secrets` is not available to a job-level `if`, so the decision is made
+      # here in a step and passed out. Absent secrets mean "skip", not "fail" —
+      # a fork PR and a fresh clone should both go green.
+      - name: Can we deploy?
+        id: secret_check
+        shell: bash
+        env:
+          SERVER: ${{ secrets.PESTY_DEPLOY_SERVER }}
+          APP_ROOT: ${{ secrets.PESTY_DEPLOY_APP_ROOT }}
+          SSH_KEY: ${{ secrets.CLOUDWAYS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -n "$SERVER" ] && [ -n "$APP_ROOT" ] && [ -n "$SSH_KEY" ]; then
+            echo "can_deploy=true" >> "$GITHUB_OUTPUT"
+            echo "Deploy secrets present."
+          else
+            echo "can_deploy=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Deploy skipped — set PESTY_DEPLOY_SERVER, PESTY_DEPLOY_APP_ROOT and CLOUDWAYS_SSH_KEY to enable it. The built page is attached as an artifact."
+          fi
+
+  deploy:
+    needs: build
+    if: >-
+      github.event_name != 'pull_request'
+      && github.ref == 'refs/heads/main'
+      && needs.build.outputs.can_deploy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Rebuild rather than trusting the committed file: the build job already
+      # proved the two agree, and this way the live page always carries the
+      # current month stamp.
+      - name: Rebuild the catalog
+        run: python3 site/build.py
+
+      - name: Deploy to Cloudways + purge Varnish
+        shell: bash
+        env:
+          SERVER: ${{ secrets.PESTY_DEPLOY_SERVER }}
+          APP_ROOT: ${{ secrets.PESTY_DEPLOY_APP_ROOT }}
+          CLOUDWAYS_SSH_KEY: ${{ secrets.CLOUDWAYS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$CLOUDWAYS_SSH_KEY" > ~/.ssh/cloudways_rsa
+          chmod 600 ~/.ssh/cloudways_rsa
+          OPTS="-i $HOME/.ssh/cloudways_rsa -oStrictHostKeyChecking=no -oBatchMode=yes"
+          DIR="$APP_ROOT/agent-skills"
+
+          # Idempotent; sftp resolves the absolute path even though the ssh
+          # shell is jailed. "already exists" is not an error here.
+          printf 'mkdir %s\n' "$DIR" | sftp $OPTS -b - "$SERVER" || true
+
+          # scp, not rsync: reliable per-file exit codes and no heredoc. dist
+          # holds exactly one file, so there is nothing for --delete to clean.
+          scp $OPTS site/dist/index.html "$SERVER:$DIR/index.html"
+
+          # HTTP PURGE to the front (port 80) with the public Host header.
+          # Port 2000 is varnishadm's telnet port, not HTTP.
+          ssh $OPTS "$SERVER" \
+            "curl -s -o /dev/null -X PURGE -H 'Host: pestymarketing.com' http://127.0.0.1/agent-skills/" \
+            || echo "  (varnish purge skipped — non-fatal; the check below still has to pass)"
+
+      # Varnish serves stale content with a 200, so a bare 200 does not prove the
+      # deploy landed. Match on a string from the page we just built instead.
+      - name: Verify the live page
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://pestymarketing.com/agent-skills/"
+          EXPECT=$(grep -o 'Updated [A-Za-z]* [0-9]*' site/dist/index.html | head -1)
+          echo "Expecting: $EXPECT"
+          for attempt in 1 2 3 4 5 6; do
+            body=$(curl -sS -A 'Mozilla/5.0' "$URL" || true)
+            code=$(curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0' "$URL" || true)
+            echo "  attempt $attempt: HTTP $code"
+            if [ "$code" = "200" ] && printf '%s' "$body" | grep -qF "$EXPECT"; then
+              echo "Live and current → $URL"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::$URL did not serve the freshly built page (last HTTP $code). Cache may be stale or the upload failed."
+          exit 1
