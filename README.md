@@ -30,6 +30,7 @@ Update later by re-running the same command.
 | `pesty-design` | The default Pesty design system — colors, type, components, and UI kit for on-brand pages, prototypes, and interfaces |
 | `storybrand` | Write or audit customer-facing copy with the StoryBrand SB7 framework |
 | `storytelling` | Long-form narrative copy via Will Storr's Science of Storytelling |
+| `untangle` | Clarify messy problems, expose blind spots, and choose the next step with Why, How, or What trees |
 | `ui-design` | Build or audit interface designs (general-purpose, not Pesty-specific) |
 | `website-launch-impact-report` | Build a before/after report on whether a website relaunch helped or hurt SEO, conversions, and UX |
 | `youtube-thumbnails` | Go from transcript to YouTube title + photoreal AI thumbnail — hooks, CTR gate, Nano Banana generation |
@@ -43,8 +44,8 @@ Update later by re-running the same command.
 
 1. Create `<skill-name>/SKILL.md` in this repo (kebab-case folder; frontmatter needs `name` matching the folder and a `description` that says what it does **and when to use it** — that's all agents see before loading it). Put supporting docs in `<skill-name>/references/`.
 2. Add a `HUMAN_COPY` entry for it in `site/build.py` (title, category, tagline, example prompt).
-3. Commit and push.
-4. Regenerate the catalog page: `python3 site/build.py && bash site/deploy.sh`.
+3. Run `python3 site/build.py` and commit the rebuilt `site/dist/index.html` alongside the skill and catalog entry. Run `gitleaks protect --staged` before committing.
+4. Push to `main`. The catalog workflow checks the build and deploys the page automatically when deployment secrets are configured. Verify the deployment job and the new card on the live page; a successful build alone does not confirm publication.
 5. Everyone picks it up on their next `npx skills add Pesty-Marketing/agent-skills -g`.
 
 Don't create skills loose in `~/.claude/skills/` — this repo is the source of truth.

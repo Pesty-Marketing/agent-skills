@@ -1,0 +1,4 @@
+interface:
+  display_name: "Untangle"
+  short_description: "Expose blind spots and clarify the next decision"
+  default_prompt: "Use $untangle to help me frame this problem, expose blind spots, and work out the next decision."

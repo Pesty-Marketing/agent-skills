@@ -42,6 +42,7 @@ GLOBAL_INSTALL_CMD = "npx skills add Pesty-Marketing/agent-skills -g"
 CATEGORIES = {
     "Writing & Messaging": ("var(--blue)", "var(--blue-dim)"),
     "Research": ("var(--purple)", "var(--purple-dim)"),
+    "Strategy & Decisions": ("var(--purple)", "var(--purple-dim)"),
     "Design & Build": ("var(--green)", "var(--green-dim)"),
     "Content Ops": ("var(--amber)", "var(--amber-dim)"),
     "New": ("var(--text-secondary)", "var(--surface-raised)"),
@@ -49,6 +50,12 @@ CATEGORIES = {
 
 # Human-facing card copy, keyed by skill folder name.
 HUMAN_COPY = {
+    "untangle": {
+        "title": "Untangle",
+        "category": "Strategy & Decisions",
+        "tagline": "Clarify a messy problem, expose blind spots, and decide what to do next.",
+        "prompt": "Use the untangle skill to help us understand why we keep missing client deadlines and decide what to change.",
+    },
     "ann-handley": {
         "title": "Everybody Writes",
         "category": "Writing & Messaging",
@@ -234,7 +241,7 @@ def render_card(skill, index):
     ref_note = ""
     if ref_count > 0:
         plural = "guide" if ref_count == 1 else "guides"
-        ref_note = f"<p class=\"detail-refs\">Ships with {ref_count} reference {plural} the agent reads as it works.</p>"
+        ref_note = f"          <p class=\"detail-refs\">Ships with {ref_count} reference {plural} the agent reads as it works.</p>\n"
 
     return f"""      <article class="skill-card">
         <div class="card-top">
@@ -246,8 +253,7 @@ def render_card(skill, index):
 {prompt_html}        <details class="skill-details">
           <summary>Details &amp; solo install</summary>
           <p class="detail-desc">{esc(skill["description"])}</p>
-          {ref_note}
-          <div class="code-row">
+{ref_note}          <div class="code-row">
             <code id="{code_id}" class="code-block">{esc(install_cmd)}</code>
             <button class="copy-btn" type="button" onclick="copyCmd('{code_id}', this)">Copy</button>
           </div>
