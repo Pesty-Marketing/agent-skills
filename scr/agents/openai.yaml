@@ -1,0 +1,3 @@
+interface:
+  display_name: "SCR"
+  short_description: "Draft and review Situation–Complication–Resolution messages"

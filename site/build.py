@@ -50,6 +50,36 @@ CATEGORIES = {
 
 # Human-facing card copy, keyed by skill folder name.
 HUMAN_COPY = {
+    "scr": {
+        "title": "SCR Communication",
+        "category": "Writing & Messaging",
+        "tagline": "Turn context, a problem, and a proposed action into a concise client or team message.",
+        "prompt": "Use the scr skill to turn these notes into a client update with a clear next step.",
+    },
+    "pyramid-principle": {
+        "title": "Pyramid Principle",
+        "category": "Writing & Messaging",
+        "tagline": "Lead with the answer, then organize the reasons and evidence that support it.",
+        "prompt": "Use the pyramid-principle skill to organize this recommendation for our leadership team.",
+    },
+    "presentation-structure": {
+        "title": "Presentation Structure",
+        "category": "Writing & Messaging",
+        "tagline": "Build a clear presentation opening, supporting argument, and closing from your notes.",
+        "prompt": "Use the presentation-structure skill to turn these notes into a speaking outline for our client meeting.",
+    },
+    "problem-solving-process": {
+        "title": "Problem Solving Process",
+        "category": "Strategy & Decisions",
+        "tagline": "Define a business problem, prioritize what to investigate, and build an evidence-based work plan.",
+        "prompt": "Use the problem-solving-process skill to plan an investigation into why our client leads declined.",
+    },
+    "transcript-cleanup": {
+        "title": "Transcript Cleanup",
+        "category": "Content Ops",
+        "tagline": "Clean a garbled talk or meeting transcript while preserving speakers, facts, and unresolved wording.",
+        "prompt": "Use the transcript-cleanup skill to clean this meeting transcript and flag wording we need to verify.",
+    },
     "untangle": {
         "title": "Untangle",
         "category": "Strategy & Decisions",

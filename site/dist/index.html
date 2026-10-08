@@ -512,6 +512,78 @@ footer p { margin: 0 0 var(--space-2); }
       <article class="skill-card">
         <div class="card-top">
           <span class="chip" style="color:var(--blue);background:var(--blue-dim)">Writing &amp; Messaging</span>
+          <code class="skill-slug">presentation-structure</code>
+        </div>
+        <h3 class="skill-title">Presentation Structure</h3>
+        <p class="skill-desc">Build a clear presentation opening, supporting argument, and closing from your notes.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-1" class="prompt-text">&ldquo;Use the presentation-structure skill to turn these notes into a speaking outline for our client meeting.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-1', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Draft or review presentation argument structure using an SCQR opening and Pyramid Principle body. Use when combining SCR with the Pyramid Principle or shaping a presentation&#x27;s opening, supporting argument, and closing.</p>
+          <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-1" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;presentation-structure&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-1', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--blue);background:var(--blue-dim)">Writing &amp; Messaging</span>
+          <code class="skill-slug">pyramid-principle</code>
+        </div>
+        <h3 class="skill-title">Pyramid Principle</h3>
+        <p class="skill-desc">Lead with the answer, then organize the reasons and evidence that support it.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-2" class="prompt-text">&ldquo;Use the pyramid-principle skill to organize this recommendation for our leadership team.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-2', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Draft or review communication using the Pyramid Principle. Use for Pyramid Principle requests or organizing a recommendation into a main message, supporting arguments, and evidence.</p>
+          <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-2" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;pyramid-principle&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-2', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--blue);background:var(--blue-dim)">Writing &amp; Messaging</span>
+          <code class="skill-slug">scr</code>
+        </div>
+        <h3 class="skill-title">SCR Communication</h3>
+        <p class="skill-desc">Turn context, a problem, and a proposed action into a concise client or team message.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-3" class="prompt-text">&ldquo;Use the scr skill to turn these notes into a client update with a clear next step.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-3', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Draft or review messages using Situation–Complication–Resolution (SCR). Use for SCR requests or concise recommendations that need context, a problem, and a proposed action.</p>
+          <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-3" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;scr&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-3', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--blue);background:var(--blue-dim)">Writing &amp; Messaging</span>
           <code class="skill-slug">storybrand</code>
         </div>
         <h3 class="skill-title">StoryBrand (SB7)</h3>
@@ -519,8 +591,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-1" class="prompt-text">&ldquo;Use the storybrand skill to audit the copy on this homepage.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-1', this)">Copy</button>
+            <span id="prompt-skill-4" class="prompt-text">&ldquo;Use the storybrand skill to audit the copy on this homepage.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-4', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -528,8 +600,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Apply the StoryBrand SB7 framework to create or evaluate customer-facing copy. Two modes — Write (homepage, landing page, email, ad, one-liner) and Audit (review existing copy against SB7 checklist). Invoke when user says &quot;use StoryBrand,&quot; &quot;SB7,&quot; &quot;apply the framework,&quot; or requests help with brand messaging, homepage copy, or marketing copy where narrative structure matters. Not for blog posts, SEO articles, or general writing.</p>
           <p class="detail-refs">Ships with 4 reference guides the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-1" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;storybrand&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-1', this)">Copy</button>
+            <code id="cmd-skill-4" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;storybrand&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-4', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -543,8 +615,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-2" class="prompt-text">&ldquo;Use the storytelling skill to turn these notes into a founder story.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-2', this)">Copy</button>
+            <span id="prompt-skill-5" class="prompt-text">&ldquo;Use the storytelling skill to turn these notes into a founder story.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-5', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -552,8 +624,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Apply Will Storr&#x27;s Science of Storytelling framework (Sacred Flaw, theory of control, dramatic question, change-driven openings) to long-form narrative copy where engagement matters more than direct-response structure. Two modes — Write (founder narrative, brand story, About page, case study, blog hook, long-form sales) and Audit (review existing narrative for character flaw, change, curiosity gap, transformation arc). Invoke when user says &quot;use Storr,&quot; &quot;Science of Storytelling,&quot; &quot;sacred flaw,&quot; &quot;make this more compelling,&quot; or requests help with founder stories, About pages, case studies, brand origin, or any narrative where character + transformation is the point. Not for homepages, ad headlines, or scan-first marketing surfaces — use the storybrand skill for those.</p>
           <p class="detail-refs">Ships with 5 reference guides the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-2" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;storytelling&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-2', this)">Copy</button>
+            <code id="cmd-skill-5" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;storytelling&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-5', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -567,8 +639,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-3" class="prompt-text">&ldquo;Use the buyer-personas skill to build a persona from these sales call transcripts.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-3', this)">Copy</button>
+            <span id="prompt-skill-6" class="prompt-text">&ldquo;Use the buyer-personas skill to build a persona from these sales call transcripts.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-6', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -576,8 +648,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Use when building a buyer persona, customer persona, or ICP from real inputs — sales/discovery call transcripts (Fathom), win-loss interviews, surveys, reviews, CRM won/lost notes — and you want a decision-focused persona, not a demographic profile. Triggers like &quot;make a buyer persona&quot;, &quot;build a persona for &lt;client/segment&gt;&quot;, &quot;turn these call transcripts into a persona&quot;, &quot;what drives these buyers&quot;. Applies the Kraus &amp; Revella 5 Rings of Buying Insight method.</p>
           <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-3" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;buyer-personas&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-3', this)">Copy</button>
+            <code id="cmd-skill-6" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;buyer-personas&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-6', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -591,16 +663,40 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-4" class="prompt-text">&ldquo;Use the website-launch-impact-report skill to build a before/after report for our client&#x27;s new site.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-4', this)">Copy</button>
+            <span id="prompt-skill-7" class="prompt-text">&ldquo;Use the website-launch-impact-report skill to build a before/after report for our client&#x27;s new site.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-7', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
           <summary>Details &amp; solo install</summary>
           <p class="detail-desc">Build a client-facing before/after report answering whether a website relaunch or migration helped or hurt — SEO, conversions, and UX, pre-launch vs post-launch. Use when a site was relaunched, redesigned, or migrated to new URLs and someone asks &#x27;did the new site help or hurt&#x27;, &#x27;new-site impact&#x27;, &#x27;before/after website report&#x27;, or &#x27;launch impact report for &lt;client&gt;&#x27;. Not for routine monthly SEO reporting or a report unconnected to a launch/migration event.</p>
           <div class="code-row">
-            <code id="cmd-skill-4" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;website-launch-impact-report&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-4', this)">Copy</button>
+            <code id="cmd-skill-7" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;website-launch-impact-report&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-7', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--purple);background:var(--purple-dim)">Strategy &amp; Decisions</span>
+          <code class="skill-slug">problem-solving-process</code>
+        </div>
+        <h3 class="skill-title">Problem Solving Process</h3>
+        <p class="skill-desc">Define a business problem, prioritize what to investigate, and build an evidence-based work plan.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-8" class="prompt-text">&ldquo;Use the problem-solving-process skill to plan an investigation into why our client leads declined.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-8', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Structure business problem-solving through definition, decomposition, prioritization, investigation planning, analysis, and synthesis. Use for problem-solving process requests or turning an ambiguous business problem into an investigation plan.</p>
+          <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-8" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;problem-solving-process&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-8', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -614,16 +710,16 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-5" class="prompt-text">&ldquo;Use the untangle skill to help us understand why we keep missing client deadlines and decide what to change.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-5', this)">Copy</button>
+            <span id="prompt-skill-9" class="prompt-text">&ldquo;Use the untangle skill to help us understand why we keep missing client deadlines and decide what to change.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-9', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
           <summary>Details &amp; solo install</summary>
           <p class="detail-desc">Untangle ambiguous problems with Why, How, or What trees. Use to clarify the question, expose blind spots, or separate causes, options, and work before deciding.</p>
           <div class="code-row">
-            <code id="cmd-skill-5" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;untangle&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-5', this)">Copy</button>
+            <code id="cmd-skill-9" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;untangle&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-9', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -637,16 +733,16 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-6" class="prompt-text">&ldquo;Use the pesty-design skill to build a landing page for our new SEO offer.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-6', this)">Copy</button>
+            <span id="prompt-skill-10" class="prompt-text">&ldquo;Use the pesty-design skill to build a landing page for our new SEO offer.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-10', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
           <summary>Details &amp; solo install</summary>
           <p class="detail-desc">Use this skill to generate well-branded interfaces and assets for Pesty Marketing (the #1 pest control marketing agency — SEO, PPC &amp; web design), either for production or throwaway prototypes/mocks/etc. Contains essential design guidelines, colors, type, fonts, assets, and UI kit components for prototyping. This is the default Pesty design system for all new frontend work. user-invocable: true</p>
           <div class="code-row">
-            <code id="cmd-skill-6" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;pesty-design&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-6', this)">Copy</button>
+            <code id="cmd-skill-10" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;pesty-design&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-10', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -660,8 +756,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-7" class="prompt-text">&ldquo;Use the ui-design skill to review this screenshot of our signup page.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-7', this)">Copy</button>
+            <span id="prompt-skill-11" class="prompt-text">&ldquo;Use the ui-design skill to review this screenshot of our signup page.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-11', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -669,8 +765,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Apply Master UI Design + Practical UI frameworks to build or audit interface designs (components, layouts, typography, color, forms, buttons, navigation, copywriting). Invoke when user says &quot;use ui-design,&quot; &quot;audit this UI,&quot; &quot;review the design,&quot; or asks for help building/improving an interface, component, or screen. General-purpose (not Pesty-specific; use the pesty-design skill for that).</p>
           <p class="detail-refs">Ships with 8 reference guides the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-7" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;ui-design&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-7', this)">Copy</button>
+            <code id="cmd-skill-11" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;ui-design&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-11', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -684,8 +780,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-8" class="prompt-text">&ldquo;Use the linkedin-guest-kit skill to build a share kit for our guest on this episode: &lt;transcript&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-8', this)">Copy</button>
+            <span id="prompt-skill-12" class="prompt-text">&ldquo;Use the linkedin-guest-kit skill to build a share kit for our guest on this episode: &lt;transcript&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-12', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -693,8 +789,32 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Build a share kit that a podcast guest can actually post — several LinkedIn post options written in the guest&#x27;s own voice from the episode transcript, plus portrait graphics with their face on them, generated with Google&#x27;s Nano Banana image models. Invoke on &#x27;linkedin kit for &lt;guest&gt;&#x27;, &#x27;post options for our podcast guest&#x27;, &#x27;guest promo assets&#x27;, &#x27;help our guest share the episode&#x27;, &#x27;linkedin graphics for this episode&#x27;. Copy-only requests use Steps 1–3 and skip generation. Not for the host&#x27;s own posting schedule, LinkedIn ads, or company-page content.</p>
           <p class="detail-refs">Ships with 2 reference guides the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-8" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;linkedin-guest-kit&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-8', this)">Copy</button>
+            <code id="cmd-skill-12" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;linkedin-guest-kit&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-12', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--amber);background:var(--amber-dim)">Content Ops</span>
+          <code class="skill-slug">transcript-cleanup</code>
+        </div>
+        <h3 class="skill-title">Transcript Cleanup</h3>
+        <p class="skill-desc">Clean a garbled talk or meeting transcript while preserving speakers, facts, and unresolved wording.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-13" class="prompt-text">&ldquo;Use the transcript-cleanup skill to clean this meeting transcript and flag wording we need to verify.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-13', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Use when a pasted or exported speech transcript is garbled — a live auto-transcription of a talk, a Gemini/Fathom meeting note with crosstalk, a recording that starts mid-sentence, names mangled by the recognizer — and the user wants a faithful cleaned version (&quot;run the usual transcript cleanup&quot;, &quot;clean this up&quot;, &quot;next transcript&quot;). Not for clean YouTube captions or articles (use yt-structure) and not for summaries.</p>
+          <p class="detail-refs">Ships with 3 reference guides the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-13" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;transcript-cleanup&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-13', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -708,8 +828,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-9" class="prompt-text">&ldquo;Use the youtube-thumbnails skill to make thumbnails for this episode: &lt;transcript&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-9', this)">Copy</button>
+            <span id="prompt-skill-14" class="prompt-text">&ldquo;Use the youtube-thumbnails skill to make thumbnails for this episode: &lt;transcript&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-14', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -717,8 +837,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Build a complete YouTube title + thumbnail package from a video&#x27;s content — extract hooks from the transcript, write title/thumbnail-text combos, gate them for click-through potential, then generate photorealistic thumbnails with Google&#x27;s Nano Banana image models using real headshots and past thumbnails as style references. Invoke on &#x27;make a thumbnail&#x27;, &#x27;thumbnail for this episode/video&#x27;, &#x27;YouTube packaging&#x27;, &#x27;title ideas for this video&#x27;, &#x27;title and thumbnail ideas&#x27;, &#x27;generate thumbnails with nano banana&#x27;. Titles-only requests use Steps 1–2 and skip generation. Not for channel strategy audits or general-purpose image generation.</p>
           <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-9" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;youtube-thumbnails&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-9', this)">Copy</button>
+            <code id="cmd-skill-14" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;youtube-thumbnails&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-14', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -732,16 +852,16 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-10" class="prompt-text">&ldquo;Use the yt-structure skill to structure this YouTube video: &lt;link&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-10', this)">Copy</button>
+            <span id="prompt-skill-15" class="prompt-text">&ldquo;Use the yt-structure skill to structure this YouTube video: &lt;link&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-15', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
           <summary>Details &amp; solo install</summary>
           <p class="detail-desc">Use when turning a YouTube video, talk, podcast, or web article into a clean, citable Markdown document for an LLM knowledge library or RAG/OKF bundle — triggers like &quot;transcribe and structure this video&quot;, &quot;structure this transcript&quot;, &quot;add this talk/article to the library&quot;. Covers pulling captions, faithful structuring, and editor&#x27;s-note / [?] flagging.</p>
           <div class="code-row">
-            <code id="cmd-skill-10" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;yt-structure&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-10', this)">Copy</button>
+            <code id="cmd-skill-15" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;yt-structure&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-15', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -752,7 +872,7 @@ footer p { margin: 0 0 var(--space-2); }
   </section>
 
   <footer>
-    <p>Updated September 2026 &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
+    <p>Updated October 2026 &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
     <p>Want to add a skill? Read the <a href="https://github.com/Pesty-Marketing/agent-skills/blob/main/CONTRIBUTING.md">skill-writing guide</a> and add it in the repo (not <code>~/.claude/skills</code>) &mdash; or drop skill ideas in #pesty-crew.</p>
     <p>Built by Pesty Marketing, a pest-control marketing agency &rarr; <a href="https://pestymarketing.com/?utm_source=agent-skills-catalog&amp;utm_medium=web&amp;utm_campaign=agent-skills" target="_blank" rel="noopener">pestymarketing.com</a></p>
   </footer>

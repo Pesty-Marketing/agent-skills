@@ -24,6 +24,11 @@ Update later by re-running the same command.
 
 | Skill | What it does |
 |---|---|
+| `scr` | Draft or review concise messages with Situation, Complication, and Resolution |
+| `pyramid-principle` | Lead with the answer and organize supporting arguments and evidence |
+| `presentation-structure` | Shape a presentation opening, body, and closing with SCQR and the Pyramid Principle |
+| `problem-solving-process` | Define and decompose business problems, prioritize questions, and plan investigations |
+| `transcript-cleanup` | Recover garbled transcripts without inventing wording, losing attribution, or hiding uncertainty |
 | `ann-handley` | Create or audit marketing content with the Everybody Writes framework |
 | `buyer-personas` | Build decision-focused buyer personas from real inputs (5 Rings method) |
 | `linkedin-guest-kit` | Turn an episode into a share kit a podcast guest will actually post — post options in their voice + portrait graphics with their face |
