@@ -1,0 +1,47 @@
+{
+  "skill_name": "pesty-explainer",
+  "evals": [
+    {
+      "id": 1,
+      "name": "map-pack-youtube",
+      "prompt": "Make a Pesty video for our YouTube channel explaining how the Google map pack works and how a pest control company gets into the top 3.",
+      "expected_output": "Pesty-branded explainer MP4 + SRT, PCO-owner protagonist, real or no numbers, end card with strategy-call CTA",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "cac-vs-cpl-linkedin",
+      "prompt": "We need a short Pesty-branded explainer for LinkedIn: why pest control owners should judge marketing on cost per acquisition, not cost per lead.",
+      "expected_output": "Pesty-branded explainer MP4 + SRT; proof numbers only from pestymarketing.com and listed in sources.md",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "lsa-vs-google-ads",
+      "prompt": "Pesty explainer video: Google Local Services Ads vs regular Google Search ads, and when a PCO should use each.",
+      "expected_output": "Pesty-branded explainer MP4 + SRT; accurate LSA mechanics sourced; comparison layout; end card",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "gbp-agency-access",
+      "prompt": "Turn this blog post into a Pesty video for our YouTube channel: https://pestymarketing.com/add-marketing-agency-google-business-profile-pest-control/",
+      "expected_output": "A Pesty-branded 2-4 min MP4 + SRT whose claims all trace to the blog post (sources.md), using the new motion rules",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "ranking-pages-in-common",
+      "prompt": "Turn this blog post into a Pesty video for our YouTube channel: https://pestymarketing.com/what-ranking-pest-control-pages-have-in-common/",
+      "expected_output": "A Pesty-branded 2-4 min MP4 + SRT whose claims all trace to the blog post (sources.md), using the new motion rules",
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "lsa-moving-to-google-ads",
+      "prompt": "Turn this blog post into a Pesty video for our YouTube channel: https://pestymarketing.com/local-services-ads-moving-to-google-ads-pest-control/",
+      "expected_output": "A Pesty-branded 2-4 min MP4 + SRT whose claims all trace to the blog post (sources.md), using the new motion rules",
+      "files": []
+    }
+  ]
+}

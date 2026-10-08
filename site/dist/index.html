@@ -773,6 +773,30 @@ footer p { margin: 0 0 var(--space-2); }
       <article class="skill-card">
         <div class="card-top">
           <span class="chip" style="color:var(--amber);background:var(--amber-dim)">Content Ops</span>
+          <code class="skill-slug">animated-explainer</code>
+        </div>
+        <h3 class="skill-title">Animated Explainer Videos</h3>
+        <p class="skill-desc">Turn a topic or document into a narrated training video with animation and captions. Requires macOS setup and ElevenLabs.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-12" class="prompt-text">&ldquo;Use the animated-explainer skill to turn this process document into a training video for our team.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-12', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Animated explainer videos - turns one prompt into a finished 2-4 minute narrated MP4 (Manim animation, polished flat motion-design style, ElevenLabs voice, .srt captions). Use whenever someone asks for an explainer, training, or educational video on any topic - &quot;make a video explaining X&quot;, &quot;3b1b/Kurzgesagt-style explainer on Y&quot;, &quot;turn this doc into a training video&quot;, &quot;animate how Z works&quot; - even if they don&#x27;t say &quot;animated&quot; or &quot;Manim&quot;. For Pesty Marketing branded or marketing videos, use pesty-explainer instead.</p>
+          <p class="detail-refs">Ships with 2 reference guides the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-12" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;animated-explainer&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-12', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--amber);background:var(--amber-dim)">Content Ops</span>
           <code class="skill-slug">linkedin-guest-kit</code>
         </div>
         <h3 class="skill-title">LinkedIn Guest Kit</h3>
@@ -780,8 +804,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-12" class="prompt-text">&ldquo;Use the linkedin-guest-kit skill to build a share kit for our guest on this episode: &lt;transcript&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-12', this)">Copy</button>
+            <span id="prompt-skill-13" class="prompt-text">&ldquo;Use the linkedin-guest-kit skill to build a share kit for our guest on this episode: &lt;transcript&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-13', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -789,8 +813,32 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Build a share kit that a podcast guest can actually post — several LinkedIn post options written in the guest&#x27;s own voice from the episode transcript, plus portrait graphics with their face on them, generated with Google&#x27;s Nano Banana image models. Invoke on &#x27;linkedin kit for &lt;guest&gt;&#x27;, &#x27;post options for our podcast guest&#x27;, &#x27;guest promo assets&#x27;, &#x27;help our guest share the episode&#x27;, &#x27;linkedin graphics for this episode&#x27;. Copy-only requests use Steps 1–3 and skip generation. Not for the host&#x27;s own posting schedule, LinkedIn ads, or company-page content.</p>
           <p class="detail-refs">Ships with 2 reference guides the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-12" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;linkedin-guest-kit&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-12', this)">Copy</button>
+            <code id="cmd-skill-13" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;linkedin-guest-kit&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-13', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--amber);background:var(--amber-dim)">Content Ops</span>
+          <code class="skill-slug">pesty-explainer</code>
+        </div>
+        <h3 class="skill-title">Pesty Explainer Videos</h3>
+        <p class="skill-desc">Create a Pesty-branded marketing video with narration, animation, captions, and a clear call to action. Uses Animated Explainer.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-14" class="prompt-text">&ldquo;Use the pesty-explainer skill to turn this case study into a video for pest control owners.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-14', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Pesty Marketing branded explainer videos - turns one prompt into a finished 2-4 minute narrated MP4 in the Pesty brand (white canvas, Pesty Red, Epilogue/Montserrat, logo end card with CTA) for Pesty&#x27;s own marketing content - YouTube, LinkedIn, website and sales explainers aimed at pest control owners. Use whenever someone wants a Pesty-branded or Pesty marketing video, &quot;make a Pesty video on local SEO / LSAs / CAC&quot;, &quot;explainer for our YouTube channel&quot;, &quot;turn this case study into a video&quot;, even if they don&#x27;t say &quot;branded&quot;. For internal training videos (not Pesty-branded), use animated-explainer instead.</p>
+          <p class="detail-refs">Ships with 2 reference guides the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-14" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;animated-explainer&quot; &quot;pesty-explainer&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-14', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -804,8 +852,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-13" class="prompt-text">&ldquo;Use the transcript-cleanup skill to clean this meeting transcript and flag wording we need to verify.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-13', this)">Copy</button>
+            <span id="prompt-skill-15" class="prompt-text">&ldquo;Use the transcript-cleanup skill to clean this meeting transcript and flag wording we need to verify.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-15', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -813,8 +861,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Use when a pasted or exported speech transcript is garbled — a live auto-transcription of a talk, a Gemini/Fathom meeting note with crosstalk, a recording that starts mid-sentence, names mangled by the recognizer — and the user wants a faithful cleaned version (&quot;run the usual transcript cleanup&quot;, &quot;clean this up&quot;, &quot;next transcript&quot;). Not for clean YouTube captions or articles (use yt-structure) and not for summaries.</p>
           <p class="detail-refs">Ships with 3 reference guides the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-13" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;transcript-cleanup&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-13', this)">Copy</button>
+            <code id="cmd-skill-15" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;transcript-cleanup&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-15', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -828,8 +876,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-14" class="prompt-text">&ldquo;Use the youtube-thumbnails skill to make thumbnails for this episode: &lt;transcript&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-14', this)">Copy</button>
+            <span id="prompt-skill-16" class="prompt-text">&ldquo;Use the youtube-thumbnails skill to make thumbnails for this episode: &lt;transcript&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-16', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -837,8 +885,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Build a complete YouTube title + thumbnail package from a video&#x27;s content — extract hooks from the transcript, write title/thumbnail-text combos, gate them for click-through potential, then generate photorealistic thumbnails with Google&#x27;s Nano Banana image models using real headshots and past thumbnails as style references. Invoke on &#x27;make a thumbnail&#x27;, &#x27;thumbnail for this episode/video&#x27;, &#x27;YouTube packaging&#x27;, &#x27;title ideas for this video&#x27;, &#x27;title and thumbnail ideas&#x27;, &#x27;generate thumbnails with nano banana&#x27;. Titles-only requests use Steps 1–2 and skip generation. Not for channel strategy audits or general-purpose image generation.</p>
           <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-14" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;youtube-thumbnails&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-14', this)">Copy</button>
+            <code id="cmd-skill-16" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;youtube-thumbnails&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-16', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -852,16 +900,16 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-15" class="prompt-text">&ldquo;Use the yt-structure skill to structure this YouTube video: &lt;link&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-15', this)">Copy</button>
+            <span id="prompt-skill-17" class="prompt-text">&ldquo;Use the yt-structure skill to structure this YouTube video: &lt;link&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-17', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
           <summary>Details &amp; solo install</summary>
           <p class="detail-desc">Use when turning a YouTube video, talk, podcast, or web article into a clean, citable Markdown document for an LLM knowledge library or RAG/OKF bundle — triggers like &quot;transcribe and structure this video&quot;, &quot;structure this transcript&quot;, &quot;add this talk/article to the library&quot;. Covers pulling captions, faithful structuring, and editor&#x27;s-note / [?] flagging.</p>
           <div class="code-row">
-            <code id="cmd-skill-15" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;yt-structure&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-15', this)">Copy</button>
+            <code id="cmd-skill-17" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;yt-structure&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-17', this)">Copy</button>
           </div>
         </details>
       </article>

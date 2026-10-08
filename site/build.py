@@ -50,6 +50,19 @@ CATEGORIES = {
 
 # Human-facing card copy, keyed by skill folder name.
 HUMAN_COPY = {
+    "animated-explainer": {
+        "title": "Animated Explainer Videos",
+        "category": "Content Ops",
+        "tagline": "Turn a topic or document into a narrated training video with animation and captions. Requires macOS setup and ElevenLabs.",
+        "prompt": "Use the animated-explainer skill to turn this process document into a training video for our team.",
+    },
+    "pesty-explainer": {
+        "title": "Pesty Explainer Videos",
+        "category": "Content Ops",
+        "tagline": "Create a Pesty-branded marketing video with narration, animation, captions, and a clear call to action. Uses Animated Explainer.",
+        "prompt": "Use the pesty-explainer skill to turn this case study into a video for pest control owners.",
+        "install_skills": ["animated-explainer", "pesty-explainer"],
+    },
     "scr": {
         "title": "SCR Communication",
         "category": "Writing & Messaging",
@@ -251,7 +264,8 @@ def esc(s):
 
 def render_card(skill, index):
     name = skill["name"]
-    install_cmd = f'npx skills add Pesty-Marketing/agent-skills --skill "{name}" -g'
+    install_names = " ".join(f'"{n}"' for n in skill.get("install_skills", [name]))
+    install_cmd = f"npx skills add Pesty-Marketing/agent-skills --skill {install_names} -g"
     code_id = f"cmd-skill-{index}"
     prompt_id = f"prompt-skill-{index}"
     color, bg = CATEGORIES[skill["category"]]

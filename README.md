@@ -24,6 +24,8 @@ Update later by re-running the same command.
 
 | Skill | What it does |
 |---|---|
+| `animated-explainer` | Create narrated animated training videos with captions |
+| `pesty-explainer` | Create Pesty-branded marketing videos using the Animated Explainer engine |
 | `scr` | Draft or review concise messages with Situation, Complication, and Resolution |
 | `pyramid-principle` | Lead with the answer and organize supporting arguments and evidence |
 | `presentation-structure` | Shape a presentation opening, body, and closing with SCQR and the Pyramid Principle |
@@ -42,6 +44,12 @@ Update later by re-running the same command.
 | `yt-structure` | Turn a YouTube video/talk/article into a clean, citable Markdown doc |
 
 > **Deprecated:** `pesty-frontend` (dark-navy internal-tools system) was superseded by `pesty-design` as the default on 2026-07-17. Its folder stays in the repo as reference for maintaining the existing dark-navy dashboards, but it's excluded from the catalog and no longer installed by default.
+
+## Explainer video requirements
+
+The two video skills include their scripts, animation helpers, and visual assets. Their setup script supports macOS with Homebrew; it requires FFmpeg, uv, the macOS Avenir Next font, and an ElevenLabs API key. Pesty Explainer also needs Montserrat, Epilogue, and the Animated Explainer skill. Set `ELEVENLABS_API_KEY` in your environment, or use the macOS Keychain instructions in the skill. Narration consumes your ElevenLabs credits. Install both video skills together:
+
+    npx skills add Pesty-Marketing/agent-skills --skill animated-explainer pesty-explainer -g
 
 ## Adding a new skill
 

@@ -1,0 +1,59 @@
+{
+  "skill_name": "animated-explainer",
+  "evals": [
+    {
+      "id": 1,
+      "name": "musk-signal-to-noise",
+      "prompt": "Make an internal training video for the Pesty team on Elon Musk's 'signal-to-noise ratio' idea - what he means by it and how we should apply it to how we communicate and work.",
+      "expected_output": "2-4 min narrated MP4 + srt; hook shows a character drowning in noise; one engine (e.g. a concrete test for whether something is signal); accurate attribution to Musk.",
+      "files": [],
+      "assertions": [
+        "Final explainer.mp4 exists",
+        "Video is 1920x1080",
+        "Video has a narration audio track",
+        "Duration is 2-4 minutes (120-240s)",
+        "Separate captions.srt exists with cues",
+        "Captions run to within 10s of the video's end (in sync)",
+        "Storyboard has the four 80/20 acts (hook, concept, engine, takeaway)",
+        "Every beat names a concrete visual change (>=5 words)",
+        "Narration is 300-600 words"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "high-vs-low-agency",
+      "prompt": "create an explainer video for our team on high agency vs low agency. what it is, why it matters, and the one habit that makes someone higher agency at work",
+      "expected_output": "2-4 min narrated MP4 + srt contrasting two characters; single habit as the engine; memorable takeaway.",
+      "files": [],
+      "assertions": [
+        "Final explainer.mp4 exists",
+        "Video is 1920x1080",
+        "Video has a narration audio track",
+        "Duration is 2-4 minutes (120-240s)",
+        "Separate captions.srt exists with cues",
+        "Captions run to within 10s of the video's end (in sync)",
+        "Storyboard has the four 80/20 acts (hook, concept, engine, takeaway)",
+        "Every beat names a concrete visual change (>=5 words)",
+        "Narration is 300-600 words"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "rag-for-marketers",
+      "prompt": "Make a 3b1b / kurzgesagt style training video explaining RAG (retrieval-augmented generation) to our non-technical marketing team. Use my ElevenLabs key for the narration (it's in my keychain as elevenlabs-api).",
+      "expected_output": "2-4 min narrated MP4 + srt; non-technical; engine = retrieve-then-generate workflow shown visually; no jargon dump.",
+      "files": [],
+      "assertions": [
+        "Final explainer.mp4 exists",
+        "Video is 1920x1080",
+        "Video has a narration audio track",
+        "Duration is 2-4 minutes (120-240s)",
+        "Separate captions.srt exists with cues",
+        "Captions run to within 10s of the video's end (in sync)",
+        "Storyboard has the four 80/20 acts (hook, concept, engine, takeaway)",
+        "Every beat names a concrete visual change (>=5 words)",
+        "Narration is 300-600 words"
+      ]
+    }
+  ]
+}
