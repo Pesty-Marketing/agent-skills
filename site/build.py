@@ -45,6 +45,7 @@ CATEGORIES = {
     "Strategy & Decisions": ("var(--purple)", "var(--purple-dim)"),
     "Design & Build": ("var(--green)", "var(--green-dim)"),
     "Content Ops": ("var(--amber)", "var(--amber-dim)"),
+    "Team Ops": ("var(--red)", "var(--red-dim)"),
     "New": ("var(--text-secondary)", "var(--surface-raised)"),
 }
 
@@ -98,6 +99,13 @@ HUMAN_COPY = {
         "category": "Strategy & Decisions",
         "tagline": "Clarify a messy problem, expose blind spots, and decide what to do next.",
         "prompt": "Use the untangle skill to help us understand why we keep missing client deadlines and decide what to change.",
+    },
+    "pesty-asana-tasks": {
+        "title": "Pesty Asana Tasks",
+        "category": "Team Ops",
+        "tagline": "Draft Asana tasks, incident tickets, and enhancements to Pesty's standard, then write them only after you approve.",
+        "prompt": "Use the pesty-asana-tasks skill to log a ticket: the homepage quote form on our client's site isn't sending leads.",
+        "install_skills": ["pyramid-principle", "pesty-asana-tasks"],
     },
     "ann-handley": {
         "title": "Everybody Writes",
