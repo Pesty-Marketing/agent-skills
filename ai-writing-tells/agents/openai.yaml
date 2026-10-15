@@ -1,0 +1,3 @@
+interface:
+  display_name: "AI Writing Tells"
+  short_description: "Find and cut phrases that make a draft read as AI-written"

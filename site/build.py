@@ -113,6 +113,12 @@ HUMAN_COPY = {
         "tagline": "Make any marketing copy sound human — blogs, emails, social — using Ann Handley's rules.",
         "prompt": "Use the ann-handley skill to punch up this email draft.",
     },
+    "ai-writing-tells": {
+        "title": "AI Writing Tells",
+        "category": "Writing & Messaging",
+        "tagline": "Catch the phrases that make a draft read as AI-written, and cut them before it ships.",
+        "prompt": "Use the ai-writing-tells skill to check this blog post draft for AI tells before we publish.",
+    },
     "buyer-personas": {
         "title": "Buyer Personas",
         "category": "Research",

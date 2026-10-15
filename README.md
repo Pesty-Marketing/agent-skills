@@ -32,6 +32,7 @@ Update later by re-running the same command.
 | `problem-solving-process` | Define and decompose business problems, prioritize questions, and plan investigations |
 | `transcript-cleanup` | Recover garbled transcripts without inventing wording, losing attribution, or hiding uncertainty |
 | `ann-handley` | Create or audit marketing content with the Everybody Writes framework |
+| `ai-writing-tells` | Audit a draft for AI-writing tells and cut them, with a bundled checker script |
 | `buyer-personas` | Build decision-focused buyer personas from real inputs (5 Rings method) |
 | `linkedin-guest-kit` | Turn an episode into a share kit a podcast guest will actually post — post options in their voice + portrait graphics with their face |
 | `pesty-asana-tasks` | Draft Pesty Asana tasks, incidents, and enhancements to the team standard and write them only after approval (works best with `pyramid-principle`) |
