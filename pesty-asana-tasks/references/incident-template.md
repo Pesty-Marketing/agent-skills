@@ -2,7 +2,7 @@
 
 Use this when something on a client website is **broken**. Title: `[TAG] P# | Short, observable description of the problem`, for example `[EX] P1 | Homepage form submits but no lead arrives`.
 
-The task goes in the **DX** section of the client's main project. If a developer has to make the fix, also add the task to the **Dev Team Backlog** project, which brings up the dev team's own fields (task type, team, sprint, status).
+The task goes in the **DX** section of the client's main project.
 
 ## Description
 

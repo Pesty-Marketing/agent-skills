@@ -15,7 +15,13 @@ Nothing gets written to Asana until the user has approved that exact change. Thi
 - **Updating** an existing task: title, description, custom fields, assignee, due date, section, followers or completion status.
 - **Commenting.**
 
-Show the draft in the conversation: title, project and section, assignee, due date, every custom field value and the full description. Then wait. If the user changes the draft, show it again and wait again. Approval covers only the draft it was given for, not later changes.
+Show the draft in the conversation. Then wait.
+
+- **For a new task:** title, project and section, assignee, due date, every custom field value and the full description.
+- **For an update:** each changed value as before → after.
+- **For a comment:** the full text.
+
+Write relative dates such as "next Friday" as an exact date with the weekday. If the user changes the draft, show it again and wait again. Approval covers only the draft it was given for, not later changes.
 
 If the user shares a Slack thread, an email or notes **without** asking for tasks, don't draft any. List what could become a task and let the user choose.
 
@@ -55,17 +61,19 @@ Incident and enhancement titles both carry a priority. It comes from Pesty's Inc
 | P3 | Medium | A local or non-critical problem with a workaround and no proven effect on revenue, SEO or trust |
 | P4 | Low | Cosmetic changes, enhancements and nice-to-haves |
 
+For incidents, adjust the level up or down using these signals:
+
 - Raise the level for: a live or upcoming campaign; a high-traffic or primary conversion page; site-wide impact; compliance or security implications; no workaround; a visible brand or trust error (wrong phone number, business name, pricing or license information).
 - Lower it for: low-traffic areas, a clear workaround, cosmetic-only impact, no evidence of an effect on KPIs.
 - PageSpeed scores alone never set severity. Impact does.
-- **Enhancements are P4.** If the client wants one sooner, the task gets the **Client-Prioritized** tag and keeps P4. Client priority changes the order work is done in, not the severity.
+- **Enhancements are always P4,** and the signals above don't apply to them. If the client asks for one sooner or clearly signals urgency, the task gets the **Client-Prioritized** Asana tag and keeps P4. Client priority changes the order work is done in, not the severity. If you can't tell whether the client is asking for urgency, ask the user.
 - Explain the level in one sentence in the Severity Rationale field.
 
 ## Findings at different severities
 
 If one incident turns up findings at more than one severity level, create **one ticket per severity level**. Then the P# in each title is true for everything in that ticket, and urgent items don't wait behind cosmetic ones.
 
-Before drafting, ask the user whether the tickets should be **subtasks** of one parent task or **separate tasks**. Inside each ticket, put each finding on its own line, starting with its severity, grouped under category headings. Don't merge findings into paragraphs.
+Before drafting, ask the user whether the tickets should be **subtasks** of one parent task or **separate tasks**. If they choose subtasks, propose the parent in the draft as well. Give it a title in the same format, carrying the highest severity among its subtasks. Inside each ticket, put each finding on its own line, starting with its severity, grouped under category headings. Don't merge findings into paragraphs.
 
 ## Writing descriptions and comments
 
@@ -90,6 +98,7 @@ Format it so a person can scan it: short `##` headings, bullet lists, numbered s
 
 - Fill in every custom field you can decide. Leave a field on its default only when you really don't know the value.
 - Put the task in the right section of the client's main project. Website incidents and enhancements go in **DX** unless the work belongs to a section with its own owner, such as CRO or SEO.
+- Add every ticket a developer will work on to the **Dev Team Backlog** project as well.
 - Set the assignee and a due date, and say in the draft which ones you chose yourself so the user can change them. Don't add followers until the user approves, so nobody gets notified about a draft.
 
 ## Before you write

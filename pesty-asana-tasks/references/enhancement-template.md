@@ -4,7 +4,7 @@ Use this when the client wants something on the website **added or improved** an
 
 Enhancements are scheduled by priority, scope and capacity, not by urgency. (SKILL.md explains why they're always P4.)
 
-The task goes in the **DX** section of the client's main project. If a developer has to build it, also add it to the **Dev Team Backlog** project.
+The task goes in the **DX** section of the client's main project.
 
 ## Description
 
