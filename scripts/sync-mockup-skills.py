@@ -25,7 +25,8 @@ stale = []
 for name, content in expected.items():
     dest = target / name
     if args.check:
-        if not dest.is_file() or dest.read_bytes() != content:
+        # Git can check text out as CRLF on Windows; compare logical contents.
+        if not dest.is_file() or dest.read_bytes().replace(b"\r\n", b"\n") != content.replace(b"\r\n", b"\n"):
             stale.append(name)
     else:
         dest.parent.mkdir(parents=True, exist_ok=True)
