@@ -51,6 +51,18 @@ CATEGORIES = {
 
 # Human-facing card copy, keyed by skill folder name.
 HUMAN_COPY = {
+    "desktop-mockup": {
+        "title": "Desktop Website Mockups",
+        "category": "Design & Build",
+        "tagline": "Put a real website screenshot in a Chrome window frame for a presentation. Exports transparent PNGs and optional 4K slides; requires Node.js setup.",
+        "prompt": "Use the desktop-mockup skill to make a Chrome window mockup of https://example.com/.",
+    },
+    "mobile-mockup": {
+        "title": "Mobile Website Mockups",
+        "category": "Design & Build",
+        "tagline": "Show a mobile website inside an iPhone frame for a presentation. Exports transparent PNGs and optional 4K slides; requires Node.js setup.",
+        "prompt": "Use the mobile-mockup skill to make an iPhone mockup of https://example.com/.",
+    },
     "animated-explainer": {
         "title": "Animated Explainer Videos",
         "category": "Content Ops",

@@ -24,6 +24,8 @@ Update later by re-running the same command.
 
 | Skill | What it does |
 |---|---|
+| `desktop-mockup` | Capture a website in a Chrome window frame with transparent PNG and optional slide export |
+| `mobile-mockup` | Capture a mobile website in an iPhone frame with transparent PNG and optional slide export |
 | `animated-explainer` | Create narrated animated training videos with captions |
 | `pesty-explainer` | Create Pesty-branded marketing videos using the Animated Explainer engine |
 | `scr` | Draft or review concise messages with Situation, Complication, and Resolution |
@@ -46,6 +48,17 @@ Update later by re-running the same command.
 | `yt-structure` | Turn a YouTube video/talk/article into a clean, citable Markdown doc |
 
 > **Deprecated:** `pesty-frontend` (dark-navy internal-tools system) was superseded by `pesty-design` as the default on 2026-07-17. Its folder stays in the repo as reference for maintaining the existing dark-navy dashboards, but it's excluded from the catalog and no longer installed by default.
+
+## Website mockup requirements
+
+Desktop Mockup and Mobile Mockup can each be installed on their own:
+
+    npx skills add Pesty-Marketing/agent-skills --skill desktop-mockup -g
+    npx skills add Pesty-Marketing/agent-skills --skill mobile-mockup -g
+
+Each includes its renderer, frame assets, and locked Node dependencies. Inside the installed skill folder, run `npm ci` followed by `npm run setup` once. Requirements: Node.js 20+ and npm. Linux may need `npm run setup -- --with-deps` for browser libraries. Then ask your agent: “Make a desktop mockup of https://example.com/” or “Make an iPhone mockup of https://example.com/”.
+
+Local headless capture is the default. ScreenshotAPI is optional for hosted or batch work and uses your own `SCREENSHOTAPI_TOKEN`. Both export transparent PNGs and optional 4K slides. Mobile content uses Chromium emulation inside an illustrative iPhone frame. See each skill's `references/setup.md` for commands and options.
 
 ## Explainer video requirements
 
