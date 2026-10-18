@@ -1,0 +1,4 @@
+interface:
+  display_name: "Desktop Mockup"
+  short_description: "Capture websites in a Chrome window frame"
+  default_prompt: "Use $desktop-mockup to create a desktop Chrome mockup of this URL."

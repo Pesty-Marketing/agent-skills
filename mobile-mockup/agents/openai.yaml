@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Mockup"
+  short_description: "Capture websites in an iPhone device frame"
+  default_prompt: "Use $mobile-mockup to create an iPhone mockup of this URL."

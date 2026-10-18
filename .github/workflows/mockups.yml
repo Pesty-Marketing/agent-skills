@@ -1,0 +1,43 @@
+name: mockup-skills
+
+on:
+  push:
+    branches: [main]
+    paths: ['desktop-mockup/**', 'mobile-mockup/**', 'scripts/sync-mockup-skills.py', '.github/workflows/mockups.yml']
+  pull_request:
+    paths: ['desktop-mockup/**', 'mobile-mockup/**', 'scripts/sync-mockup-skills.py', '.github/workflows/mockups.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        skill: [desktop-mockup, mobile-mockup]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Check standalone bundles are synchronized
+        run: python scripts/sync-mockup-skills.py --check
+      - name: Copy only the selected skill outside the repository
+        shell: bash
+        run: cp -R "${{ matrix.skill }}" "$RUNNER_TEMP/standalone-mockup"
+      - name: Install locked dependencies and browser
+        working-directory: ${{ runner.temp }}/standalone-mockup
+        run: |
+          npm ci
+          npm run setup -- --with-deps
+      - name: Test independent installation and exports
+        working-directory: ${{ runner.temp }}/standalone-mockup
+        run: npm test
