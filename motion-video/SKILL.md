@@ -44,7 +44,7 @@ The preset only sets defaults. `storyboard.json` can override `narration`, `capt
 6. **Build `video.html`** from the scene library: [references/scenes.md](references/scenes.md) has every component, the `data-in` / `data-anim` timing grammar, and how to time an element to a spoken word (`data-in="@revenue"`). Follow [references/readability.md](references/readability.md) for the preset you're making. Preview by opening `video.html` in a browser, after step 7 has written `timeline.js`.
 
 7. **Stills and gates.** Run `python3 $MV/scripts/render.py stills videos/<slug>`.
-   - It writes one still per scene plus `stills/<size>/contact-sheet.jpg`, and runs every gate: timing, fonts, text size, fit, QR decode, and the loop seam.
+   - It writes one still per scene plus `stills/<size>/contact-sheet.jpg`, and runs every gate: timing, pace, reading time, fonts, text size, fit, QR decode, and the loop seam.
    - Open the contact sheet and every still, and fix what you see: crowding, a weak hierarchy, text fighting the background, a scene that says two things.
    - Re-run until the gates print `checks: all passed` for every size and the stills look finished.
    - Show the contact sheet to the user before the final render.
@@ -61,4 +61,5 @@ The preset only sets defaults. `storyboard.json` can override `narration`, `capt
 - **Size:** every size renders with its short side at 1080px, so px values mean the same thing in every orientation. Use `.row`, `.only-landscape` / `.only-portrait`, or `@media (orientation:portrait)` for layouts that change by size.
 - **Library edits:** a library fix belongs in `$MV/assets/motion/`, followed by `new.py --refresh videos/<slug>`. Don't fork `motion/` inside a project.
 - **Pace:** narration runs at `"speed": 1.1` by default (storyboard `speed`, 0.7–1.2), trailing silence is trimmed from each clip, and scenes cut 0.5 s after the last word. If a video feels slow, split scenes and add word-timed beats before touching the speed. The `pace` gate enforces it.
+- **Reading time:** the `read` gate holds every text block on screen long enough to read at 3 words a second, counting all the text that's up at once. "Too slow" means add motion; "too fast to read" means hold the words longer. Fix a `read` failure with a longer `dur` or fewer words, never by hiding text early. See [references/readability.md](references/readability.md).
 - **Overlap:** the fit gate catches text that overflows its box, not one element covering another. When you review stills, check that photos and big numbers don't collide, and in 9:16 that the photo crop keeps faces (`object-position`).

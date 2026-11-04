@@ -1,6 +1,20 @@
 # Readability by preset
 
-`render.py` enforces the minimum text size and the frame fit. Everything else here is judgment, and you check it on the stills.
+`render.py` enforces the minimum text size, the frame fit and reading time. Everything else here is judgment, and you check it on the stills.
+
+## Reading time (every preset)
+
+Viewers watch muted, and on-screen text has to be readable without the narration. The `read` gate simulates one viewer who reads every text block once, in the order blocks appear, at 3 words a second (about 180 words a minute; storyboard `read_wps` changes it). A block fails when it leaves the screen before that viewer could finish it.
+
+- **It counts all text on screen, not per scene.** Three blocks that land together are read one after another, so a stat, its label and a footnote need the sum of their reading times.
+- **Word-by-word reveals** count from when the first word lands, and the viewer can't finish before the last word lands.
+- **Burned-in captions** are skipped, because they follow the narration. Glyphs with no letter or digit (✓ → •) aren't words.
+- **Fixing a failure**, in order of preference:
+  1. Raise the scene's `dur`. For a narrated scene, `dur` is a minimum, so this holds the frame after the last spoken word.
+  2. Cut words on screen. On-screen text is the three-word version, not the transcript.
+  3. Stagger less text into the same moment.
+- **Never** put `data-read-ok` on a claim, number or call to action to get past the gate.
+- **Length:** don't trim a case study to hit a target length. The default for case studies is the full cut, with every claim held long enough to read. Make a short cut only when asked, by dropping whole scenes or stats, never by speeding the rest up.
 
 ## loop: screens people walk past (3–10 ft, no sound)
 

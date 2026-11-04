@@ -28,6 +28,7 @@ The storyboard is the contract between the user and the render. Scene `id`s link
 | `scenes[].screen` | Notes for you and the user. The renderer ignores it. |
 | `scenes[].still` | Seconds into the scene to take its still and run the fit checks (default: 75% of the way in). Set it when a scene is mid-transition at 75%. |
 | `captions` | `true` burns captions into every size, a list burns them into only those sizes (for example `["9x16"]` for feeds that autoplay muted), and `false` burns in none. `captions.srt` is written whenever the video is narrated. |
+| `read_wps` | Reading speed for the `read` gate, in words a second (default 3). Lower it for an older audience or a screen seen from far away. Never raise it to pass a failing video. |
 | `loop` | Defaults to `true` for the loop preset. The last scene fades out so the end matches the start, and a gate checks the seam. |
 
 ## Writing scenes

@@ -225,7 +225,8 @@ def main():
             print(f"\n[{size}]")
             times = scene_still_times(tl)
             max_still = float(sb.get("max_still") or PRESET_MAX_STILL.get(sb.get("preset"), 3.0))
-            problems = gates.run_all(pg, tl, times, min_px, args.fps, max_still)
+            read_wps = float(sb.get("read_wps") or 3.0)
+            problems = gates.run_all(pg, tl, times, min_px, args.fps, max_still, read_wps)
             for p in problems:
                 print("  FAIL", p)
             if not problems:

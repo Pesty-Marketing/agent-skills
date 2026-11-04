@@ -33,8 +33,11 @@ Put these attributes on any element:
 | `data-out="3.5"` | Fades the element out at that time (same grammar as `data-in`). |
 | `data-count="18.1" data-from="12.5" data-prefix="$" data-suffix="M" data-decimals="1"` | A number counting up, starting at `data-in`, lasting `data-dur` (1.4 s by default). |
 | `data-small-ok` | Exempts deliberate small glyphs from the text-size gate. Use it rarely. |
+| `data-read-ok` | Exempts text nobody has to read in full from the `read` gate, such as a word that swaps on purpose (a cycling city name) or a decorative ticker. Never put it on a claim, a number or a call to action. |
 
 **Pace.** Viewers leave when the frame stops changing. Aim for a new beat every 1.5–2.5 s: a word-timed reveal, a pulse, a camera move, or a cut. Prefer more short scenes (one idea, 3–6 s) over few long ones; a sentence with four items is a scene of four word-timed tiles, not a static list. Alternate white scenes with `.scene.ink` (deep full-bleed) and the occasional `.scene.flood` (accent full-bleed) for rhythm. Headlines that the narrator reads use `data-anim="speak"`; the `pace` gate fails any scene that holds still longer than `max_still` (3 s for story/walkthrough, 6 s for loops).
+
+**Pace is motion, not reading speed.** A new beat keeps the eye busy, but words must stay up long enough to read: the `read` gate fails any text a viewer couldn't finish at 3 words a second. When both gates pull against each other, keep the words up and add motion around them (a pulse, a drift, the next element arriving). Never take text off early to make a scene feel faster.
 
 Land each big reveal on its spoken word, not on a guessed time. The timing gate fails if a word is never said in that scene, or if an element starts after its scene is nearly over.
 
