@@ -1,0 +1,16 @@
+{
+  "title": "{{TITLE}}",
+  "slug": "{{SLUG}}",
+  "preset": "loop",
+  "theme": "{{THEME}}",
+  "sizes": ["16x9"],
+  "narration": false,
+  "loop": true,
+  "scenes": [
+    {"id": "hook",   "dur": 5, "screen": "The question your viewer already has (one line, 7 words max)"},
+    {"id": "answer", "dur": 5, "screen": "The surprising answer or problem"},
+    {"id": "offer",  "dur": 5, "screen": "What you're offering, in 6 words"},
+    {"id": "proof",  "dur": 5, "screen": "Up to 3 short term rows: big word + small note"},
+    {"id": "act",    "dur": 5, "screen": "Deadline or next step + big QR"}
+  ]
+}

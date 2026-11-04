@@ -1,6 +1,6 @@
 ---
 name: animated-explainer
-description: Animated explainer videos - turns one prompt into a finished 2-4 minute narrated MP4 (Manim animation, polished flat motion-design style, ElevenLabs voice, .srt captions). Use whenever someone asks for an explainer, training, or educational video on any topic - "make a video explaining X", "3b1b/Kurzgesagt-style explainer on Y", "turn this doc into a training video", "animate how Z works" - even if they don't say "animated" or "Manim". For Pesty Marketing branded or marketing videos, use pesty-explainer instead.
+description: Animated explainer videos - turns one prompt into a finished 2-4 minute narrated MP4 (Manim animation, polished flat motion-design style, ElevenLabs voice, .srt captions). Use whenever someone asks for an explainer, training, or educational video on any topic - "make a video explaining X", "3b1b/Kurzgesagt-style explainer on Y", "turn this doc into a training video", "animate how Z works" - even if they don't say "animated" or "Manim". For Pesty Marketing branded or marketing videos, use pesty-explainer instead. For case study videos, tool walkthroughs, booth loops, and short social clips, use motion-video.
 ---
 
 # Animated explainer

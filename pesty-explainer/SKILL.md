@@ -1,6 +1,6 @@
 ---
 name: pesty-explainer
-description: Pesty Marketing branded explainer videos - turns one prompt into a finished 2-4 minute narrated MP4 in the Pesty brand (white canvas, Pesty Red, Epilogue/Montserrat, logo end card with CTA) for Pesty's own marketing content - YouTube, LinkedIn, website and sales explainers aimed at pest control owners. Use whenever someone wants a Pesty-branded or Pesty marketing video, "make a Pesty video on local SEO / LSAs / CAC", "explainer for our YouTube channel", "turn this case study into a video", even if they don't say "branded". For internal training videos (not Pesty-branded), use animated-explainer instead.
+description: Pesty Marketing branded explainer videos - turns one prompt into a finished 2-4 minute narrated MP4 in the Pesty brand (white canvas, Pesty Red, Epilogue/Montserrat, logo end card with CTA) for Pesty's own marketing content - YouTube, LinkedIn, website and sales explainers aimed at pest control owners. Use whenever someone wants a Pesty-branded or Pesty marketing video, "make a Pesty video on local SEO / LSAs / CAC", "explainer for our YouTube channel", even if they don't say "branded". For internal training videos (not Pesty-branded), use animated-explainer instead. For case study videos, tool walkthroughs, booth loops, and short social clips, use motion-video.
 ---
 
 # Pesty explainer
