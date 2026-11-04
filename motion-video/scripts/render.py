@@ -24,7 +24,8 @@ import gates  # noqa: E402
 
 SIZES = {"16x9": (1920, 1080), "9x16": (1080, 1920), "1x1": (1080, 1080)}
 PRESET_MIN_PX = {"loop": 56, "walkthrough": 30, "story": 30}
-LEAD, TAIL = 0.4, 0.7  # silence before / after each scene's narration
+PRESET_MAX_STILL = {"loop": 6.0, "walkthrough": 3.0, "story": 3.0}
+LEAD, TAIL = 0.15, 0.35  # silence before / after each scene's narration (keep it tight: dead air drags)
 
 
 # ---------- timeline -------------------------------------------------------------------------
@@ -223,7 +224,8 @@ def main():
             pg = Page(pw, proj, size)
             print(f"\n[{size}]")
             times = scene_still_times(tl)
-            problems = gates.run_all(pg, tl, times, min_px, args.fps)
+            max_still = float(sb.get("max_still") or PRESET_MAX_STILL.get(sb.get("preset"), 3.0))
+            problems = gates.run_all(pg, tl, times, min_px, args.fps, max_still)
             for p in problems:
                 print("  FAIL", p)
             if not problems:

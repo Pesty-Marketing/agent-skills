@@ -8,6 +8,8 @@ plain-English problems ("FAIL ...") an agent can act on. A video is not done unt
   fit      at each scene's built moment, no visible text runs outside the frame or its own box
   qr       every <img data-qr="URL"> decodes to that URL when it is on screen
   seam     loops only: the last frame matches the first, so the loop has no visible jump
+  pace     nothing sits still too long: inside each scene, something new starts at least every
+           max_still seconds (story/walkthrough 3.0 s, loop 6 s; storyboard "max_still" overrides)
 """
 
 TEXT_JS = """([min, mode]) => {
@@ -54,9 +56,13 @@ QR_JS = """() => [...document.querySelectorAll('img[data-qr]')].map((img, i) => 
 })"""
 
 
-def run_all(pg, tl, times, min_px, fps):
+def run_all(pg, tl, times, min_px, fps, max_still=3.0):
     page = pg.page
     problems = [f"timing: {e}" for e in page.evaluate("motion.errors")]
+    for d in page.evaluate("motion.deadAir()"):
+        if d["gap"] > max_still:
+            problems.append(f"pace: scene \"{d['id']}\" holds still for {d['gap']:.1f}s from {d['at']:.1f}s "
+                            f"(max {max_still:g}s): add a beat (a word-timed reveal, pulse, camera move) or split the scene")
     missing = page.evaluate("motion.fontsOk()")
     if missing:
         problems.append(f"fonts: did not load {', '.join(missing)} (offline? wrong theme name?)")

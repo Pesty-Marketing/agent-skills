@@ -25,13 +25,18 @@ Put these attributes on any element:
 |---|---|
 | `data-in="0.4"` | Starts 0.4 s after its scene starts. Outside a scene, the time is absolute. |
 | `data-in="@revenue"` | Starts when the narrator says "revenue" in this scene. Use `@revenue+0.2` or `@revenue-0.3` to shift it (a small lead-in lets a count-up land on the word), and `@18.1#2` for the 2nd time it's said. Words are matched with case and punctuation ignored, and `$` is dropped ("$18.1" matches `@18.1`). |
-| `data-anim` | `up` (default), `down`, `left`, `right`, `fade`, `pop`, `zoom`, `grow-x`, `grow-y`, `type` (left-to-right reveal), `wipe`, `draw` (an SVG path drawing itself on), `strike` (on `.strike`), or `none`. |
+| `data-anim` | `up` (default), `down`, `left`, `right`, `fade`, `pop`, `zoom`, `slam` (big-to-size with blur, for the number or word that matters), `blur`, `flip`, `grow-x`, `grow-y`, `type` (left-to-right reveal), `wipe`, `draw` (an SVG path drawing itself on), `strike` (on `.strike`), `mark` (highlighter sweep, on `.mark`), `words` (each word rises in, staggered by `data-stagger`, default 0.07 s), `speak` (each word appears as the narrator says it), or `none`. Directional and pop entrances land with a small spring overshoot. |
+| `data-pulse="@word; @other"` | A quick scale punch for emphasis at each time. Use it to give a held stat a second beat. |
+| `data-trans` (on a `.scene`) | How the scene enters and leaves: `push` (default for story/walkthrough: slides in from the right, out to the left), `zoom`, `fade` (default for loops) or `cut`. Mix two or three across a video. |
+| `data-drift="off"` (on a `.scene`) | Turns off ambient motion. By default every non-loop scene creeps forward ~3% over its length and every `.photo img` / `img[data-kb]` drifts (Ken Burns), so no frame is ever frozen. |
 | `data-dur="0.6"` | Animation length in seconds. Each animation has its own default. |
 | `data-out="3.5"` | Fades the element out at that time (same grammar as `data-in`). |
 | `data-count="18.1" data-from="12.5" data-prefix="$" data-suffix="M" data-decimals="1"` | A number counting up, starting at `data-in`, lasting `data-dur` (1.4 s by default). |
 | `data-small-ok` | Exempts deliberate small glyphs from the text-size gate. Use it rarely. |
 
-Stagger related elements by 0.3–0.5 s. Land each big reveal on its spoken word, not on a guessed time. The timing gate fails if a word is never said in that scene, or if an element starts after its scene is nearly over.
+**Pace.** Viewers leave when the frame stops changing. Aim for a new beat every 1.5–2.5 s: a word-timed reveal, a pulse, a camera move, or a cut. Prefer more short scenes (one idea, 3–6 s) over few long ones; a sentence with four items is a scene of four word-timed tiles, not a static list. Alternate white scenes with `.scene.ink` (deep full-bleed) and the occasional `.scene.flood` (accent full-bleed) for rhythm. Headlines that the narrator reads use `data-anim="speak"`; the `pace` gate fails any scene that holds still longer than `max_still` (3 s for story/walkthrough, 6 s for loops).
+
+Land each big reveal on its spoken word, not on a guessed time. The timing gate fails if a word is never said in that scene, or if an element starts after its scene is nearly over.
 
 ## Components
 
@@ -55,6 +60,12 @@ Stagger related elements by 0.3–0.5 s. Land each big reveal on its spoken word
   <div class="arrow" data-in="0.8" data-anim="fade">&rarr;</div>
   <div class="side after" data-in="@18.1"><div class="k">2025</div><div class="v">$18.1M</div></div></div>
 ```
+
+**Tiles** (quick beats, one per spoken item): `<div class="tiles"><div class="tile" data-in="@location" data-anim="pop"><b>01</b><span>Location pages</span></div>…</div>` (`--tcols` sets columns; stacks in portrait).
+
+**Stamp** (a rotated label slammed onto a stat): `<div class="stamp" data-in="@pause" data-anim="slam">Paused</div>`.
+
+**Highlighter:** `<span class="mark" data-in="@services" data-anim="mark">services and markets</span>`.
 
 **List:** use `<ul class="list">` with `<li data-in=…>` items, or `.list.checks` for checkmarks.
 

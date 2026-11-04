@@ -60,4 +60,5 @@ The preset only sets defaults. `storyboard.json` can override `narration`, `capt
 - **Transforms:** `motion.js` animates `transform` and `opacity` on any element that has `data-in`. Put layout transforms on a wrapper element, not on the animated one.
 - **Size:** every size renders with its short side at 1080px, so px values mean the same thing in every orientation. Use `.row`, `.only-landscape` / `.only-portrait`, or `@media (orientation:portrait)` for layouts that change by size.
 - **Library edits:** a library fix belongs in `$MV/assets/motion/`, followed by `new.py --refresh videos/<slug>`. Don't fork `motion/` inside a project.
+- **Pace:** narration runs at `"speed": 1.1` by default (storyboard `speed`, 0.7–1.2), trailing silence is trimmed from each clip, and scenes cut 0.5 s after the last word. If a video feels slow, split scenes and add word-timed beats before touching the speed. The `pace` gate enforces it.
 - **Overlap:** the fit gate catches text that overflows its box, not one element covering another. When you review stills, check that photos and big numbers don't collide, and in 9:16 that the photo crop keeps faces (`object-position`).

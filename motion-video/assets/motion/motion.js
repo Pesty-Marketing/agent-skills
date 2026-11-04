@@ -17,13 +17,22 @@
   if (CAPTIONS) document.body.classList.add('has-captions');
   const errors = [];
   const EASE = 'cubic-bezier(.2,.7,.2,1)';
-  const FADE = 0.35;
+  const SPRING = 'cubic-bezier(.34,1.45,.64,1)';   // small overshoot: entrances land with a little snap
+  const PRESET = (document.body.className.match(/preset-(\w+)/) || [])[1] || 'story';
+  const FADE = 0.3;
+  /* Scene transitions (data-trans on a .scene, default per preset): push | zoom | fade | cut */
+  const TRANS_DEFAULT = PRESET === 'loop' ? 'fade' : 'push';
+  const events = [];   // every animation start, for the pacing gate
 
   const KF = {
-    up: () => [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }],
-    down: () => [{ opacity: 0, transform: 'translateY(-40px)' }, { opacity: 1, transform: 'none' }],
-    left: () => [{ opacity: 0, transform: 'translateX(-60px)' }, { opacity: 1, transform: 'none' }],
-    right: () => [{ opacity: 0, transform: 'translateX(60px)' }, { opacity: 1, transform: 'none' }],
+    up: () => [{ opacity: 0, transform: 'translateY(60px)' }, { opacity: 1, transform: 'none' }],
+    down: () => [{ opacity: 0, transform: 'translateY(-60px)' }, { opacity: 1, transform: 'none' }],
+    left: () => [{ opacity: 0, transform: 'translateX(-90px)' }, { opacity: 1, transform: 'none' }],
+    right: () => [{ opacity: 0, transform: 'translateX(90px)' }, { opacity: 1, transform: 'none' }],
+    slam: () => [{ opacity: 0, transform: 'scale(1.8)', filter: 'blur(12px)' }, { opacity: 1, transform: 'scale(.97)', filter: 'blur(0)', offset: 0.75 }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
+    blur: () => [{ opacity: 0, transform: 'translateY(30px)', filter: 'blur(14px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
+    flip: () => [{ opacity: 0, transform: 'perspective(900px) rotateX(-80deg)', transformOrigin: '50% 100%' }, { opacity: 1, transform: 'perspective(900px) rotateX(0)', transformOrigin: '50% 100%' }],
+    mark: () => [{ backgroundSize: '0% 38%' }, { backgroundSize: '100% 38%' }],
     fade: () => [{ opacity: 0 }, { opacity: 1 }],
     pop: () => [{ opacity: 0, transform: 'scale(.8)' }, { opacity: 1, transform: 'scale(1.05)', offset: 0.7 }, { opacity: 1, transform: 'none' }],
     zoom: () => [{ opacity: 0, transform: 'scale(1.15)' }, { opacity: 1, transform: 'none' }],
@@ -39,7 +48,8 @@
     strike: () => [{ backgroundSize: '0% 6px' }, { backgroundSize: '100% 6px' }],
     none: () => [{ opacity: 1 }, { opacity: 1 }],
   };
-  const DUR = { type: 1.2, draw: 1.2, 'grow-x': 0.8, 'grow-y': 0.8, pop: 0.6, strike: 0.5 };
+  const DUR = { type: 0.9, draw: 1.0, 'grow-x': 0.7, 'grow-y': 0.7, pop: 0.45, strike: 0.4, slam: 0.5, mark: 0.5, flip: 0.5 };
+  const SPRINGY = new Set(['up', 'down', 'left', 'right', 'pop', 'flip']);
 
   const byId = {};
   TL.scenes.forEach((s) => (byId[s.id] = s));
@@ -69,7 +79,52 @@
   }
 
   function anim(el, kf, start, dur, opts = {}) {
-    return el.animate(kf, { delay: start * 1000, duration: dur * 1000, fill: opts.fill || 'both', easing: opts.easing || EASE });
+    if (opts.event !== false) events.push(start);
+    return el.animate(kf, { delay: start * 1000, duration: dur * 1000, fill: opts.fill || 'both', easing: opts.easing || EASE, composite: opts.composite || 'replace' });
+  }
+
+  /* Split an element's text into word spans (keeps inline markup like <em>). */
+  function splitWords(el) {
+    if (el._words) return el._words;
+    const out = [];
+    const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walk.nextNode()) nodes.push(walk.currentNode);
+    nodes.forEach((n) => {
+      const parts = n.textContent.split(/(\s+)/);
+      const frag = document.createDocumentFragment();
+      parts.forEach((p) => {
+        if (!p) return;
+        if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+        const w = document.createElement('span');
+        w.className = 'w'; w.textContent = p;
+        frag.appendChild(w); out.push(w);
+      });
+      n.parentNode.replaceChild(frag, n);
+    });
+    return (el._words = out);
+  }
+
+  /* data-anim="words": words rise in one after another from data-in (data-stagger, default 0.07 s).
+     data-anim="speak": each word appears as the narrator says it (falls back to a stagger). */
+  function buildWords(el, scene, t, kind) {
+    const ws = splitWords(el);
+    const stag = parseFloat(el.dataset.stagger || '0.07');
+    let times;
+    if (kind === 'speak' && scene) {
+      const said = (scene.words || []).filter((w) => w.start >= t - 0.05);
+      let j = 0, last = t;
+      times = ws.map((w) => {
+        const want = norm(w.textContent);
+        for (let k = j; k < Math.min(said.length, j + 4); k++) {
+          if (norm(said[k].w) === want) { j = k + 1; last = said[k].start; return last; }
+        }
+        last += 0.12; return last;
+      });
+    } else {
+      times = ws.map((_, i) => t + i * stag);
+    }
+    ws.forEach((w, i) => anim(w, [{ opacity: 0, transform: 'translateY(.45em) scale(.96)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], times[i], 0.32, { easing: SPRING, event: i === 0 || i % 3 === 0 }));
   }
 
   const counters = [], videos = [];
@@ -145,8 +200,31 @@
       if (!s) { errors.push(`.scene "${sec.dataset.scene}" is not in storyboard.json`); return; }
       seen.add(s.id);
       const first = s.start === 0, last = s.start + s.dur >= TL.total - 0.01;
-      if (first && !TL.loop) sec.style.opacity = 1; else anim(sec, KF.fade(), s.start, FADE);
-      if (!(last && !TL.loop)) anim(sec, [{ opacity: 1 }, { opacity: 0 }], s.start + s.dur - FADE, FADE, { fill: 'forwards' });
+      const tr = sec.dataset.trans || TRANS_DEFAULT;
+      const IN = {
+        push: [{ opacity: 0, transform: 'translateX(160px)' }, { opacity: 1, transform: 'none' }],
+        zoom: [{ opacity: 0, transform: 'scale(.86)' }, { opacity: 1, transform: 'none' }],
+        fade: KF.fade(),
+        cut: [{ opacity: 1 }, { opacity: 1 }],
+      }[tr] || KF.fade();
+      const OUT = {
+        push: [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(-160px)' }],
+        zoom: [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.12)' }],
+        fade: [{ opacity: 1 }, { opacity: 0 }],
+        cut: [{ opacity: 1 }, { opacity: 0 }],
+      }[tr] || [{ opacity: 1 }, { opacity: 0 }];
+      const td = tr === 'cut' ? 0.001 : FADE;
+      if (first && !TL.loop) sec.style.opacity = 1; else anim(sec, IN, s.start, td, { easing: 'cubic-bezier(.16,1,.3,1)' });
+      if (!(last && !TL.loop)) anim(sec, OUT, s.start + s.dur - td, td, { fill: 'forwards', easing: tr === 'fade' ? EASE : 'cubic-bezier(.7,0,.84,0)', event: false });
+      /* Ambient motion so no frame is ever frozen: the scene creeps forward, photos drift (Ken Burns).
+         data-drift="off" on a scene turns it off. Added on top of the transition (composite add). */
+      if (sec.dataset.drift !== 'off' && PRESET !== 'loop') {
+        anim(sec, [{ transform: 'scale(1)' }, { transform: 'scale(1.035)' }], s.start, s.dur, { easing: 'linear', composite: 'add', event: false, fill: 'none' });
+        sec.querySelectorAll('.photo img, img[data-kb]').forEach((img, k) => {
+          const dir = k % 2 ? -1 : 1;
+          anim(img, [{ transform: `scale(1.04) translateX(${-1.5 * dir}%)` }, { transform: `scale(1.16) translateX(${1.5 * dir}%)` }], s.start, s.dur, { easing: 'linear', event: false });
+        });
+      }
     });
     TL.scenes.forEach((s) => { if (!seen.has(s.id)) errors.push(`storyboard scene "${s.id}" has no <section class="scene" data-scene="${s.id}">`); });
 
@@ -154,6 +232,12 @@
       const scene = sceneOf(el);
       const t = at(el.dataset.in, scene, el);
       const kind = el.dataset.anim || 'up';
+      if (kind === 'words' || kind === 'speak') {
+        if (scene && t > scene.start + scene.dur - 0.5) errors.push(`${desc(el)} starts after scene "${scene.id}" is nearly over`);
+        buildWords(el, scene, t, kind);
+        if (el.dataset.out) anim(el, [{ opacity: 1 }, { opacity: 0 }], at(el.dataset.out, scene, el), 0.25, { fill: 'forwards' });
+        return;
+      }
       if (!KF[kind]) { errors.push(`unknown data-anim "${kind}" on ${desc(el)}`); return; }
       const d = parseFloat(el.dataset.dur || DUR[kind] || 0.5);
       if (scene && t > scene.start + scene.dur - 0.5) errors.push(`${desc(el)} starts at ${(t - scene.start).toFixed(1)}s, after scene "${scene.id}" (${scene.dur.toFixed(1)}s) is nearly over`);
@@ -164,11 +248,19 @@
         const c = { el, t, d: parseFloat(el.dataset.dur || 1.4), from, to, dec, prefix: el.dataset.prefix || '', suffix: el.dataset.suffix || '' };
         counters.push(c);
         el.textContent = fmt(from, c);
-        anim(el, KF.fade(), t, 0.3);
+        anim(el, KF.pop(), t, 0.4, { easing: SPRING });
+        anim(el, [{ transform: 'scale(1)' }, { transform: 'scale(1.1)', offset: 0.35 }, { transform: 'scale(1)' }], t + c.d - 0.05, 0.4, { fill: 'none', composite: 'add' });
         return;
       }
-      anim(el, KF[kind](el), t, d);
+      anim(el, KF[kind](el), t, d, { easing: SPRINGY.has(kind) ? SPRING : EASE });
       if (el.dataset.out) anim(el, [{ opacity: 1 }, { opacity: 0 }], at(el.dataset.out, scene, el), 0.3, { fill: 'forwards' });
+    });
+
+    /* data-pulse="@word; @other" : a quick scale punch for emphasis (can repeat) */
+    document.querySelectorAll('[data-pulse]').forEach((el) => {
+      const scene = sceneOf(el);
+      el.dataset.pulse.split(';').map((x) => x.trim()).filter(Boolean).forEach((spec) =>
+        anim(el, [{ transform: 'scale(1)' }, { transform: 'scale(1.12)', offset: 0.35 }, { transform: 'scale(1)' }], at(spec, scene, el), 0.45, { fill: 'none', composite: 'add' }));
     });
 
     document.querySelectorAll('[data-cam]').forEach(buildCam);
@@ -213,7 +305,17 @@
     return true;
   })();
 
-  window.motion = { ready, seek, errors, fontsOk, timeline: TL };
+  /* Pacing: the longest stretch inside any scene with nothing new starting (scene start/end count). */
+  function deadAir() {
+    return TL.scenes.map((s) => {
+      const ts = [s.start, ...events.filter((e) => e >= s.start && e < s.start + s.dur), s.start + s.dur].sort((a, b) => a - b);
+      let gap = 0, at0 = s.start;
+      for (let i = 1; i < ts.length; i++) if (ts[i] - ts[i - 1] > gap) { gap = ts[i] - ts[i - 1]; at0 = ts[i - 1]; }
+      return { id: s.id, gap: +gap.toFixed(2), at: +(at0 - s.start).toFixed(2) };
+    });
+  }
+
+  window.motion = { ready, seek, errors, fontsOk, deadAir, timeline: TL };
 
   if (!/[?&]render=1/.test(location.search)) {
     ready.then(() => {
