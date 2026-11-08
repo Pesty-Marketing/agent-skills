@@ -13,6 +13,7 @@ Writes timeline.js (read by video.html), captions.srt (narrated), stills/<size>/
 """
 import argparse
 import json
+import math
 import shutil
 import subprocess
 import sys
@@ -25,6 +26,7 @@ import gates  # noqa: E402
 SIZES = {"16x9": (1920, 1080), "9x16": (1080, 1920), "1x1": (1080, 1080)}
 PRESET_MIN_PX = {"loop": 56, "walkthrough": 30, "story": 30}
 PRESET_MAX_STILL = {"loop": 6.0, "walkthrough": 3.0, "story": 3.0}
+JCUT = 0.12  # pace "punchy": audio leads picture by this much
 LEAD, TAIL = 0.15, 0.35  # silence before / after each scene's narration (keep it tight: dead air drags)
 
 
@@ -46,28 +48,36 @@ def load(proj: Path):
 
 
 def build_timeline(sb, narrated, tim):
+    """Lay scenes end to end. Pace "punchy": J-cuts (each line's audio starts JCUT s before its
+    picture), near-zero gaps, and every scene cut snapped to the music's eighth-note grid."""
+    punchy = sb.get("pace") == "punchy"
+    lead, tail = (-JCUT, 0.2) if punchy else (LEAD, TAIL)
+    grid = 30.0 / float(sb["sound"].get("bpm", 120)) if punchy and (sb.get("sound") or {}).get("music") else 0
     t, scenes, notes = 0.0, [], []
-    for s in sb["scenes"]:
+    for n, s in enumerate(sb["scenes"]):
         text = (s.get("narration") or "").strip()
         dur = float(s.get("dur") or 0)
         words, audio = [], None
+        ld = 0.1 if (punchy and n == 0) else lead
         if narrated and text:
             v = tim.get(s["id"])
             if not v:
                 sys.exit(f"scene {s['id']} has narration but no audio in timings.json: re-run tts.py")
-            need = LEAD + v["duration"] + TAIL
+            need = ld + v["duration"] + tail
             if dur and need > dur + 0.01:
                 notes.append(f"scene {s['id']}: narration needs {need:.1f}s, storyboard said {dur:.1f}s -> using {need:.1f}s")
             dur = max(dur, need)
-            audio = {"file": v["audio"], "at": round(t + LEAD, 3)}
-            words = [{"w": w["w"], "start": round(t + LEAD + w["start"], 3), "end": round(t + LEAD + w["end"], 3)} for w in v["words"]]
+            audio = {"file": v["audio"], "at": round(t + ld, 3)}
+            words = [{"w": w["w"], "start": round(t + ld + w["start"], 3), "end": round(t + ld + w["end"], 3)} for w in v["words"]]
         if dur <= 0:
             sys.exit(f"scene {s['id']} has no narration and no \"dur\"")
+        if grid:
+            dur = math.ceil((t + dur) / grid - 1e-6) * grid - t
         scenes.append({"id": s["id"], "start": round(t, 3), "dur": round(dur, 3), "words": words, "audio": audio,
                        "still": s.get("still")})
         t += dur
     cues = make_cues([w for s in scenes for w in s["words"]])
-    tl = {"total": round(t, 3), "loop": bool(sb.get("loop", sb.get("preset") == "loop")),
+    tl = {"total": round(t, 3), "loop": bool(sb.get("loop", sb.get("preset") == "loop")), "pace": sb.get("pace", "normal"),
           "captions": caption_sizes(sb, narrated), "cues": cues, "scenes": scenes}
     return tl, notes
 
@@ -168,17 +178,83 @@ def contact_sheet(paths, out):
 
 
 # ---------- audio + encode -------------------------------------------------------------------
-def audio_track(proj, tl, out_wav):
-    clips = [s["audio"] for s in tl["scenes"] if s["audio"]]
-    if not clips:
+LUFS = {"voice": -16, "music": -22, "hit": -20, "stamp": -19, "sting": -21, "riser": -24, "whoosh": -26,
+        "count": -29, "marker": -28, "pop": -29, "tick": -30}  # mix targets: big moments loud, texture quiet
+VARY = [(1.0, 0.0), (0.95, -1.5), (1.05, -0.5), (0.97, -2.0), (1.03, -1.0)]  # (pitch, dB) per play of a kind
+_lufs_cache = {}
+
+
+def lufs(path: Path) -> float:
+    """Integrated loudness of a file, so every element can be set to a target level whatever its source level."""
+    key = (str(path), path.stat().st_mtime)
+    if key not in _lufs_cache:
+        log = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(path), "-af", "ebur128", "-f", "null", "-"],
+                             capture_output=True, text=True).stderr
+        vals = [float(l.split("I:")[1].split("LUFS")[0]) for l in log.splitlines() if l.strip().startswith("I:")]
+        _lufs_cache[key] = vals[-1] if vals and vals[-1] > -70 else -23.0
+    return _lufs_cache[key]
+
+
+def gain(path: Path, target: float) -> str:
+    return f"volume={target - lufs(path):.2f}dB"
+
+
+def audio_track(proj, tl, out_wav, sound=None, sfx=(), until=None):
+    """Mix narration, an optional music bed (ducked under the voice) and SFX cues into one WAV.
+    sound = storyboard "sound" block; files come from audio/sound.json (scripts/sound.py)."""
+    total = until or tl["total"]
+    clips = [s["audio"] for s in tl["scenes"] if s["audio"] and s["audio"]["at"] < total]
+    lib = {}
+    if sound and (proj / "audio" / "sound.json").exists():
+        lib = json.loads((proj / "audio" / "sound.json").read_text())
+    music = lib.get("music") if sound and sound.get("music") else None
+    takes = {k: (v if isinstance(v, list) else [v]) for k, v in lib.get("sfx", {}).items()}
+    events = [q for q in sfx if takes.get(q["kind"]) and q["t"] < total] if sound and sound.get("sfx", True) else []
+    if not clips and not music and not events:
         return False
-    cmd = ["ffmpeg", "-y", "-loglevel", "error"]
+    cmd, parts, n = ["ffmpeg", "-y", "-loglevel", "error"], [], 0
+
+    def inp(path):
+        nonlocal n
+        cmd.extend(["-i", str(proj / path)])
+        n += 1
+        return n - 1
+
+    vox = []
     for c in clips:
-        cmd += ["-i", str(proj / c["file"])]
-    parts = [f"[{i}:a]adelay={int(c['at'] * 1000)}:all=1[a{i}]" for i, c in enumerate(clips)]
-    mix = "".join(f"[a{i}]" for i in range(len(clips)))
-    fc = ";".join(parts) + f";{mix}amix=inputs={len(clips)}:normalize=0:dropout_transition=0,apad[out]"
-    cmd += ["-filter_complex", fc, "-map", "[out]", "-t", f"{tl['total']:.3f}", "-ar", "48000", str(out_wav)]
+        i = inp(c["file"])
+        parts.append(f"[{i}:a]{gain(proj / c['file'], LUFS['voice'])},adelay={max(0, int(c['at'] * 1000))}:all=1[v{i}]")
+        vox.append(f"[v{i}]")
+    bus = []
+    if vox:
+        parts.append(f"{''.join(vox)}amix=inputs={len(vox)}:normalize=0:dropout_transition=0,apad,atrim=0:{total:.3f}[vox]")
+    if music:
+        i = inp(music)
+        fade = max(0.0, total - 1.5)
+        parts.append(f"[{i}:a]atrim=0:{total:.3f},{gain(proj / music, LUFS['music'] + sound.get('music_db', 0))},afade=t=out:st={fade:.3f}:d=1.5[mus]")
+        if vox:
+            parts.append("[vox]asplit=2[voxa][key]")
+            parts.append("[mus][key]sidechaincompress=threshold=0.02:ratio=5:attack=15:release=400:makeup=1[duck]")
+            bus += ["[voxa]", "[duck]"]
+        else:
+            bus.append("[mus]")
+    elif vox:
+        bus.append("[vox]")
+    plays = {}
+    for k, q in enumerate(events):  # rotate takes and nudge pitch/level so a repeated kind never sounds identical
+        play = plays[q["kind"]] = plays.get(q["kind"], -1) + 1  # not "n": that is inp()'s input counter
+        f = takes[q["kind"]][play % len(takes[q["kind"]])]
+        pitch, db = VARY[play % len(VARY)]
+        i = inp(f)
+        chain = f"aresample=48000,asetrate={int(48000 * pitch)},aresample=48000,"
+        if q.get("dur"):  # e.g. a counter's roll: as long as the count, faded out
+            chain += f"atrim=0:{q['dur']:.3f},afade=t=out:st={max(0, q['dur'] - 0.15):.3f}:d=0.15,"
+        vol = LUFS.get(q["kind"], -26) + sound.get("sfx_db", 0) + db
+        parts.append(f"[{i}:a]{chain}{gain(proj / f, vol)},adelay={max(0, int(q['t'] * 1000))}:all=1[s{k}]")
+        bus.append(f"[s{k}]")
+    assert n == len(cmd[4:]) // 2, "audio_track: input count drifted; a filter would read the wrong file"
+    parts.append(f"{''.join(bus)}amix=inputs={len(bus)}:normalize=0:dropout_transition=0,apad,atrim=0:{total:.3f},alimiter=limit=0.89[out]")
+    cmd += ["-filter_complex", ";".join(parts), "-map", "[out]", "-ar", "48000", str(out_wav)]
     subprocess.run(cmd, check=True)
     return True
 
@@ -204,6 +280,7 @@ def main():
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--deliver", action="store_true", help="copy finished MP4 (+ .srt) to ~/Downloads")
     ap.add_argument("--force", action="store_true", help="render even if checks fail (never for delivery)")
+    ap.add_argument("--until", type=float, help="video mode: render only the first N seconds (a test cut; never delivered)")
     args = ap.parse_args()
 
     proj = Path(args.project).resolve()
@@ -226,7 +303,7 @@ def main():
             times = scene_still_times(tl)
             max_still = float(sb.get("max_still") or PRESET_MAX_STILL.get(sb.get("preset"), 3.0))
             read_wps = float(sb.get("read_wps") or 3.0)
-            problems = gates.run_all(pg, tl, times, min_px, args.fps, max_still, read_wps)
+            problems = gates.run_all(pg, tl, times, min_px, args.fps, max_still, read_wps, root=proj)
             for p in problems:
                 print("  FAIL", p)
             if not problems:
@@ -252,18 +329,20 @@ def main():
                     sys.exit("checks failed: fix them, or re-run with --force for a draft (never deliver a --force render)")
                 with tempfile.TemporaryDirectory() as tmp:
                     tmp = Path(tmp)
-                    n = int(round(tl["total"] * args.fps))
+                    span = min(args.until or tl["total"], tl["total"])
+                    n = int(round(span * args.fps))
                     for i in range(n):
                         pg.seek(i / args.fps)
                         pg.page.screenshot(path=str(tmp / f"{i:05d}.jpg"), type="jpeg", quality=93)
                         if i and i % (args.fps * 10) == 0:
                             print(f"  frames {i}/{n}", flush=True)
-                    wav = tmp / "narration.wav" if audio_track(proj, tl, tmp / "narration.wav") else None
+                    sfx = pg.page.evaluate("motion.sfx ? motion.sfx() : []")
+                    wav = tmp / "mix.wav" if audio_track(proj, tl, tmp / "mix.wav", sb.get("sound"), sfx, args.until) else None
                     (proj / "out").mkdir(exist_ok=True)
-                    out = proj / "out" / f"{slug}-{size}.mp4"
+                    out = proj / "out" / (f"{slug}-{size}-test{args.until:g}s.mp4" if args.until else f"{slug}-{size}.mp4")
                     encode(tmp, args.fps, wav, out)
                 print(f"  wrote {out}")
-                if args.deliver and not problems:
+                if args.deliver and not problems and not args.until:
                     dl = Path.home() / "Downloads"
                     shutil.copy2(out, dl / out.name)
                     print(f"  delivered {dl / out.name}")

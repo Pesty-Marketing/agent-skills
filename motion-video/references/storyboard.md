@@ -29,6 +29,11 @@ The storyboard is the contract between the user and the render. Scene `id`s link
 | `scenes[].still` | Seconds into the scene to take its still and run the fit checks (default: 75% of the way in). Set it when a scene is mid-transition at 75%. |
 | `captions` | `true` burns captions into every size, a list burns them into only those sizes (for example `["9x16"]` for feeds that autoplay muted), and `false` burns in none. `captions.srt` is written whenever the video is narrated. |
 | `read_wps` | Reading speed for the `read` gate, in words a second (default 3). Lower it for an older audience or a screen seen from far away. Never raise it to pass a failing video. |
+| `pace` | `"punchy"` for social cuts: hard cuts, 0.3 s expo entrances, J-cuts (audio leads each picture by 0.12 s), auto-placed SFX, pauses inside a line cut to `max_pause`. |
+| `speed` | ElevenLabs voice speed, 0.7–1.2 (default 1.1). It changes the read more than the clock. |
+| `tempo` | Pitch-kept speed-up applied after voicing (ffmpeg `atempo`), default 1.0. For a fast YouTube-narrator read use `speed` 1.2 + `tempo` 1.2 + `max_pause` 0.1 (about 185 spoken words a minute). Re-run `tts.py` after changing it; nothing is re-billed. |
+| `max_pause` | Longest pause kept inside a line, in seconds (0.15 under `pace: punchy`). |
+| `sound` | `{"sfx": true}` adds whooshes, hits and ticks from `scripts/sound.py`; add `"music": "<prompt>", "bpm": 120` only when the user asks for a music bed. |
 | `loop` | Defaults to `true` for the loop preset. The last scene fades out so the end matches the start, and a gate checks the seam. |
 
 ## Writing scenes

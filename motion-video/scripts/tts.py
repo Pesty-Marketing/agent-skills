@@ -18,6 +18,7 @@ import base64
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -62,6 +63,57 @@ def speech_end(path: Path, dur: float) -> float:
     return dur
 
 
+def stretch(src: Path, out: Path, tempo: float):
+    """Speed a voice up without changing pitch. Rubber Band's R3 engine keeps one clean voice; ffmpeg atempo
+    (the fallback) smears speech into a faint doubled echo that listeners hear as two voices at once."""
+    rb = shutil.which("rubberband")
+    if not rb:
+        print("  WARNING: rubberband not installed (brew install rubberband); atempo will sound doubled", file=sys.stderr)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src), "-af", f"atempo={tempo}",
+                        "-b:a", "192k", str(out)], check=True)
+        return
+    a, b = out.with_suffix(".in.wav"), out.with_suffix(".out.wav")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src), "-ar", "44100", str(a)], check=True)
+    subprocess.run([rb, "-q", "-3", "-F", "-T", str(tempo), str(a), str(b)], check=True, capture_output=True)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(b), "-b:a", "192k", str(out)], check=True)
+    a.unlink(); b.unlink()
+
+
+def tighten(raw: Path, out: Path, words: list, dur: float, maxgap: float):
+    """Shorten every pause inside a line to maxgap seconds (pace "punchy"), and remap word times to match."""
+    log = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(raw), "-af", f"silencedetect=n=-38dB:d={maxgap + 0.06}", "-f", "null", "-"],
+                         capture_output=True, text=True).stderr
+    sil, st = [], None
+    for line in log.splitlines():
+        if "silence_start:" in line:
+            st = float(line.split("silence_start:")[1])
+        elif "silence_end:" in line and st is not None:
+            en = float(line.split("silence_end:")[1].split("|")[0])
+            if st > 0.05 and en < dur - 0.05:
+                sil.append((st + maxgap / 2, en - maxgap / 2))  # the part to cut
+            st = None
+    if not sil:
+        shutil.copy(raw, out)
+        return words, dur
+    keep, t0 = [], 0.0
+    for a, b in sil:
+        keep.append((t0, a)); t0 = b
+    keep.append((t0, dur))
+    fc = "".join(f"[0:a]atrim={a:.3f}:{b:.3f},asetpts=PTS-STARTPTS[k{i}];" for i, (a, b) in enumerate(keep))
+    fc += "".join(f"[k{i}]" for i in range(len(keep))) + f"concat=n={len(keep)}:v=0:a=1[o]"
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(raw), "-filter_complex", fc, "-map", "[o]", "-b:a", "192k", str(out)], check=True)
+
+    def m(t):
+        cut = 0.0
+        for a, b in sil:
+            if t >= b:
+                cut += b - a
+            elif t > a:
+                return round(a - cut, 3)
+        return round(t - cut, 3)
+    return [{"w": w["w"], "start": m(w["start"]), "end": m(w["end"])} for w in words], dur - sum(b - a for a, b in sil)
+
+
 def words_from_alignment(al: dict) -> list[dict]:
     words, cur, start, end = [], "", None, None
     for ch, s, e in zip(al["characters"], al["character_start_times_seconds"], al["character_end_times_seconds"]):
@@ -94,6 +146,8 @@ def main():
     model = args.model or sb.get("model") or DEFAULT_MODEL
     # Narration pace: storyboard "speed" (ElevenLabs 0.7-1.2). Narrated presets default to 1.1: brisk, still natural.
     settings = {**VOICE_SETTINGS, "speed": float(sb.get("speed", 1.1))}
+    if sb.get("pace") == "punchy":  # higher-energy, more expressive read
+        settings.update({"stability": 0.4, "style": 0.2})
     lines = [(s["id"], (s.get("narration") or "").strip()) for s in sb["scenes"]]
     lines = [(i, t) for i, t in lines if t]
     if not lines:
@@ -137,9 +191,27 @@ def main():
         cache_path.write_text(json.dumps({"scenes": {**old, **out}}, indent=2))  # paid work survives an interrupt
         print(f"  voiced {i:<16} {out[i]['duration']:5.1f}s")
 
-    for i, v in out.items():  # trim trailing silence (cheap, local; no re-billing)
+    maxgap = sb.get("max_pause", 0.15 if sb.get("pace") == "punchy" else None)
+    # "tempo": post-process speed-up (Rubber Band R3, pitch and formants kept). ElevenLabs "speed" tops out at 1.2 and barely
+    # moves the clock; tempo 1.15-1.3 gets a fast YouTube-narrator read (~180-200 spoken wpm).
+    tempo = float(sb.get("tempo", 1.0))
+    for i, v in list(out.items()):  # local post-processing on a copy; the cache keeps the raw take
+        v = out[i] = json.loads(json.dumps(v))
+        if maxgap:
+            raw = proj / "audio" / f"{i}.mp3"
+            tight = proj / "audio" / f"{i}.tight.mp3"
+            v["words"], _ = tighten(raw, tight, v["words"], probe_duration(raw), float(maxgap))
+            v["audio"] = f"audio/{i}.tight.mp3"
+        if tempo != 1.0:  # pitch-preserving speed-up past ElevenLabs' 1.2 ceiling
+            src = proj / v["audio"]
+            fast = proj / "audio" / f"{i}.fast.mp3"
+            stretch(src, fast, tempo)
+            v["words"] = [{"w": w["w"], "start": round(w["start"] / tempo, 3), "end": round(w["end"] / tempo, 3)} for w in v["words"]]
+            v["audio"] = f"audio/{i}.fast.mp3"
         full = probe_duration(proj / v["audio"])
-        v["duration"] = speech_end(proj / v["audio"], full)
+        # silence detection can mistake a soft last word ("months") for the end; never end before the aligned last word
+        last = max((w["end"] for w in v["words"]), default=0.0)
+        v["duration"] = round(min(full, max(speech_end(proj / v["audio"], full), last + 0.05)), 3)
         for w in v["words"]:
             w["end"] = min(w["end"], v["duration"])
     (proj / "timings.json").write_text(json.dumps({"voice": voice, "model": model, "scenes": out}, indent=2))

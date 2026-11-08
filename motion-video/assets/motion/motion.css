@@ -163,10 +163,20 @@ body.has-captions{--caption-reserve:200px}
 .scene.flood{--fg:#FFFFFF;--muted:rgba(255,255,255,.9);--accent-text:#FFFFFF;--glow:rgba(0,0,0,.18);color:#fff}
 .scene.flood::before{content:"";position:absolute;inset:-2400px;background:var(--accent);z-index:-1}
 /* Stamp: rotated label that slams onto a stat. <div class="stamp" data-in="…" data-anim="slam">Paused</div> */
-.stamp{display:inline-block;border:8px solid var(--accent);color:var(--accent);font-family:var(--font-display);font-weight:800;font-size:var(--t-h2);letter-spacing:.04em;text-transform:uppercase;padding:6px 30px;border-radius:14px;transform:rotate(-8deg)}
+.stamp{display:inline-block;white-space:nowrap;width:max-content;border:8px solid var(--accent);color:var(--accent);font-family:var(--font-display);font-weight:800;font-size:var(--t-h2);letter-spacing:.04em;text-transform:uppercase;padding:6px 30px;border-radius:14px;transform:rotate(-8deg)}
 /* Tile grid for quick beats */
 .tiles{display:grid;grid-template-columns:repeat(var(--tcols,2),1fr);gap:28px}
 .tiles .tile{background:var(--surface);border:2px solid var(--line);border-radius:26px;padding:34px 40px;display:flex;gap:28px;align-items:flex-start}
 .tiles .tile b{font-family:var(--font-mono);font-weight:700;font-size:var(--t-label);color:var(--accent-text);flex:none;padding-top:6px}
 .tiles .tile span{font-family:var(--font-display);font-weight:800;font-size:calc(var(--t-h2) * .78);line-height:1.12;letter-spacing:-.015em}
 @media (orientation:portrait){.tiles{grid-template-columns:1fr;gap:20px}}
+
+/* Shot cards: <div data-cards> children overlay each other; each hard-cuts out when the next comes in. */
+[data-cards]{display:grid}
+[data-cards]>*{grid-area:1/1;align-self:center}
+/* Background motion layer (pace "punchy"; motion.js adds it). Sits behind scenes; ink/flood scenes cover it. */
+.bgfx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.bgfx i{position:absolute;left:0;top:0;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 62%)}
+.bgfx i:nth-child(2){width:1200px;height:1200px;background:radial-gradient(circle,rgba(0,35,48,.06),transparent 60%)}
+.bgfx i:nth-child(3){width:700px;height:700px}
+.bgfx b{position:absolute;inset:0;background-image:radial-gradient(rgba(0,35,48,.10) 2px,transparent 2.5px);background-size:44px 44px;-webkit-mask-image:linear-gradient(115deg,transparent 30%,#000 65%,transparent 95%);mask-image:linear-gradient(115deg,transparent 30%,#000 65%,transparent 95%)}

@@ -21,8 +21,18 @@
   const PRESET = (document.body.className.match(/preset-(\w+)/) || [])[1] || 'story';
   const FADE = 0.3;
   /* Scene transitions (data-trans on a .scene, default per preset): push | zoom | fade | cut */
-  const TRANS_DEFAULT = PRESET === 'loop' ? 'fade' : 'push';
+  /* Pace: storyboard "pace": "punchy" -> hard cuts, 6-10 frame expo-out entrances, punch-ins, background motion. */
+  const PUNCHY = TL.pace === 'punchy';
+  const TRANS_DEFAULT = PUNCHY ? 'cut' : PRESET === 'loop' ? 'fade' : 'push';
+  const EXPO = 'cubic-bezier(.16,1,.3,1)';
   const events = [];   // every animation start, for the pacing gate
+  /* Sound cues for render.py: {t, kind, dur?}. Auto cues are motivated and sparse: a whoosh only when a cut
+     changes the ground (white / ink / flood), a rolling count under every counter, a marker swipe under every
+     highlight. Everything else (hits, stamp, riser, sting) is spotted by hand with data-sfx. */
+  const sfx = [];
+  const cue = (t, kind, dur) => sfx.push(dur ? { t: +t.toFixed(3), kind, dur: +dur.toFixed(3) } : { t: +t.toFixed(3), kind });
+  const ground = (sec) => (sec.classList.contains('ink') ? 'ink' : sec.classList.contains('flood') ? 'flood' : 'plain');
+  let prevGround = null;
 
   const KF = {
     up: () => [{ opacity: 0, transform: 'translateY(60px)' }, { opacity: 1, transform: 'none' }],
@@ -46,7 +56,7 @@
       return [{ strokeDashoffset: len }, { strokeDashoffset: 0 }];
     },
     strike: () => [{ backgroundSize: '0% 6px' }, { backgroundSize: '100% 6px' }],
-    none: () => [{ opacity: 1 }, { opacity: 1 }],
+    none: () => [{ opacity: 0 }, { opacity: 1, offset: 0.001 }, { opacity: 1 }],  // hard cut in at data-in
   };
   const DUR = { type: 0.9, draw: 1.0, 'grow-x': 0.7, 'grow-y': 0.7, pop: 0.45, strike: 0.4, slam: 0.5, mark: 0.5, flip: 0.5 };
   const SPRINGY = new Set(['up', 'down', 'left', 'right', 'pop', 'flip']);
@@ -205,7 +215,7 @@
         push: [{ opacity: 0, transform: 'translateX(160px)' }, { opacity: 1, transform: 'none' }],
         zoom: [{ opacity: 0, transform: 'scale(.86)' }, { opacity: 1, transform: 'none' }],
         fade: KF.fade(),
-        cut: [{ opacity: 1 }, { opacity: 1 }],
+        cut: [{ opacity: 0 }, { opacity: 1 }],
       }[tr] || KF.fade();
       const OUT = {
         push: [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(-160px)' }],
@@ -214,6 +224,10 @@
         cut: [{ opacity: 1 }, { opacity: 0 }],
       }[tr] || [{ opacity: 1 }, { opacity: 0 }];
       const td = tr === 'cut' ? 0.001 : FADE;
+      /* data-cut-sfx="none" keeps the cut silent (e.g. a hush before a quote); any other value forces that sound */
+      const g = ground(sec), forced = sec.dataset.cutSfx;
+      if (!first && forced !== 'none' && (forced || g !== prevGround)) cue(s.start - (tr === 'cut' ? 0.12 : 0.05), forced || 'whoosh');
+      prevGround = g;
       if (first && !TL.loop) sec.style.opacity = 1; else anim(sec, IN, s.start, td, { easing: 'cubic-bezier(.16,1,.3,1)' });
       if (!(last && !TL.loop)) anim(sec, OUT, s.start + s.dur - td, td, { fill: 'forwards', easing: tr === 'fade' ? EASE : 'cubic-bezier(.7,0,.84,0)', event: false });
       /* Ambient motion so no frame is ever frozen: the scene creeps forward, photos drift (Ken Burns).
@@ -228,6 +242,23 @@
     });
     TL.scenes.forEach((s) => { if (!seen.has(s.id)) errors.push(`storyboard scene "${s.id}" has no <section class="scene" data-scene="${s.id}">`); });
 
+    /* data-cards: children are shots shown one at a time; each hard-cuts out when the next one comes in. */
+    document.querySelectorAll('[data-cards]').forEach((box) => {
+      const kids = [...box.children].filter((k) => k.dataset.in !== undefined);
+      const sc = sceneOf(box);
+      kids.forEach((k, i) => { if (i + 1 < kids.length) k._cutAt = at(kids[i + 1].dataset.in, sc, kids[i + 1]); });
+    });
+    /* data-sfx="hit" plays at the element's data-in (on a counter: when it lands); "riser@@@pause-1" sets its own time.
+       Several cues: "riser@@@in#2-1.85; stamp". Kinds: see scripts/sound.py SFX. */
+    document.querySelectorAll('[data-sfx]').forEach((el) => {
+      el.dataset.sfx.split(';').map((x) => x.trim()).filter(Boolean).forEach((spec) => {
+        const [kind, when] = spec.split('@@');
+        let t = at(when || el.dataset.in || '0', sceneOf(el), el);
+        if (!when && el.dataset.count !== undefined) t += parseFloat(el.dataset.dur || 1.4) - 0.05;
+        cue(t, kind);
+      });
+    });
+
     document.querySelectorAll('[data-in]').forEach((el) => {
       const scene = sceneOf(el);
       const t = at(el.dataset.in, scene, el);
@@ -235,6 +266,7 @@
       if (kind === 'words' || kind === 'speak') {
         if (scene && t > scene.start + scene.dur - 0.5) errors.push(`${desc(el)} starts after scene "${scene.id}" is nearly over`);
         buildWords(el, scene, t, kind);
+        if (el._cutAt !== undefined) { anim(el, [{ opacity: 1 }, { opacity: 0 }], el._cutAt, 0.001, { fill: 'forwards' }); }
         if (el.dataset.out) anim(el, [{ opacity: 1 }, { opacity: 0 }], at(el.dataset.out, scene, el), 0.25, { fill: 'forwards' });
         return;
       }
@@ -250,9 +282,14 @@
         el.textContent = fmt(from, c);
         anim(el, KF.pop(), t, 0.4, { easing: SPRING });
         anim(el, [{ transform: 'scale(1)' }, { transform: 'scale(1.1)', offset: 0.35 }, { transform: 'scale(1)' }], t + c.d - 0.05, 0.4, { fill: 'none', composite: 'add' });
+        cue(t, 'count', c.d);
+        if (el._cutAt !== undefined) anim(el, [{ opacity: 1 }, { opacity: 0 }], el._cutAt, 0.001, { fill: 'forwards' });
         return;
       }
-      anim(el, KF[kind](el), t, d, { easing: SPRINGY.has(kind) ? SPRING : EASE });
+      const dd = PUNCHY && !el.dataset.dur ? Math.min(d, kind === 'grow-y' || kind === 'grow-x' || kind === 'draw' ? 0.5 : 0.3) : d;
+      anim(el, KF[kind](el), t, dd, { easing: SPRINGY.has(kind) ? SPRING : PUNCHY ? EXPO : EASE });
+      if (kind === 'mark') cue(t, 'marker');
+      if (el._cutAt !== undefined) { anim(el, [{ opacity: 1 }, { opacity: 0 }], el._cutAt, 0.001, { fill: 'forwards', event: true }); }
       if (el.dataset.out) anim(el, [{ opacity: 1 }, { opacity: 0 }], at(el.dataset.out, scene, el), 0.3, { fill: 'forwards' });
     });
 
@@ -262,6 +299,34 @@
       el.dataset.pulse.split(';').map((x) => x.trim()).filter(Boolean).forEach((spec) =>
         anim(el, [{ transform: 'scale(1)' }, { transform: 'scale(1.12)', offset: 0.35 }, { transform: 'scale(1)' }], at(spec, scene, el), 0.45, { fill: 'none', composite: 'add' }));
     });
+
+    /* Punch-in: data-punch="t=@18.1 s=1.25; t=@2025 s=1" on a scene or element. Hard step to scale s
+       (around data-punch-origin, default centre), held until the next step or the scene's end. */
+    document.querySelectorAll('[data-punch]').forEach((el) => {
+      const scene = sceneOf(el);
+      const end = scene ? scene.start + scene.dur : TL.total;
+      if (el.dataset.punchOrigin) el.style.transformOrigin = el.dataset.punchOrigin;
+      const steps = parseSteps(el.dataset.punch).map((st) => ({ t: at(st.t || '0', scene, el), s: parseFloat(st.s || '1.2') })).sort((a, b) => a.t - b.t);
+      steps.forEach((st, i) => {
+        const until = i + 1 < steps.length ? steps[i + 1].t : end;
+        if (st.s === 1) return;
+        anim(el, [{ transform: `scale(${st.s})` }, { transform: `scale(${st.s * 1.02})` }], st.t, Math.max(0.05, until - st.t), { fill: 'none', composite: 'add', easing: 'linear' });
+      });
+    });
+
+    /* Background motion layer (punchy pace): soft shapes drifting behind every white scene. */
+    if (PUNCHY && !document.querySelector('.bgfx')) {
+      const fx = document.createElement('div');
+      fx.className = 'bgfx';
+      fx.innerHTML = '<i></i><i></i><i></i><b></b>';
+      document.body.prepend(fx);
+      const [a, b, c] = fx.querySelectorAll('i');
+      const T = TL.total;
+      anim(a, [{ transform: 'translate(-10%,-10%) rotate(0deg)' }, { transform: 'translate(30%,20%) rotate(160deg)' }], 0, T, { easing: 'linear', event: false });
+      anim(b, [{ transform: 'translate(40%,60%) scale(1)' }, { transform: 'translate(-20%,10%) scale(1.4)' }], 0, T, { easing: 'linear', event: false });
+      anim(c, [{ transform: 'translate(90%,-20%)' }, { transform: 'translate(50%,70%)' }], 0, T, { easing: 'linear', event: false });
+      anim(fx.querySelector('b'), [{ backgroundPosition: '0 0' }, { backgroundPosition: `${T * 18}px ${T * 10}px` }], 0, T, { easing: 'linear', event: false });
+    }
 
     document.querySelectorAll('[data-cam]').forEach(buildCam);
     document.querySelectorAll('[data-path]').forEach(buildCursor);
@@ -315,7 +380,24 @@
     });
   }
 
-  window.motion = { ready, seek, errors, fontsOk, deadAir, timeline: TL };
+  /* Shot list for the storyboard check: every moment the picture changes composition. */
+  function shots() {
+    const ts = [...new Set(events.map((e) => +e.toFixed(2)))].sort((a, b) => a - b);
+    return ts;
+  }
+  function sfxList() {
+    const order = { hit: 3, stamp: 3, sting: 3, riser: 3, whoosh: 2, count: 2, marker: 1, pop: 1, tick: 1 };
+    const out = [];
+    sfx.sort((a, b) => a.t - b.t).forEach((q) => {
+      if (q.t < 0 || q.t > TL.total) return;
+      const prev = out[out.length - 1];
+      if (prev && q.t - prev.t < 0.15) { if (order[q.kind] > order[prev.kind]) out[out.length - 1] = q; return; }
+      out.push(q);
+    });
+    return out;
+  }
+
+  window.motion = { ready, seek, errors, fontsOk, deadAir, shots, sfx: sfxList, timeline: TL };
 
   if (!/[?&]render=1/.test(location.search)) {
     ready.then(() => {

@@ -10,6 +10,7 @@ plain-English problems ("FAIL ...") an agent can act on. A video is not done unt
   seam     loops only: the last frame matches the first, so the loop has no visible jump
   pace     nothing sits still too long: inside each scene, something new starts at least every
            max_still seconds (story/walkthrough 3.0 s, loop 6 s; storyboard "max_still" overrides)
+  voice    no narration clip is still sounding when the next one starts
   read     every piece of on-screen text stays up long enough to read at read_wps words a second
            (default 3, about 180 words a minute; storyboard "read_wps" overrides). Simulates one
            viewer reading each text block in the order it appears; burned-in captions and
@@ -139,9 +140,39 @@ QR_JS = """() => [...document.querySelectorAll('img[data-qr]')].map((img, i) => 
 })"""
 
 
-def run_all(pg, tl, times, min_px, fps, max_still=3.0, read_wps=3.0):
+def voice_end(path) -> float:
+    """Last moment the clip is above -50 dB, measured from the file itself (independent of tts.py's estimate)."""
+    import subprocess
+    dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
+                               capture_output=True, text=True).stdout)
+    log = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(path), "-af", "silencedetect=n=-50dB:d=0.05", "-f", "null", "-"],
+                         capture_output=True, text=True).stderr
+    end, start = dur, None
+    for line in log.splitlines():
+        if "silence_start:" in line:
+            start = float(line.split("silence_start:")[1])
+        elif "silence_end:" in line:
+            start = None
+    return start if start is not None else end
+
+
+def overlap_problems(tl, root):
+    """voice: one narration clip still sounding when the next one starts (two voices at once)."""
+    clips = [(s["id"], s["audio"]) for s in tl["scenes"] if s.get("audio")]
+    out = []
+    for (ia, a), (ib, b) in zip(clips, clips[1:]):
+        end = a["at"] + voice_end(root / a["file"])
+        if end > b["at"] + 0.03:
+            out.append(f"voice: \"{ia}\" is still speaking {end - b['at']:.2f}s into \"{ib}\"'s line (two voices at once): "
+                       f"re-run tts.py, or raise \"{ia}\"'s \"dur\"")
+    return out
+
+
+def run_all(pg, tl, times, min_px, fps, max_still=3.0, read_wps=3.0, root=None):
     page = pg.page
     problems = [f"timing: {e}" for e in page.evaluate("motion.errors")]
+    if root is not None:
+        problems += overlap_problems(tl, root)
     problems += read_problems(pg, tl, read_wps)
     for d in page.evaluate("motion.deadAir()"):
         if d["gap"] > max_still:
