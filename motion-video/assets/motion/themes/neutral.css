@@ -1,0 +1,21 @@
+/* Neutral theme for internal training or unbranded videos. Inter + JetBrains Mono, slate + blue.
+   Copy this file to make a client theme: change the colors, fonts, --motion-fonts and logo. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=block');
+:root{
+  --motion-fonts:"Inter","JetBrains Mono";
+  --font-display:'Inter',Arial,sans-serif;
+  --font-body:'Inter',Arial,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --ink:#0F172A;
+}
+body{
+  --bg:#FFFFFF;--fg:#0F172A;--muted:#475569;--muted-2:#CBD5E1;--line:#E2E8F0;--surface:#FFFFFF;--chrome:#F8FAFC;
+  --accent:#2563EB;--accent-text:#2563EB;--good:#16A34A;--bad:#DC2626;
+  --bubble-bg:#0F172A;--bubble-fg:#FFFFFF;--glow:rgba(37,99,235,.10);
+}
+body.dark{
+  --bg:#0F172A;--fg:#FFFFFF;--muted:rgba(255,255,255,.80);--muted-2:rgba(255,255,255,.28);--line:rgba(255,255,255,.16);--surface:#1E293B;--chrome:#1E293B;
+  --accent-text:#93C5FD;--bubble-bg:#FFFFFF;--bubble-fg:#0F172A;--glow:rgba(37,99,235,.25);
+}
+/* No logo by default. For a client theme: .logo,.end-logo{background-image:url(../brand/client-logo.svg)} */
+.logo,.end-logo{display:none}

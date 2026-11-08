@@ -1,0 +1,68 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- {{TITLE}}: narrated tool walkthrough. Screens are real captures (scripts/capture.py), never mockups. -->
+<link rel="stylesheet" href="motion/motion.css">
+<link rel="stylesheet" href="motion/themes/{{THEME}}.css">
+<style>
+  .walk{display:grid;grid-template-columns:520px 1fr;gap:64px;align-items:center;height:100%}
+  .walk .shot{height:100%}
+  @media (orientation:portrait){.walk{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
+</style>
+</head><body class="preset-walkthrough">
+<div class="logo"></div>
+
+<section class="scene" data-scene="intro">
+  <div class="eyebrow" data-in="0.2">Walkthrough</div>
+  <h1 data-in="0.5">How to use <em>the tool</em></h1>
+  <p class="lead" data-in="1.0">One line on who it's for.</p>
+</section>
+
+<section class="scene" data-scene="step-1">
+  <div class="walk">
+    <div>
+      <div class="step" data-in="0.1"><b>1</b>Step one</div>
+      <h2 data-in="0.3">Short instruction</h2>
+    </div>
+    <div class="shot browser" data-in="0.2" data-anim="zoom">
+      <div class="bar"><i></i><i></i><i></i><span>example.com</span></div>
+      <div class="view">
+        <div class="cam" data-cam="t=0 s=1 x=50 y=0; t=1.5 s=1.8 x=50 y=30">
+          <img src="shots/step-1.png" alt="">
+          <div class="cursor" data-path="t=1.2 x=80 y=70; t=2.4 x=50 y=30 click"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" data-scene="step-2">
+  <div class="walk">
+    <div>
+      <div class="step" data-in="0.1"><b>2</b>Step two</div>
+      <h2 data-in="0.3">What you'll see</h2>
+    </div>
+    <div class="shot browser">
+      <div class="bar"><i></i><i></i><i></i><span>example.com</span></div>
+      <div class="view">
+        <div class="cam" data-cam="t=0 s=1 x=50 y=0">
+          <img src="shots/step-2.png" alt="">
+          <div class="hl" style="left:10%;top:20%;width:40%;height:15%" data-in="1.0" data-anim="zoom"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" data-scene="end">
+  <div class="end-card">
+    <div class="end-logo" data-in="0.1" data-anim="fade"></div>
+    <h1 data-in="0.4">Try it <em>today</em></h1>
+    <div class="url" data-in="0.8">example.com</div>
+  </div>
+</section>
+
+<div class="captions"></div>
+<div class="progress"></div>
+<script src="timeline.js"></script>
+<script src="motion/motion.js"></script>
+</body></html>

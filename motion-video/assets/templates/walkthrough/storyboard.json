@@ -1,0 +1,15 @@
+{
+  "title": "{{TITLE}}",
+  "slug": "{{SLUG}}",
+  "preset": "walkthrough",
+  "theme": "{{THEME}}",
+  "sizes": ["16x9"],
+  "narration": true,
+  "captions": false,
+  "scenes": [
+    {"id": "intro",  "narration": "One sentence: what this tool does and who it's for.", "screen": "Title card"},
+    {"id": "step-1", "narration": "Step one, in the words a new user needs.", "screen": "shots/step-1.png, zoom to the first field, cursor clicks it"},
+    {"id": "step-2", "narration": "Step two, and what they'll see.", "screen": "shots/step-2.png, highlight the result"},
+    {"id": "end",    "narration": "Where to find it, and the one thing to do next.", "screen": "End card with URL"}
+  ]
+}

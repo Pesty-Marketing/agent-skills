@@ -1,0 +1,17 @@
+{
+  "title": "{{TITLE}}",
+  "slug": "{{SLUG}}",
+  "preset": "story",
+  "theme": "{{THEME}}",
+  "sizes": ["16x9", "9x16"],
+  "narration": true,
+  "captions": ["9x16"],
+  "sources": ["URL of the approved page every claim comes from"],
+  "scenes": [
+    {"id": "hook",    "narration": "The result, stated plainly, with its timeframe.", "screen": "Before -> after numbers count up"},
+    {"id": "goal",    "narration": "What the client wanted.", "screen": "One line"},
+    {"id": "work",    "narration": "What we did, in two or three concrete moves.", "screen": "List reveal"},
+    {"id": "result",  "narration": "The numbers, exactly as the source states them.", "screen": "Bar chart"},
+    {"id": "end",     "narration": "One next step.", "screen": "Logo + CTA + URL"}
+  ]
+}

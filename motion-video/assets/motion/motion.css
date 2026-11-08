@@ -1,0 +1,182 @@
+/* motion-video scene library. Pair with one theme file (themes/pesty.css or themes/neutral.css).
+   Every size renders with its short side = 1080px, so px values mean the same in 16:9, 9:16 and 1:1.
+   Body classes: preset-loop | preset-walkthrough | preset-story, and optionally "dark".
+   Animations are NOT here: put data-in / data-anim on elements and motion.js builds them. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100vw;height:100vh;overflow:hidden}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);-webkit-font-smoothing:antialiased;position:relative}
+
+/* Type scale per preset. Loops are read from 10 ft while walking; walkthroughs/stories on a screen. */
+body{--t-hero:120px;--t-h1:88px;--t-h2:64px;--t-body:40px;--t-label:32px;--pad:96px;--gap:48px}
+body.preset-loop{--t-hero:150px;--t-h1:120px;--t-h2:90px;--t-body:62px;--t-label:58px;--pad:100px}
+@media (orientation:portrait){body{--pad:72px;--gap:40px}}
+
+.frame{position:absolute;inset:0}
+.scene{position:absolute;left:var(--pad);right:var(--pad);top:calc(var(--pad) + var(--top-reserve,90px));bottom:calc(var(--pad) + var(--bottom-reserve,0px) + var(--caption-reserve,0px));display:flex;flex-direction:column;justify-content:center;gap:calc(var(--gap) * .5);opacity:0}
+.scene.top{justify-content:flex-start}
+.persist{position:absolute}
+
+/* Layout helpers: .row goes side by side in landscape, stacks in portrait. */
+.row{display:flex;align-items:center;gap:var(--gap)}
+.row>*{min-width:0}
+.row .grow{flex:1}
+@media (orientation:portrait){.row{flex-direction:column;align-items:stretch}.row.keep{flex-direction:row;align-items:center}}
+.center{text-align:center;align-items:center}
+.only-landscape{}
+.only-portrait{display:none}
+@media (orientation:portrait){.only-landscape{display:none!important}.only-portrait{display:revert}}
+.nowrap{white-space:nowrap}
+
+/* Text */
+.eyebrow{font-family:var(--font-mono);font-weight:700;font-size:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text)}
+.hero{font-family:var(--font-display);font-weight:800;font-size:var(--t-hero);line-height:1.02;letter-spacing:-.035em}
+h1,.h1{font-family:var(--font-display);font-weight:800;font-size:var(--t-h1);line-height:1.04;letter-spacing:-.03em}
+h2,.h2{font-family:var(--font-display);font-weight:800;font-size:var(--t-h2);line-height:1.08;letter-spacing:-.02em}
+.lead{font-size:var(--t-body);line-height:1.35;color:var(--muted);max-width:1300px}
+.lead b,.lead strong{color:var(--fg)}
+em{font-style:normal;color:var(--accent-text)}
+.mono{font-family:var(--font-mono)}
+.muted{color:var(--muted)}
+
+/* Logo: the theme file sets background-image for .logo and .end-logo (light and body.dark) */
+.logo{position:absolute;left:var(--pad);top:calc(var(--pad) * .6);height:72px;width:260px;background-position:left center;background-size:contain;background-repeat:no-repeat}
+
+/* Card surface */
+.card{background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:36px 44px}
+
+/* Big stat: <div class="stat"><div class="num" data-count="18.1" data-prefix="$" data-suffix="M">…</div><div class="label">…</div></div> */
+.stat .num{font-family:var(--font-display);font-weight:800;font-size:calc(var(--t-hero) * 1.5);line-height:.95;letter-spacing:-.04em;color:var(--accent-text);font-variant-numeric:tabular-nums}
+.stat .label{font-size:var(--t-body);color:var(--muted);margin-top:16px}
+
+/* Before / after */
+.ba{display:flex;align-items:center;gap:var(--gap)}
+.ba .side{flex:1}
+.ba .side .k{font-family:var(--font-mono);font-weight:700;font-size:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ba .side .v{font-family:var(--font-display);font-weight:800;font-size:var(--t-hero);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.ba .side.after .v{color:var(--accent-text)}
+.ba .arrow{font-size:var(--t-hero);color:var(--muted);font-family:var(--font-body)}
+@media (orientation:portrait){.ba{flex-direction:column;align-items:flex-start;gap:24px}.ba .arrow{transform:rotate(90deg)}}
+
+/* List reveal: <ul class="list"><li data-in=…>…</li></ul> */
+.list{list-style:none;display:flex;flex-direction:column;gap:20px}
+.list li{display:flex;gap:24px;align-items:baseline;font-size:var(--t-body);line-height:1.3;font-weight:600}
+.list li::before{content:"";flex:none;width:.55em;height:.55em;border-radius:50%;background:var(--accent);transform:translateY(-.05em)}
+.list.checks li::before{content:"\2713";width:auto;height:auto;background:none;color:var(--good);font-weight:800}
+
+/* Term rows (big word + small note), as in the booth loop */
+.terms .term{display:flex;align-items:baseline;gap:44px;padding:16px 0;border-top:3px solid var(--line)}
+.terms .term:first-child{border-top:0}
+.terms .term b{font-family:var(--font-display);font-weight:800;font-size:var(--t-h1);line-height:1.05;letter-spacing:-.03em;white-space:nowrap;flex:none;width:var(--term-w,760px)}
+.terms .term span{font-weight:700;font-size:var(--t-body);color:var(--muted)}
+@media (orientation:portrait){.terms .term{flex-direction:column;gap:4px}.terms .term b{width:auto}}
+
+/* Quote */
+.quote{font-family:var(--font-display);font-weight:700;font-size:var(--t-h2);line-height:1.2;letter-spacing:-.015em;max-width:1500px}
+.quote::before{content:"\201C";display:block;color:var(--accent);font-size:1.6em;line-height:.6}
+.quote .who{display:block;margin-top:28px;font-family:var(--font-body);font-weight:600;font-size:var(--t-label);color:var(--muted);letter-spacing:0}
+
+/* Chat bubble */
+.bubble{align-self:flex-start;background:var(--bubble-bg);color:var(--bubble-fg);border-radius:44px 44px 44px 10px;padding:30px 46px;font-family:var(--font-display);font-weight:800;font-size:var(--t-h2);line-height:1.1;letter-spacing:-.02em}
+
+/* Bar chart: <div class="bars"><div class="bar" style="--v:.62"><i data-in=… data-anim="grow-y"></i><b>$12.5M</b><span>2023</span></div>…</div> */
+.bars{display:flex;align-items:flex-end;gap:var(--gap);height:var(--bars-h,520px)}
+.bars .bar{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:12px}
+.bars .bar i{display:block;width:100%;height:calc(var(--v) * 78%);background:var(--bar,var(--muted-2));border-radius:16px 16px 4px 4px}
+.bars .bar.hi i{background:var(--accent)}
+.bars .bar b{order:-1;font-family:var(--font-display);font-weight:800;font-size:var(--t-h2);font-variant-numeric:tabular-nums}
+.bars .bar span{font-family:var(--font-mono);font-weight:700;font-size:var(--t-label);color:var(--muted)}
+
+/* Cell grid (e.g. 20 AI answers): .cells > .y / .n */
+.cells{display:grid;grid-template-columns:repeat(var(--cols,10),var(--cell,68px));gap:10px;flex:none}
+.cells>div{width:var(--cell,68px);height:var(--cell,68px);border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;font-weight:700;font-size:calc(var(--cell,68px) * .58);color:#fff}
+.cells .y{background:var(--good)}.cells .n{background:var(--bad)}
+
+/* Screenshot frame with camera, cursor, highlight and callout.
+   <div class="shot browser"><div class="bar"><i></i><i></i><i></i><span>example.com</span></div>
+     <div class="view"><div class="cam" data-cam="…"><img src="shots/home.png">
+        <div class="hl" style="left:..%;top:..%;width:..%;height:..%" data-in="@word" data-anim="zoom"></div>
+        <div class="cursor" data-path="…"></div></div></div></div> */
+.shot{position:relative;border-radius:22px;overflow:hidden;background:var(--surface);box-shadow:0 30px 80px rgba(0,0,0,.18),0 0 0 2px var(--line);display:flex;flex-direction:column;min-height:0}
+.shot .bar{flex:none;height:54px;display:flex;align-items:center;gap:10px;padding:0 22px;background:var(--chrome);border-bottom:2px solid var(--line)}
+.shot .bar i{width:16px;height:16px;border-radius:50%;background:var(--line)}
+.shot .bar span{margin-left:18px;font-family:var(--font-mono);font-size:24px;color:var(--muted)}
+.shot .view{position:relative;flex:1;overflow:hidden;min-height:0}
+.shot .cam{position:absolute;left:0;top:0;width:100%}
+.shot .cam>img,.shot .cam>video{display:block;width:100%;height:auto}
+.hl{position:absolute;border:6px solid var(--accent);border-radius:14px;box-shadow:0 0 0 4000px rgba(0,0,0,.28)}
+.hl.soft{box-shadow:none}
+.cursor{position:absolute;width:44px;height:44px;margin:-4px 0 0 -6px;z-index:5;opacity:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 2l15 10.5-6.6 1.2 3.9 7.3-3 1.6-3.9-7.4L4 20z' fill='%23111' stroke='%23fff' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.click{position:absolute;width:90px;height:90px;border-radius:50%;border:5px solid var(--accent);z-index:4;opacity:0;pointer-events:none}
+.callout{position:absolute;z-index:6;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:var(--t-label);line-height:1.15;padding:18px 26px;border-radius:18px;box-shadow:0 16px 40px rgba(0,0,0,.25);max-width:620px}
+.callout.dark{background:var(--ink);}
+
+/* Step badge for walkthroughs */
+.step{display:inline-flex;align-items:center;gap:18px;font-family:var(--font-mono);font-weight:700;font-size:var(--t-label);letter-spacing:.06em;text-transform:uppercase;color:var(--accent-text)}
+.step b{display:inline-flex;align-items:center;justify-content:center;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:#fff;letter-spacing:0}
+
+/* QR: <img class="qr" data-qr="https://…" src="qr.png"> (scripts/qr.py makes the PNG; render.py checks it decodes) */
+.qr{background:#fff;padding:14px;border-radius:22px;display:block;width:var(--qr,300px);height:var(--qr,300px)}
+
+/* Calendar tile */
+.cal{width:230px;border-radius:30px;background:#fff;overflow:hidden;text-align:center;flex:none;box-shadow:0 0 0 2px var(--line)}
+.cal i{display:block;font-style:normal;background:var(--accent);color:#fff;font-family:var(--font-mono);font-weight:700;font-size:56px;letter-spacing:.08em;padding:10px 0}
+.cal b{display:block;color:var(--ink);font-family:var(--font-display);font-weight:800;font-size:130px;line-height:1;padding:16px 0 22px}
+
+/* Persistent CTA band along the bottom (loops). Set --bottom-reserve on body to keep scenes clear of it. */
+.band{position:absolute;left:0;right:0;bottom:0;height:var(--band-h,270px);background:var(--accent);color:#fff;display:flex;align-items:center;gap:40px;padding:0 var(--pad)}
+.band .what{flex:1}
+.band .what b{display:block;font-family:var(--font-display);font-weight:800;font-size:84px;line-height:1;letter-spacing:-.02em}
+.band .what span{display:block;margin-top:14px;font-weight:700;font-size:58px;line-height:1;opacity:.92}
+.band .qr{--qr:230px;padding:9px;border-radius:18px;flex:none}
+@media (orientation:portrait){.band .what b{font-size:72px}.band .what span{font-size:50px}}
+
+/* End card */
+.end-card{display:flex;flex-direction:column;align-items:flex-start;gap:28px}
+.end-card .end-logo{width:420px;height:120px;background-position:left center;background-size:contain;background-repeat:no-repeat}
+.cta{display:inline-block;background:var(--accent);color:#fff;font-family:var(--font-display);font-weight:800;font-size:var(--t-h2);padding:22px 44px;border-radius:999px}
+.url{font-family:var(--font-mono);font-weight:700;font-size:var(--t-label);color:var(--muted)}
+
+/* Strike-through that draws on (data-anim="strike") */
+.strike{background:linear-gradient(var(--bad),var(--bad)) left 55%/0% 6px no-repeat}
+
+/* Progress bar + burned-in captions (captions only show when storyboard "captions": true) */
+.progress{position:absolute;left:0;bottom:0;height:10px;width:100%;background:var(--accent);opacity:.5;z-index:20}
+.captions{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--bottom-reserve,0px) + 70px);width:max-content;max-width:86%;z-index:30;background:rgba(0,0,0,.78);color:#fff;font-family:var(--font-body);font-weight:700;font-size:var(--t-caption,46px);line-height:1.25;padding:14px 30px;border-radius:16px;text-align:center;opacity:0}
+@media (orientation:portrait){.captions{bottom:calc(var(--bottom-reserve,0px) + 260px);--t-caption:52px}}
+/* When captions are burned in, scenes stop above them (motion.js adds .has-captions). */
+body.has-captions{--caption-reserve:200px}
+@media (orientation:portrait){body.has-captions{--caption-reserve:420px}}
+
+/* Soft glow decoration */
+.glow{position:absolute;right:-300px;top:-380px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 65%);pointer-events:none}
+
+/* Kinetic text: data-anim="words" / "speak" wraps each word in .w */
+.w{display:inline-block;will-change:transform}
+/* Highlighter sweep behind a phrase: <span class="mark" data-in="@word" data-anim="mark">…</span> */
+.mark{background:linear-gradient(var(--mark,rgba(217,4,41,.22)),var(--mark,rgba(217,4,41,.22))) left 88%/0% 38% no-repeat;padding:0 .08em}
+.scene{transform-origin:50% 50%}
+.photo{overflow:hidden}
+/* Ink scene: full-bleed deep background for contrast beats. <section class="scene ink" …> */
+.scene{isolation:isolate}
+.scene.ink{--fg:#FFFFFF;--muted:rgba(255,255,255,.8);--muted-2:rgba(255,255,255,.28);--line:rgba(255,255,255,.16);--surface:#06303D;--accent-text:#FF5C78;--glow:rgba(217,4,41,.35);color:var(--fg)}
+.scene.ink::before{content:"";position:absolute;inset:-2400px;background:var(--ink,#002330);z-index:-1}
+.scene.flood{--fg:#FFFFFF;--muted:rgba(255,255,255,.9);--accent-text:#FFFFFF;--glow:rgba(0,0,0,.18);color:#fff}
+.scene.flood::before{content:"";position:absolute;inset:-2400px;background:var(--accent);z-index:-1}
+/* Stamp: rotated label that slams onto a stat. <div class="stamp" data-in="…" data-anim="slam">Paused</div> */
+.stamp{display:inline-block;white-space:nowrap;width:max-content;border:8px solid var(--accent);color:var(--accent);font-family:var(--font-display);font-weight:800;font-size:var(--t-h2);letter-spacing:.04em;text-transform:uppercase;padding:6px 30px;border-radius:14px;transform:rotate(-8deg)}
+/* Tile grid for quick beats */
+.tiles{display:grid;grid-template-columns:repeat(var(--tcols,2),1fr);gap:28px}
+.tiles .tile{background:var(--surface);border:2px solid var(--line);border-radius:26px;padding:34px 40px;display:flex;gap:28px;align-items:flex-start}
+.tiles .tile b{font-family:var(--font-mono);font-weight:700;font-size:var(--t-label);color:var(--accent-text);flex:none;padding-top:6px}
+.tiles .tile span{font-family:var(--font-display);font-weight:800;font-size:calc(var(--t-h2) * .78);line-height:1.12;letter-spacing:-.015em}
+@media (orientation:portrait){.tiles{grid-template-columns:1fr;gap:20px}}
+
+/* Shot cards: <div data-cards> children overlay each other; each hard-cuts out when the next comes in. */
+[data-cards]{display:grid}
+[data-cards]>*{grid-area:1/1;align-self:center}
+/* Background motion layer (pace "punchy"; motion.js adds it). Sits behind scenes; ink/flood scenes cover it. */
+.bgfx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.bgfx i{position:absolute;left:0;top:0;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 62%)}
+.bgfx i:nth-child(2){width:1200px;height:1200px;background:radial-gradient(circle,rgba(0,35,48,.06),transparent 60%)}
+.bgfx i:nth-child(3){width:700px;height:700px}
+.bgfx b{position:absolute;inset:0;background-image:radial-gradient(rgba(0,35,48,.10) 2px,transparent 2.5px);background-size:44px 44px;-webkit-mask-image:linear-gradient(115deg,transparent 30%,#000 65%,transparent 95%);mask-image:linear-gradient(115deg,transparent 30%,#000 65%,transparent 95%)}

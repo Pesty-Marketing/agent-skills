@@ -1,0 +1,50 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- {{TITLE}}: silent loop for a screen people walk past (3-10 ft).
+     Rules: no visible text under 56px, ~7 words per scene, the band (what + QR) is on screen the whole loop. -->
+<link rel="stylesheet" href="motion/motion.css">
+<link rel="stylesheet" href="motion/themes/{{THEME}}.css">
+<style>
+  body{--bottom-reserve:270px}
+</style>
+</head><body class="preset-loop dark">
+<div class="glow"></div>
+<div class="logo"></div>
+
+<section class="scene" data-scene="hook">
+  <div class="eyebrow" data-in="0.1">Ask ChatGPT:</div>
+  <div class="bubble" data-in="0.4" data-anim="pop">Best pest control near you?</div>
+</section>
+
+<section class="scene" data-scene="answer">
+  <div class="hero" data-in="0.2">Is <em>yours</em> on the list?</div>
+</section>
+
+<section class="scene" data-scene="offer">
+  <div class="eyebrow" data-in="0.1">This week only</div>
+  <div class="hero" data-in="0.3">Try it for <em>1 month.</em></div>
+</section>
+
+<section class="scene" data-scene="proof">
+  <div class="terms">
+    <div class="term" data-in="0.1"><b>1 month</b><span>to start</span></div>
+    <div class="term" data-in="0.6"><b>Money back</b><span>on month 1</span></div>
+  </div>
+</section>
+
+<section class="scene" data-scene="act">
+  <div class="row">
+    <div class="grow" data-in="0.2"><div class="hero">Scan <em>now</em></div></div>
+    <img class="qr" style="--qr:430px" src="qr.png" data-qr="https://example.com/" alt="QR code" data-in="0.6" data-anim="pop">
+  </div>
+</section>
+
+<div class="band">
+  <div class="what"><b>Free AI Visibility Test</b><span>Right here at this booth</span></div>
+  <img class="qr" src="qr.png" data-qr="https://example.com/" alt="QR code">
+</div>
+<div class="progress"></div>
+
+<script src="timeline.js"></script>
+<script src="motion/motion.js"></script>
+</body></html>

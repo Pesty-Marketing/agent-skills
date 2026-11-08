@@ -1,0 +1,24 @@
+/* Pesty theme: pesty-design tokens. White canvas by default; add class "dark" to <body> for
+   deep-teal (better on booth TVs and lobby screens). Fonts: Epilogue (display), Montserrat (body),
+   JetBrains Mono (labels). render.py fails if these fonts did not load. */
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@500;600;700;800&family=Montserrat:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=block');
+:root{
+  --motion-fonts:"Epilogue","Montserrat","JetBrains Mono";
+  --font-display:'Epilogue',Arial,sans-serif;
+  --font-body:'Montserrat',Arial,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --ink:#002330;
+}
+body{
+  --bg:#FFFFFF;--fg:#002330;--muted:#4E5B62;--muted-2:#C3CBD0;--line:#DDE3E6;--surface:#FFFFFF;--chrome:#F6F8F9;
+  --accent:#D90429;--accent-text:#D90429;--good:#1F8A5B;--bad:#D90429;
+  --bubble-bg:#002330;--bubble-fg:#FFFFFF;--glow:rgba(217,4,41,.10);
+}
+body.dark{
+  --bg:#002330;--fg:#FFFFFF;--muted:rgba(255,255,255,.80);--muted-2:rgba(255,255,255,.28);--line:rgba(255,255,255,.16);--surface:#06303D;--chrome:#06303D;
+  --accent:#D90429;--accent-text:#FF5C78;--good:#1F8A5B;--bad:#D90429;
+  --bubble-bg:#FFFFFF;--bubble-fg:#002330;--glow:rgba(217,4,41,.26);
+}
+/* Logo files live in motion/brand/ (url() resolves relative to this file). */
+.logo,.end-logo{background-image:url(../brand/pesty-logo.svg)}
+body.dark .logo,body.dark .end-logo{background-image:url(../brand/pesty-logo-white.svg)}

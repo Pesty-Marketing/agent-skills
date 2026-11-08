@@ -73,8 +73,14 @@ HUMAN_COPY = {
         "title": "Pesty Explainer Videos",
         "category": "Content Ops",
         "tagline": "Create a Pesty-branded marketing video with narration, animation, captions, and a clear call to action. Uses Animated Explainer.",
-        "prompt": "Use the pesty-explainer skill to turn this case study into a video for pest control owners.",
+        "prompt": "Use the pesty-explainer skill to make a video explaining how Local Services Ads ranking works for pest control owners.",
         "install_skills": ["animated-explainer", "pesty-explainer"],
+    },
+    "motion-video": {
+        "title": "Motion Videos",
+        "category": "Content Ops",
+        "tagline": "Make booth loops, tool walkthroughs from real screenshots, and case study clips in 16:9, 9:16, or 1:1, with optional narration and captions. Requires Python, Playwright, and ffmpeg; narration uses ElevenLabs.",
+        "prompt": "Use the motion-video skill to turn our Native Pest Management case study into a 60-second video with captions for LinkedIn.",
     },
     "scr": {
         "title": "SCR Communication",
