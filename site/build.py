@@ -73,8 +73,14 @@ HUMAN_COPY = {
         "title": "Pesty Explainer Videos",
         "category": "Content Ops",
         "tagline": "Create a Pesty-branded marketing video with narration, animation, captions, and a clear call to action. Uses Animated Explainer.",
-        "prompt": "Use the pesty-explainer skill to turn this case study into a video for pest control owners.",
+        "prompt": "Use the pesty-explainer skill to make a YouTube explainer on local SEO for pest control owners.",
         "install_skills": ["animated-explainer", "pesty-explainer"],
+    },
+    "pesty-video": {
+        "title": "Pesty Videos",
+        "category": "Content Ops",
+        "tagline": "Turn a case study, a blog article, or an SOP into a narrated, captioned motion-graphics video in the Pesty brand. Checks every number against the live page before export. Requires Node.js, Chrome, and ElevenLabs.",
+        "prompt": "Use the pesty-video skill to make a video for this blog post: https://pestymarketing.com/ahrefs-dr4-pest-control/",
     },
     "scr": {
         "title": "SCR Communication",

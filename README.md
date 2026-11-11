@@ -28,6 +28,7 @@ Update later by re-running the same command.
 | `mobile-mockup` | Capture a mobile website in an iPhone frame with transparent PNG and optional slide export |
 | `animated-explainer` | Create narrated animated training videos with captions |
 | `pesty-explainer` | Create Pesty-branded marketing videos using the Animated Explainer engine |
+| `pesty-video` | Make narrated 16:9 Pesty videos — case studies, blog-article explainers, and SOP walkthroughs — with every number checked against the live page |
 | `scr` | Draft or review concise messages with Situation, Complication, and Resolution |
 | `pyramid-principle` | Lead with the answer and organize supporting arguments and evidence |
 | `presentation-structure` | Shape a presentation opening, body, and closing with SCQR and the Pyramid Principle |

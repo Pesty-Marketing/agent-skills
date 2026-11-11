@@ -899,17 +899,41 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-17" class="prompt-text">&ldquo;Use the pesty-explainer skill to turn this case study into a video for pest control owners.&rdquo;</span>
+            <span id="prompt-skill-17" class="prompt-text">&ldquo;Use the pesty-explainer skill to make a YouTube explainer on local SEO for pest control owners.&rdquo;</span>
             <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-17', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
           <summary>Details &amp; solo install</summary>
-          <p class="detail-desc">Pesty Marketing branded explainer videos - turns one prompt into a finished 2-4 minute narrated MP4 in the Pesty brand (white canvas, Pesty Red, Epilogue/Montserrat, logo end card with CTA) for Pesty&#x27;s own marketing content - YouTube, LinkedIn, website and sales explainers aimed at pest control owners. Use whenever someone wants a Pesty-branded or Pesty marketing video, &quot;make a Pesty video on local SEO / LSAs / CAC&quot;, &quot;explainer for our YouTube channel&quot;, &quot;turn this case study into a video&quot;, even if they don&#x27;t say &quot;branded&quot;. For internal training videos (not Pesty-branded), use animated-explainer instead.</p>
+          <p class="detail-desc">Pesty Marketing branded explainer videos - turns one prompt into a finished 2-4 minute narrated MP4 in the Pesty brand (white canvas, Pesty Red, Epilogue/Montserrat, logo end card with CTA) for Pesty&#x27;s own marketing content - YouTube, LinkedIn, website and sales explainers aimed at pest control owners. Use whenever someone wants a Pesty-branded or Pesty marketing video, &quot;make a Pesty video on local SEO / LSAs / CAC&quot;, &quot;explainer for our YouTube channel&quot;, even if they don&#x27;t say &quot;branded&quot;. Case-study videos and explainers for Pesty blog articles belong to pesty-video. For internal training videos (not Pesty-branded), use animated-explainer instead.</p>
           <p class="detail-refs">Ships with 2 reference guides the agent reads as it works.</p>
           <div class="code-row">
             <code id="cmd-skill-17" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;animated-explainer&quot; &quot;pesty-explainer&quot; -g</code>
             <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-17', this)">Copy</button>
+          </div>
+        </details>
+      </article>
+      <article class="skill-card">
+        <div class="card-top">
+          <span class="chip" style="color:var(--amber);background:var(--amber-dim)">Content Ops</span>
+          <code class="skill-slug">pesty-video</code>
+        </div>
+        <h3 class="skill-title">Pesty Videos</h3>
+        <p class="skill-desc">Turn a case study, a blog article, or an SOP into a narrated, captioned motion-graphics video in the Pesty brand. Checks every number against the live page before export. Requires Node.js, Chrome, and ElevenLabs.</p>
+        <div class="prompt-row">
+          <div class="prompt-label">Try this prompt</div>
+          <div class="prompt-line">
+            <span id="prompt-skill-18" class="prompt-text">&ldquo;Use the pesty-video skill to make a video for this blog post: https://pestymarketing.com/ahrefs-dr4-pest-control/&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-18', this)">Copy</button>
+          </div>
+        </div>
+        <details class="skill-details">
+          <summary>Details &amp; solo install</summary>
+          <p class="detail-desc">Makes premium narrated 16:9 videos in the Pesty brand. It covers case-study and client-results videos, explainer videos for Pesty blog articles, and SOP, training and internal tool walkthroughs. Each video is one HTML page with its own player, plus an MP4, an .srt and a poster. It has motion-graphic titles, counting metrics, flow diagrams, recreated app screens with camera zooms, a clicking cursor, spotlights, callouts and captions. The ElevenLabs voice-over is synced to the animation, and a claims gate checks every number against the live page. Use it for &quot;turn this case study into a video&quot;, &quot;make a video for this blog post&quot;, &quot;explainer video for the article on X&quot;, &quot;results video for &lt;client&gt;&quot;, &quot;SOP video&quot;, &quot;training or onboarding video&quot;, &quot;walkthrough of this tool&quot;, &quot;hacé un video&quot;, even if the word &quot;skill&quot; never comes up. Vertical social clips (9:16 / 1:1) and silent booth loops are out of scope.</p>
+          <p class="detail-refs">Ships with 4 reference guides the agent reads as it works.</p>
+          <div class="code-row">
+            <code id="cmd-skill-18" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;pesty-video&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-18', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -923,8 +947,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-18" class="prompt-text">&ldquo;Use the transcript-cleanup skill to clean this meeting transcript and flag wording we need to verify.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-18', this)">Copy</button>
+            <span id="prompt-skill-19" class="prompt-text">&ldquo;Use the transcript-cleanup skill to clean this meeting transcript and flag wording we need to verify.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-19', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -932,8 +956,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Use when a pasted or exported speech transcript is garbled — a live auto-transcription of a talk, a Gemini/Fathom meeting note with crosstalk, a recording that starts mid-sentence, names mangled by the recognizer — and the user wants a faithful cleaned version (&quot;run the usual transcript cleanup&quot;, &quot;clean this up&quot;, &quot;next transcript&quot;). Not for clean YouTube captions or articles (use yt-structure) and not for summaries.</p>
           <p class="detail-refs">Ships with 3 reference guides the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-18" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;transcript-cleanup&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-18', this)">Copy</button>
+            <code id="cmd-skill-19" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;transcript-cleanup&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-19', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -947,8 +971,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-19" class="prompt-text">&ldquo;Use the youtube-thumbnails skill to make thumbnails for this episode: &lt;transcript&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-19', this)">Copy</button>
+            <span id="prompt-skill-20" class="prompt-text">&ldquo;Use the youtube-thumbnails skill to make thumbnails for this episode: &lt;transcript&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-20', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -956,8 +980,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Build a complete YouTube title + thumbnail package from a video&#x27;s content — extract hooks from the transcript, write title/thumbnail-text combos, gate them for click-through potential, then generate photorealistic thumbnails with Google&#x27;s Nano Banana image models using real headshots and past thumbnails as style references. Invoke on &#x27;make a thumbnail&#x27;, &#x27;thumbnail for this episode/video&#x27;, &#x27;YouTube packaging&#x27;, &#x27;title ideas for this video&#x27;, &#x27;title and thumbnail ideas&#x27;, &#x27;generate thumbnails with nano banana&#x27;. Titles-only requests use Steps 1–2 and skip generation. Not for channel strategy audits or general-purpose image generation.</p>
           <p class="detail-refs">Ships with 1 reference guide the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-19" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;youtube-thumbnails&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-19', this)">Copy</button>
+            <code id="cmd-skill-20" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;youtube-thumbnails&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-20', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -971,16 +995,16 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-20" class="prompt-text">&ldquo;Use the yt-structure skill to structure this YouTube video: &lt;link&gt;&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-20', this)">Copy</button>
+            <span id="prompt-skill-21" class="prompt-text">&ldquo;Use the yt-structure skill to structure this YouTube video: &lt;link&gt;&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-21', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
           <summary>Details &amp; solo install</summary>
           <p class="detail-desc">Use when turning a YouTube video, talk, podcast, or web article into a clean, citable Markdown document for an LLM knowledge library or RAG/OKF bundle — triggers like &quot;transcribe and structure this video&quot;, &quot;structure this transcript&quot;, &quot;add this talk/article to the library&quot;. Covers pulling captions, faithful structuring, and editor&#x27;s-note / [?] flagging.</p>
           <div class="code-row">
-            <code id="cmd-skill-20" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;yt-structure&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-20', this)">Copy</button>
+            <code id="cmd-skill-21" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;yt-structure&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-21', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -994,8 +1018,8 @@ footer p { margin: 0 0 var(--space-2); }
         <div class="prompt-row">
           <div class="prompt-label">Try this prompt</div>
           <div class="prompt-line">
-            <span id="prompt-skill-21" class="prompt-text">&ldquo;Use the pesty-asana-tasks skill to log a ticket: the homepage quote form on our client&#x27;s site isn&#x27;t sending leads.&rdquo;</span>
-            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-21', this)">Copy</button>
+            <span id="prompt-skill-22" class="prompt-text">&ldquo;Use the pesty-asana-tasks skill to log a ticket: the homepage quote form on our client&#x27;s site isn&#x27;t sending leads.&rdquo;</span>
+            <button class="copy-btn" type="button" onclick="copyCmd('prompt-skill-22', this)">Copy</button>
           </div>
         </div>
         <details class="skill-details">
@@ -1003,8 +1027,8 @@ footer p { margin: 0 0 var(--space-2); }
           <p class="detail-desc">Create, update, or comment on Pesty Marketing Asana tasks, including website incident and website enhancement tickets. Use whenever someone asks to make a task or ticket, log something in Asana, file an incident, update or reassign an Asana task, or comment on one, even if they don&#x27;t mention best practices. Not for reading Asana to prepare meetings or reports.</p>
           <p class="detail-refs">Ships with 4 reference guides the agent reads as it works.</p>
           <div class="code-row">
-            <code id="cmd-skill-21" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;pyramid-principle&quot; &quot;pesty-asana-tasks&quot; -g</code>
-            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-21', this)">Copy</button>
+            <code id="cmd-skill-22" class="code-block">npx skills add Pesty-Marketing/agent-skills --skill &quot;pyramid-principle&quot; &quot;pesty-asana-tasks&quot; -g</code>
+            <button class="copy-btn" type="button" onclick="copyCmd('cmd-skill-22', this)">Copy</button>
           </div>
         </details>
       </article>
@@ -1015,7 +1039,7 @@ footer p { margin: 0 0 var(--space-2); }
   </section>
 
   <footer>
-    <p>Updated October 2026 &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
+    <p>Updated November 2026 &middot; MIT license &middot; Source: <a href="https://github.com/Pesty-Marketing/agent-skills">github.com/Pesty-Marketing/agent-skills</a></p>
     <p>Want to add a skill? Read the <a href="https://github.com/Pesty-Marketing/agent-skills/blob/main/CONTRIBUTING.md">skill-writing guide</a> and add it in the repo (not <code>~/.claude/skills</code>) &mdash; or drop skill ideas in #pesty-crew.</p>
     <p>Built by Pesty Marketing, a pest-control marketing agency &rarr; <a href="https://pestymarketing.com/?utm_source=agent-skills-catalog&amp;utm_medium=web&amp;utm_campaign=agent-skills" target="_blank" rel="noopener">pestymarketing.com</a></p>
   </footer>
