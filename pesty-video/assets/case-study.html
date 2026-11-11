@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Native Pest Management case study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:#0B1013}*{box-sizing:border-box}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+<script src="engine.js"></script>
+<script src="kit.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- 1. SCENES — the outline. name: unique, no spaces. chapter: shown top-left from this
+     scene on. desc: one plain sentence of what is on screen. -->
+<!-- Starter: the Native Pest Management case study (pilot, 2026-11-09). Replace every scene,
+     narration chunk and evidence string with the new client's page; keep the structure. -->
+<script id="ev-scenes" type="application/json">
+[
+ {"name": "Hook", "chapter": "1 · The result", "desc": "Headline result: from $12.5M to $18.1M in two years, with a 2025 revenue card counting up."},
+ {"name": "Challenge", "chapter": "2 · The challenge", "desc": "Grow without buying every new lead: two cards, competitive Florida markets and rising ad costs."},
+ {"name": "Approach", "chapter": "3 · The approach", "desc": "A four-step flow: city pest pages, helpful articles, earned links, service pages."},
+ {"name": "AdSpend", "chapter": "4 · The results", "desc": "$100,000 in monthly ad spend paused in May 2024; three months on SEO leads."},
+ {"name": "Organic", "desc": "Two metric cards: 211% organic traffic growth and 2,755 organic leads, up 48.9%."},
+ {"name": "Revenue", "desc": "Revenue bars grow: 2023 $12.5M, 2024 $13.7M, 2025 $18.1M."},
+ {"name": "Roi", "desc": "31.7× SEO ROI in 2026."},
+ {"name": "Quote", "chapter": "5 · In their words", "desc": "Luke Lewis quote card."},
+ {"name": "Close", "desc": "Dark end card: read the full case study, with the page URL."}
+]
+</script>
+
+<!-- 2. SCRIPT — the voice-over, split into caption chunks (one caption each, max 2 lines). -->
+<script id="ev-script" type="application/json">
+{
+ "Hook": [["h1", "Native Pest Management grew from $12.5M to $18.1M in two years."], ["h2", "And it wanted to grow without relying on a bigger ad budget."]],
+ "Challenge": [["c1", "In competitive Florida markets, rising ad costs made every new customer more expensive."], ["c2", "The goal: more organic leads, so growth didn't depend on more ad spend."]],
+ "Approach": [["a1", "Pesty built the plan in four parts."], ["a2", "Pages for specific pests in each city, like \"ant control Miami.\""], ["a3", "Useful articles that lead to the right service page."], ["a4", "Links earned from relevant websites."], ["a5", "And service pages that make it easy to get in touch."]],
+ "AdSpend": [["m1", "By May 2024, eight months in, Native could pause $100,000 in monthly ad spend."], ["m2", "For three months, it relied on SEO leads."]],
+ "Organic": [["o1", "From June through August 2024, organic traffic grew 211%."], ["o2", "From April through September, organic search brought in 2,755 leads, up 48.9%."]],
+ "Revenue": [["r1", "The partnership continued as Native grew."], ["r2", "$13.7M in 2024, then $18.1M in 2025."]],
+ "Roi": [["x1", "And in 2026, Native's SEO ROI is 31.7 times."]],
+ "Quote": [["q1", "Native's CEO, Luke Lewis:"], ["q2", "\"Pesty Marketing stands out as the most aggressive and effective team I've partnered with.\""]],
+ "Close": [["e1", "Read the full case study at pestymarketing.com."]]
+}
+</script>
+
+<!-- 3. VOICE-OVER TIMES — written by scripts/voice.mjs. Leave empty. -->
+<script id="ev-vo" type="application/json"></script>
+
+<!-- 4. CLAIMS — every evidence string, and every number shown or spoken, must be on this page. -->
+<script id="ev-claims" type="application/json">
+{
+ "page": "https://pestymarketing.com/case-studies/native-pest-management/",
+ "evidence": [
+  "From $12.5M to $18.1M in two years with Pesty.",
+  "Native wanted to grow without relying on a bigger ad budget.",
+  "Grow without buying every new lead.",
+  "keep growing in competitive Florida markets",
+  "rising advertising costs made every new customer more expensive to acquire",
+  "Native could pause $100,000 in monthly ad spend",
+  "organic traffic grew 211%",
+  "organic search brought in 2,755 leads, up 48.9% from the same period in 2023",
+  "2024: $13.7 million, up 10.1% from 2023",
+  "2025: $18.1 million, up 31.6% from 2024",
+  "Pesty Marketing stands out as the most aggressive and effective team I’ve partnered with."
+ ]
+}
+</script>
+
+<script type="text/babel" data-presets="react">
+const { useVideo, Scene, Captions, ChapterLabel, M, ramp } = EV;
+const K = KIT, C = KIT.C, F = KIT.F;
+
+// No camera layers in a motion-graphics case study: every beat sits in the scenes below,
+// keyed to a narration chunk (V) or a scene cue (CUES).
+function plan() {}
+
+const card = { background: '#fff', borderRadius: 28, boxShadow: '0 30px 70px rgba(0,35,48,0.12), 0 0 0 1px rgba(0,35,48,0.06)' };
+
+// Revenue bars: each bar grows, then its value and change appear once it has landed.
+function RevenueBars({ T, bars, max, height = 470, style }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 90, height: height + 150, ...style }}>
+      {bars.map((b) => {
+        const p = M.draw(T, b.at, b.at + 0.8);
+        const hgt = Math.max(6, height * (b.value / max) * p);
+        return (
+          <div key={b.label} style={{ width: 300, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, ...M.enter(T, b.at + 0.7) }}>
+              <span style={{ fontFamily: F.head, fontWeight: 700, fontSize: 56, letterSpacing: '-0.02em', color: b.hot ? C.brand : C.ink }}>{b.display}</span>
+              {b.note ? <K.Pill tone={b.hot ? 'brand' : undefined} style={{ height: 50, fontSize: 26, padding: '0 20px', ...M.pop(T, b.at + 0.9) }}>{b.note}</K.Pill> : null}
+            </div>
+            <div style={{ width: '100%', height: hgt, borderRadius: '18px 18px 6px 6px', background: b.hot ? C.brand : C.ink, opacity: b.hot ? 1 : 0.88 }} />
+            <div style={{ fontFamily: F.head, fontWeight: 600, fontSize: 30, color: C.n600 }}>{b.label}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Piece() {
+  const { T, V, CUES } = useVideo();
+  const dark = (t) => t >= CUES.Close;
+  return (
+    <>
+      {/* 1 · Hook */}
+      <Scene from={0} to={CUES.Challenge} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={0.3} kicker="Native Pest Management · SEO case study" style={{ position: 'absolute', left: 140, top: 280 }} maxWidth={1000} size={92}
+            title={<>From <K.Hl T={T} at={V.h1 + 1.6}>$12.5M to $18.1M</K.Hl> in two years.</>}
+            sub="Native wanted to grow without relying on a bigger ad budget." />
+          <div style={{ position: 'absolute', left: 1260, top: 300, width: 520, padding: 44, display: 'flex', flexDirection: 'column', gap: 22, ...card, ...M.enter(T, 0.9, 0.6, 30) }}>
+            <K.Logo height={30} />
+            <K.Metric T={T} at={V.h1 + 0.4} dur={2.2} value={18.1} from={12.5} decimals={1} prefix="$" suffix="M" size={128} color={C.brand} label="2025 revenue" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 24, color: C.n600, borderTop: `1px solid ${C.n200}`, paddingTop: 20, ...M.enter(T, V.h1 + 2.4) }}>
+              <K.Ic n="trending-up" s={26} color={C.succ} /> up from $12.5M in 2023
+            </div>
+          </div>
+        </>
+      )} />
+
+      {/* 2 · Challenge */}
+      <Scene from={CUES.Challenge} to={CUES.Approach} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={CUES.Challenge + 0.2} kicker="The challenge" title={<>Grow without <K.Hl T={T} at={CUES.Challenge + 0.9}>buying</K.Hl> every new lead.</>} size={80} style={{ position: 'absolute', left: 140, top: 190 }} maxWidth={1400} />
+          <K.RuleCards T={T} style={{ position: 'absolute', left: 140, right: 140, top: 500 }} columns={3} rules={[
+            { kind: 'info', icon: 'map-pin', title: 'Competitive Florida markets', text: 'Native wanted to keep growing in competitive Florida markets.', at: V.c1 + 0.3 },
+            { kind: 'dont', icon: 'circle-dollar-sign', title: 'Rising ad costs', text: 'Rising advertising costs made every new customer more expensive to acquire.', at: V.c1 + 2.4 },
+            { kind: 'do', icon: 'search', title: 'The goal: organic leads', text: "Growth that doesn't depend on more ad spend.", at: V.c2 + 0.3 },
+          ]} />
+        </>
+      )} />
+
+      {/* 3 · Approach */}
+      <Scene from={CUES.Approach} to={CUES.AdSpend} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={CUES.Approach + 0.2} kicker="What Pesty did" title="A plan in four parts" size={72} style={{ position: 'absolute', left: 140, top: 200 }} />
+          <K.Flow T={T} style={{ position: 'absolute', left: 140, top: 500 }} width={1640} height={140} nodeH={140}
+            nodes={[
+              { id: 'city', label: 'City pest pages', sub: '“ant control Miami”', icon: 'map-pin', x: 0, y: 0, at: V.a2 + 0.3, w: 370 },
+              { id: 'articles', label: 'Helpful articles', sub: 'that lead to a service', icon: 'book-open', x: 423, y: 0, at: V.a3 + 0.3, w: 370 },
+              { id: 'links', label: 'Earned links', sub: 'from relevant sites', icon: 'link', x: 846, y: 0, at: V.a4 + 0.3, w: 370 },
+              { id: 'service', label: 'Service pages', sub: 'easy to get in touch', icon: 'phone', x: 1270, y: 0, at: V.a5 + 0.4, w: 370, tone: 'brand' },
+            ]}
+            edges={[{ from: 'city', to: 'articles', at: V.a3 + 0.1 }, { from: 'articles', to: 'links', at: V.a4 + 0.1 }, { from: 'links', to: 'service', at: V.a5 + 0.2, hot: true }]} />
+        </>
+      )} />
+
+      {/* 4 · Ad spend paused */}
+      <Scene from={CUES.AdSpend} to={CUES.Organic} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <div style={{ position: 'absolute', left: 140, top: 210, ...M.enter(T, CUES.AdSpend + 0.2) }}><K.Kicker>May 2024 · eight months in</K.Kicker></div>
+          <K.Metric T={T} at={V.m1 + 0.6} dur={2.4} value={100000} prefix="$" size={220} color={C.brand} label="in monthly ad spend paused" style={{ position: 'absolute', left: 130, top: 300 }} />
+          <div style={{ position: 'absolute', left: 140, top: 720, display: 'flex', alignItems: 'center', gap: 20, padding: '22px 30px', ...card, ...M.enter(T, V.m2 + 0.3) }}>
+            <K.Ic n="search" s={34} color={C.brand} />
+            <span style={{ fontFamily: F.head, fontWeight: 600, fontSize: 34, color: C.ink }}>For three months, Native ran on SEO leads</span>
+          </div>
+        </>
+      )} />
+
+      {/* 5 · Organic results */}
+      <Scene from={CUES.Organic} to={CUES.Revenue} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <div style={{ position: 'absolute', left: 140, top: 170, ...M.enter(T, CUES.Organic + 0.2) }}><K.Kicker>Organic search, 2024</K.Kicker></div>
+          {[
+            { at: V.o1 + 0.5, value: 211, suffix: '%', label: 'organic traffic growth', sub: '106,000 → 330,000 users · June–August', enter: V.o1 },
+            { at: V.o2 + 0.5, value: 2755, suffix: '', label: 'organic leads, up 48.9%', sub: 'April–September', enter: V.o2 },
+          ].map((m, i) => (
+            <div key={i} style={{ position: 'absolute', left: 140 + i * 840, top: 280, width: 800, height: 520, padding: 56, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', ...card, ...M.enter(T, m.enter, 0.5, 24) }}>
+              <K.Metric T={T} at={m.at} dur={1.3} value={m.value} suffix={m.suffix} size={170} color={i === 0 ? C.brand : C.ink} label={m.label} />
+              <div style={{ fontSize: 28, color: C.n600, borderTop: `1px solid ${C.n200}`, paddingTop: 24, ...M.enter(T, m.at + 1.2) }}>{m.sub}</div>
+            </div>
+          ))}
+        </>
+      )} />
+
+      {/* 6 · Revenue */}
+      <Scene from={CUES.Revenue} to={CUES.Roi} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={CUES.Revenue + 0.2} kicker="Company-wide annual revenue" title="The partnership continued as Native grew" size={60} style={{ position: 'absolute', left: 140, top: 130 }} maxWidth={1500} />
+          <RevenueBars T={T} max={20} height={440} style={{ position: 'absolute', left: 340, bottom: 110 }} bars={[
+            { label: '2023', value: 12.5, display: '$12.5M', at: V.r1 + 0.6 },
+            { label: '2024', value: 13.7, display: '$13.7M', note: '+10.1%', at: V.r2 + 0.2 },
+            { label: '2025', value: 18.1, display: '$18.1M', note: '+31.6%', at: V.r2 + 1.9, hot: true },
+          ]} />
+        </>
+      )} />
+
+      {/* 7 · ROI */}
+      <Scene from={CUES.Roi} to={CUES.Quote} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+            <div style={M.enter(T, CUES.Roi + 0.2)}><K.Kicker>2026</K.Kicker></div>
+            <K.Metric T={T} at={V.x1 + 0.5} dur={2.0} value={31.7} decimals={1} suffix="×" size={260} color={C.brand} label="SEO ROI" style={{ alignItems: 'center' }} />
+          </div>
+        </>
+      )} />
+
+      {/* 8 · Quote */}
+      <Scene from={CUES.Quote} to={CUES.Close} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <div style={{ position: 'absolute', left: 200, right: 200, top: 210, padding: '64px 80px', display: 'flex', flexDirection: 'column', gap: 40, ...card, ...M.enter(T, CUES.Quote + 0.2, 0.55, 24) }}>
+            <div style={{ fontFamily: F.head, fontWeight: 800, fontSize: 160, lineHeight: 0.6, height: 70, color: C.brand }}>“</div>
+            <div style={{ fontFamily: F.head, fontWeight: 600, fontSize: 56, lineHeight: 1.25, letterSpacing: '-0.01em', color: C.ink, textWrap: 'balance' }}>
+              Pesty Marketing stands out as the <K.Hl T={T} at={V.q2 + 2.6}>most aggressive and effective team</K.Hl> I’ve partnered with.
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 20, ...M.enter(T, V.q1 + 0.3) }}>
+              <div style={{ width: 72, height: 72, borderRadius: 999, background: C.ink, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F.head, fontWeight: 700, fontSize: 28 }}>LL</div>
+              <div>
+                <div style={{ fontFamily: F.head, fontWeight: 700, fontSize: 30, color: C.ink }}>Luke Lewis</div>
+                <div style={{ fontSize: 24, color: C.n600 }}>CEO, Native Pest Management</div>
+              </div>
+            </div>
+          </div>
+        </>
+      )} />
+
+      {/* 9 · Close */}
+      <Scene from={CUES.Close} bg={C.ink} render={(T) => (
+        <>
+          <K.Backdrop T={T} dark />
+          <K.EndCard T={T} at={CUES.Close + 0.3} title="Read the full case study" lines={['$12.5M → $18.1M', '211% organic traffic', '2,755 organic leads']} footer="pestymarketing.com/case-studies/native-pest-management" />
+        </>
+      )} />
+
+      <ChapterLabel dark={dark} />
+      <Captions dark={dark} />
+    </>
+  );
+}
+
+EV.render(Piece, { plan });
+</script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly Client Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:#0B1013}*{box-sizing:border-box}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+<script src="engine.js"></script>
+<script src="kit.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- 1. SCENES — the outline. name: unique, no spaces. chapter: shown top-left from this
+     scene on. desc: one plain sentence of what is on screen. tone: ElevenLabs v3 tag.
+     dur: only for scenes with no voice-over (seconds). -->
+<script id="ev-scenes" type="application/json">
+[
+ {"name": "Intro", "chapter": "1 · Why it matters", "desc": "Title card: the weekly client report, every Monday before 11 AM.", "tone": "warm, clear"},
+ {"name": "Overview", "chapter": "2 · The four steps", "desc": "The four steps appear as a flow: open, check, note, send.", "tone": "friendly"},
+ {"name": "OpenClient", "chapter": "3 · Walkthrough", "desc": "In the admin: click Reports; the clients due are at the top; open Gulf Shore.", "tone": "steady, explaining"},
+ {"name": "CheckNumbers", "desc": "Zoom to the three numbers; calls dropped 24% and get flagged.", "tone": "steady, explaining"},
+ {"name": "AddNote", "desc": "Zoom to the note; two plain sentences are typed.", "tone": "steady, explaining"},
+ {"name": "Send", "desc": "Click Send report, check the recipient, confirm; a toast says it was sent.", "tone": "steady, explaining"},
+ {"name": "Rules", "chapter": "4 · Rules", "desc": "Three rule cards: send by 11, never send a number you can't explain, big drops go to your manager.", "tone": "serious, clear"},
+ {"name": "Recap", "chapter": "5 · Recap", "desc": "A checklist of the four steps ticks off.", "tone": "warm"},
+ {"name": "Close", "desc": "Dark end card with the logo and where to ask questions.", "tone": "warm"}
+]
+</script>
+
+<!-- 2. SCRIPT — the voice-over, split into caption chunks (one caption each, max 2 lines).
+     Chunk ids are how the choreography finds each line: V["w2"] = when it starts. -->
+<script id="ev-script" type="application/json">
+{
+ "Intro": [["i1", "Every Monday, each client gets a short report on last week's leads and calls."], ["i2", "Here's how to send it in about ten minutes."]],
+ "Overview": [["o1", "There are four steps."], ["o2", "Open the client, check the numbers, add your note, and send it."]],
+ "OpenClient": [["w1", "In the Pesty admin, click Reports."], ["w2", "Clients due this week are at the top. Open the first one."]],
+ "CheckNumbers": [["c1", "Check the three numbers first: leads, calls, and keywords in the top three."], ["c2", "If any number drops more than twenty percent, flag it before you send."]],
+ "AddNote": [["n1", "Then write one or two sentences in plain words."], ["n2", "Say what changed, and what we're doing next."]],
+ "Send": [["s1", "Click Send report, and check who it goes to."], ["s2", "Confirm, and the client gets it from your email address."]],
+ "Rules": [["r1", "Three rules."], ["r2", "Send it before eleven on Monday."], ["r3", "Never send a number you can't explain."], ["r4", "And if a number drops more than twenty percent, tell your manager first."]],
+ "Recap": [["x1", "To recap: open the client, check the numbers, add your note, and send."]],
+ "Close": [["e1", "Questions go to the account managers channel in Slack."]]
+}
+</script>
+
+<!-- 3. VOICE-OVER TIMES — written by scripts/align-vo.mjs once there is audio. Leave empty. -->
+<script id="ev-vo" type="application/json"></script>
+
+<script type="text/babel" data-presets="react">
+const { useVideo, Scene, Layer, Overlays, Captions, ChapterLabel, LowerThird, M, typed, ramp, reg } = EV;
+const K = KIT, C = KIT.C, F = KIT.F;
+
+// ---- sample data (realistic, fictional) -----------------------------------
+const CLIENTS = [
+  { name: 'Gulf Shore Pest Control', city: 'Sarasota, FL', due: 'Today', status: 'Due' },
+  { name: 'Bayshore Pest Defense', city: 'Tampa, FL', due: 'Today', status: 'Due' },
+  { name: 'Palm Coast Exterminators', city: 'Palm Coast, FL', due: 'Tuesday', status: 'Due' },
+  { name: 'Lakeside Termite & Pest', city: 'Orlando, FL', due: 'Nov 3', status: 'Sent' },
+  { name: 'Desert Shield Pest', city: 'Mesa, AZ', due: 'Nov 3', status: 'Sent' },
+];
+const NOTE = 'Leads are up 12%. Calls from Google dipped after the holiday weekend, so we are adding two service-area pages this week.';
+const NAV = [
+  { group: 'Clients', items: [{ id: 'overview', label: 'Overview', icon: 'layout-dashboard' }, { id: 'reports', label: 'Reports', icon: 'file-text', badge: '3' }, { id: 'clients', label: 'All clients', icon: 'users' }] },
+  { group: 'Work', items: [{ id: 'tasks', label: 'Tasks', icon: 'list-checks' }, { id: 'calendar', label: 'Calendar', icon: 'calendar' }] },
+  { group: 'Account', items: [{ id: 'settings', label: 'Settings', icon: 'settings' }] },
+];
+const APP_H = 644; // = visible height of the browser frame at rest (816 / (1824/1440))
+
+// ---- the plan: every beat keyed to a voice-over chunk (V) or a scene cue ----
+function plan(p, V, CUES) {
+  p.layer('app', { rect: { x: 48, y: 88, w: 1824, h: 868 }, frame: 'browser', url: 'admin.pestymarketing.com/reports', content: { w: 1440 } });
+
+  // 3 · open the client
+  p.set('page', 0, 'overview');
+  p.set('lower', CUES.OpenClient + 0.5, 'Clients → Overview');
+  p.click(V.w1 + 1.0, 'sb.reports');
+  p.set('page', V.w1 + 1.15, 'reports');
+  p.set('lower', V.w1 + 1.15, 'Clients → Reports');
+  p.cam('app', V.w2 - 0.1, 'rp.due', 1.25);
+  p.spot(V.w2 + 0.2, V.w2 + 2.4, ['rp.row0', 'rp.row1']);
+  p.callout(V.w2 + 0.5, V.w2 + 2.4, 'rp.status0', 'Due today', 'top');
+  p.click(V.w2 + 2.6, 'rp.row0');
+  p.set('page', V.w2 + 2.75, 'report');
+  p.cam('app', V.w2 + 2.75, null, 1, 0.01);
+  p.set('lower', V.w2 + 2.75, 'Reports → Gulf Shore Pest Control');
+
+  // 4 · check the numbers
+  p.cam('app', V.c1 - 0.2, 'rpt.tiles', 1.3);
+  p.spot(V.c1 + 0.1, V.c2, 'rpt.tiles');
+  p.callout(V.c1 + 0.9, V.c2, 'rpt.t0', 'Compared with last week', 'bottom');
+  p.spot(V.c2, CUES.AddNote, 'rpt.t1');
+  p.callout(V.c2 + 0.4, CUES.AddNote - 0.1, 'rpt.t1', 'Down 24%: flag it', 'bottom');
+  p.click(V.c2 + 2.6, 'rpt.flag');
+  p.set('flagged', V.c2 + 2.6, true);
+
+  // 5 · the note
+  p.cam('app', V.n1 - 0.2, 'rpt.note', 1.35);
+  p.click(V.n1 + 0.5, 'rpt.noteBox');
+  p.set('typing', V.n1 + 0.9, true);
+  p.callout(V.n2 + 0.2, CUES.Send - 0.2, 'rpt.noteBox', 'What changed + what happens next', 'top');
+
+  // 6 · send
+  p.cam('app', V.s1 - 0.3, null, 1);
+  p.click(V.s1 + 0.7, 'rpt.send');
+  p.set('dialog', V.s1 + 0.85, true);
+  p.cam('app', V.s1 + 1.0, 'dlg.box', 1.35);
+  p.spot(V.s1 + 1.3, V.s2 + 0.4, 'dlg.to');
+  p.callout(V.s1 + 1.5, V.s2 + 0.4, 'dlg.to', 'Check the recipient', 'right');
+  p.click(V.s2 + 0.7, 'dlg.confirm');
+  p.set('dialog', V.s2 + 0.85, false);
+  p.set('sent', V.s2 + 0.85, true);
+  p.cam('app', V.s2 + 0.9, null, 1);
+  p.set('lower', V.s2 + 0.9, 'Sent from your address');
+  p.set('lower', CUES.Rules, '');
+}
+
+// ---- app pages (authored at real UI size; the camera layer scales them) ----
+function OverviewPage({ T, at }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, ...M.enter(T, at, 0.3, 8) }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+        {[['Active clients', '38'], ['Reports due', '3'], ['Open tasks', '12']].map(([l, v]) => (
+          <K.Card key={l}><K.CardContent><div style={{ color: C.muted }}>{l}</div><div style={{ fontFamily: F.head, fontSize: 30, fontWeight: 600, marginTop: 6 }}>{v}</div></K.CardContent></K.Card>
+        ))}
+      </div>
+      <K.Alert v="warning" icon="clock" title="3 weekly reports are due">Send them before Monday 11 AM.</K.Alert>
+    </div>
+  );
+}
+function ReportsPage({ T, at }) {
+  return (
+    <div style={M.enter(T, at, 0.3, 8)}>
+      <K.Card k="rp.due">
+        <K.CardHeader title={<>Due this week <K.Badge v="red">3</K.Badge></>} desc="Send by Monday, 11 AM" border />
+        <K.CardContent>
+          <K.Table columns={[{ label: 'Client' }, { label: 'City' }, { label: 'Due' }, { label: 'Status', right: true }]}
+            rows={CLIENTS.map((c, i) => ({ k: 'rp.row' + i, cells: [<span style={{ fontWeight: 600 }}>{c.name}</span>, c.city, c.due, <K.Badge k={'rp.status' + i} v={c.status === 'Due' ? 'warning' : 'success'}>{c.status}</K.Badge>] }))} />
+        </K.CardContent>
+      </K.Card>
+    </div>
+  );
+}
+function Tile({ k, label, value, delta, down, children }) {
+  return (
+    <K.Card k={k} style={{ flex: 1 }}>
+      <K.CardContent>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}><span style={{ color: C.muted }}>{label}</span>{children}</div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginTop: 6 }}>
+          <span style={{ fontFamily: F.head, fontSize: 34, fontWeight: 600 }}>{value}</span>
+          <span style={{ fontWeight: 600, color: down ? C.red600 : C.succ }}>{delta}</span>
+        </div>
+        <div style={{ color: C.muted, fontSize: 13, marginTop: 2 }}>vs. last week</div>
+      </K.CardContent>
+    </K.Card>
+  );
+}
+function ReportPage({ T, at }) {
+  const { P } = useVideo();
+  const flagged = P.get('flagged', T, false);
+  const ty = P.entry('typing', T);
+  const note = ty ? typed(T, ty[0], NOTE, 26) : '';
+  const sent = P.entry('sent', T);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18, ...M.enter(T, at, 0.3, 8) }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div>
+          <div style={{ fontFamily: F.head, fontSize: 22, fontWeight: 600 }}>Gulf Shore Pest Control</div>
+          <div style={{ color: C.muted }}>Sarasota, FL · Week of Nov 3 – Nov 9</div>
+        </div>
+        <div style={{ flex: 1 }} />
+        {sent ? <K.Badge v="success" icon="check">Sent</K.Badge> : <K.Badge v="warning">Due today</K.Badge>}
+      </div>
+      <div ref={reg('rpt.tiles')} style={{ display: 'flex', gap: 16 }}>
+        <Tile k="rpt.t0" label="Leads" value="42" delta="+12%" />
+        <Tile k="rpt.t1" label="Calls from Google" value="18" delta="−24%" down>
+          {flagged ? <K.Badge v="destructive" icon="flag">Flagged</K.Badge> : <K.Button k="rpt.flag" v="outline" size="sm" icon="flag">Flag</K.Button>}
+        </Tile>
+        <Tile k="rpt.t2" label="Keywords in the top 3" value="27" delta="+3" />
+      </div>
+      <K.Card k="rpt.note">
+        <K.CardHeader title="Your note to the client" desc="One or two sentences. Plain words." />
+        <K.CardContent>
+          <div ref={reg('rpt.noteBox')} style={{ minHeight: 84, borderRadius: 10, border: `1px solid ${ty ? C.ink : C.n200}`, boxShadow: ty ? '0 0 0 3px rgba(0,35,48,0.12)' : 'none', padding: '10px 12px', fontSize: 15, lineHeight: 1.5, color: note ? C.ink : C.n400 }}>
+            {note || 'Write a short note…'}{ty && note.length < NOTE.length ? <span style={{ display: 'inline-block', width: 1.5, height: 18, background: C.ink, verticalAlign: -3, marginLeft: 1 }} /> : null}
+          </div>
+        </K.CardContent>
+      </K.Card>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+        <K.Button v="outline" icon="eye">Preview</K.Button>
+        <K.Button k="rpt.send" v="brand" icon="send">Send report</K.Button>
+      </div>
+      {sent ? (
+        <div style={{ position: 'absolute', right: 28, top: 76, display: 'flex', alignItems: 'center', gap: 10, background: C.ink, color: '#fff', borderRadius: 12, padding: '12px 16px', boxShadow: '0 12px 30px rgba(0,35,48,0.3)', ...M.enter(T, sent[0] + 0.1, 0.35, -10) }}>
+          <K.Ic n="check-circle" s={18} /> Report sent to maria@gulfshorepest.example
+        </div>
+      ) : null}
+    </div>
+  );
+}
+function SendDialog({ T }) {
+  const { P } = useVideo();
+  const e = P.entry('dialog', T);
+  if (!e) return null;
+  const op = e[1] ? ramp(T, e[0], e[0] + 0.25) : 1 - ramp(T, e[0], e[0] + 0.2);
+  if (op <= 0) return null;
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: `rgba(0,35,48,${(0.35 * op).toFixed(3)})`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div ref={reg('dlg.box')} style={{ width: 480, background: '#fff', borderRadius: 16, padding: 24, display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0 30px 60px rgba(0,35,48,0.3)', opacity: op, transform: `scale(${(0.96 + 0.04 * op).toFixed(4)})` }}>
+        <div style={{ fontFamily: F.head, fontSize: 18, fontWeight: 600 }}>Send this report?</div>
+        <K.Field k="dlg.to" label="To"><K.Input value="Maria Lopez <maria@gulfshorepest.example>" /></K.Field>
+        <K.Field label="From"><K.Input value="you@pestymarketing.com" /></K.Field>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+          <K.Button v="outline">Cancel</K.Button>
+          <K.Button k="dlg.confirm" v="brand" icon="send">Send report</K.Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+function AdminApp({ T }) {
+  const { P } = useVideo();
+  const page = P.get('page', T, 'overview');
+  const at = P.entry('page', T) ? P.entry('page', T)[0] : 0;
+  const titles = { overview: 'Overview', reports: 'Reports', report: 'Weekly report' };
+  return (
+    <div style={{ position: 'relative' }}>
+      <K.AppShell nav={NAV} active={page === 'report' ? 'reports' : page} title={titles[page]} crumbs={page === 'report' ? ['Reports'] : []} user={{ name: 'Jordan Reyes', email: 'jordan@pestymarketing.com' }} product="Admin" width={1440} height={APP_H}>
+        {/* every page stays mounted (stacked in one grid cell), only the current one is visible:
+            elements keep their measured position, so a click that opens a new page doesn't lose its target */}
+        <div style={{ display: 'grid' }}>
+          {[['overview', OverviewPage], ['reports', ReportsPage], ['report', ReportPage]].map(([name, Page]) => (
+            <div key={name} style={{ gridArea: '1 / 1', visibility: page === name ? 'inherit' : 'hidden' }}>
+              <Page T={T} at={page === name ? at : -1} />
+            </div>
+          ))}
+        </div>
+      </K.AppShell>
+      <SendDialog T={T} />
+    </div>
+  );
+}
+
+// ---- the video ----------------------------------------------------------------
+function Piece() {
+  const { T, V, CUES } = useVideo();
+  const steps = [{ label: 'Open', at: CUES.OpenClient }, { label: 'Check', at: CUES.CheckNumbers }, { label: 'Note', at: CUES.AddNote }, { label: 'Send', at: CUES.Send }];
+  const walk = T >= CUES.OpenClient && T < CUES.Rules + 0.5 ? ramp(T, CUES.OpenClient, CUES.OpenClient + 0.45) : 0;
+  const dark = (t) => t >= CUES.Close;
+  return (
+    <>
+      <Scene from={0} to={CUES.Overview} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={0.3} kicker="SOP · Account management" style={{ position: 'absolute', left: 140, top: 300 }} maxWidth={980}
+            title={<>Send the <K.Hl T={T} at={V.i1 + 1.2}>weekly client report</K.Hl></>} sub="Every Monday before 11 AM. About ten minutes per client." />
+          <div style={{ position: 'absolute', left: 1240, top: 250, width: 520, ...M.enter(T, 0.9, 0.6, 30) }}>
+            <K.Card style={{ padding: 28, gap: 18, boxShadow: '0 40px 80px rgba(0,35,48,0.16), 0 0 0 1px rgba(0,35,48,0.06)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}><K.Logo height={30} /><div style={{ flex: 1 }} />{T >= V.i2 + 0.6 ? <K.Badge v="success" icon="check" style={{ height: 30, fontSize: 16, padding: '0 12px', ...M.pop(T, V.i2 + 0.6) }}>Sent</K.Badge> : null}</div>
+              <div style={{ fontFamily: F.head, fontSize: 26, fontWeight: 600 }}>Your week in numbers</div>
+              {[['Leads', '42', '+12%'], ['Calls from Google', '18', '−24%'], ['Keywords in the top 3', '27', '+3']].map(([l, v, d], i) => (
+                <div key={l} style={{ display: 'flex', alignItems: 'baseline', gap: 12, fontSize: 22, borderTop: `1px solid ${C.n200}`, paddingTop: 14, ...M.enter(T, V.i1 + 0.6 + i * 0.25) }}>
+                  <span style={{ color: C.n600, flex: 1 }}>{l}</span><b style={{ fontFamily: F.head, fontSize: 30 }}>{v}</b><span style={{ color: d[0] === '−' ? C.red600 : C.succ, fontWeight: 600, width: 70, textAlign: 'right' }}>{d}</span>
+                </div>
+              ))}
+            </K.Card>
+          </div>
+        </>
+      )} />
+
+      <Scene from={CUES.Overview} to={CUES.OpenClient} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={CUES.Overview + 0.2} kicker="The process" title="Four steps, every Monday" size={68} style={{ position: 'absolute', left: 140, top: 200 }} />
+          <K.Flow T={T} style={{ position: 'absolute', left: 140, top: 520 }} width={1640} height={140}
+            nodes={[
+              { id: 'open', label: 'Open', sub: 'the client', icon: 'folder', x: 0, y: 0, at: V.o2 + 0.1, w: 340 },
+              { id: 'check', label: 'Check', sub: 'the numbers', icon: 'bar-chart', x: 433, y: 0, at: V.o2 + 1.0, w: 340 },
+              { id: 'note', label: 'Note', sub: 'two sentences', icon: 'pencil', x: 866, y: 0, at: V.o2 + 2.0, w: 340 },
+              { id: 'send', label: 'Send', sub: 'from your email', icon: 'send', x: 1300, y: 0, at: V.o2 + 2.9, w: 340, tone: 'brand' },
+            ]}
+            edges={[{ from: 'open', to: 'check', at: V.o2 + 0.6 }, { from: 'check', to: 'note', at: V.o2 + 1.5 }, { from: 'note', to: 'send', at: V.o2 + 2.4, hot: true }]} />
+        </>
+      )} />
+
+      {/* walkthrough: the app in a browser, the camera moves inside it */}
+      <Scene from={CUES.OpenClient} to={CUES.Rules} render={(T) => <K.Backdrop T={T} glow={false} />} />
+      <Layer id="app" op={walk}><AdminApp T={T} /></Layer>
+      {walk > 0 ? <K.StepTracker T={T} steps={steps} style={{ position: 'absolute', right: 48, top: 26, opacity: walk }} /> : null}
+      <LowerThird x={400} y={884} />
+      <Overlays />
+
+      <Scene from={CUES.Rules} to={CUES.Recap} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={CUES.Rules + 0.2} kicker="Rules" title="Three rules, no exceptions" size={64} style={{ position: 'absolute', left: 140, top: 190 }} />
+          <K.RuleCards T={T} style={{ position: 'absolute', left: 140, right: 140, top: 440 }} rules={[
+            { kind: 'do', title: 'Send before 11 AM Monday', text: 'Clients read it with their coffee. Late reports get skipped.', at: V.r2 },
+            { kind: 'dont', title: "Never send a number you can't explain", text: 'If it looks wrong, check the source first.', at: V.r3 },
+            { kind: 'warn', title: 'Down more than 20%?', text: 'Tell your manager before the client sees it.', at: V.r4 },
+          ]} />
+        </>
+      )} />
+
+      <Scene from={CUES.Recap} to={CUES.Close} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Checklist T={T} title="Every Monday" style={{ position: 'absolute', left: 140, top: 240 }} size={1.25} items={[
+            { text: 'Open the client in Reports', at: V.x1 + 0.6 },
+            { text: 'Check leads, calls and keywords', at: V.x1 + 1.5 },
+            { text: 'Add one or two plain sentences', at: V.x1 + 2.5 },
+            { text: 'Send, from your own address', at: V.x1 + 3.4 },
+          ]} />
+        </>
+      )} />
+
+      <Scene from={CUES.Close} bg={C.ink} render={(T) => (
+        <>
+          <K.Backdrop T={T} dark />
+          <K.EndCard T={T} at={CUES.Close + 0.3} title="Questions? Ask in #account-managers" lines={['Open', 'Check', 'Note', 'Send']} footer="SOP owner: Account management · Updated November 2026" />
+        </>
+      )} />
+
+      <ChapterLabel dark={dark} />
+      <Captions dark={dark} />
+    </>
+  );
+}
+
+EV.render(Piece, { plan });
+</script>
+</body>
+</html>

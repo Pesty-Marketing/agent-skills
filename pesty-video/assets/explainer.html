@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ahrefs DR4 explainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:#0B1013}*{box-sizing:border-box}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+<script src="engine.js"></script>
+<script src="kit.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- 1. SCENES — the outline. name: unique, no spaces. chapter: shown top-left from this
+     scene on. desc: one plain sentence of what is on screen. -->
+<!-- Starter: the Ahrefs DR4 blog explainer (pilot, 2026-11-11). Replace every scene,
+     narration chunk and evidence string with the new article's; keep the structure. -->
+<script id="ev-scenes" type="application/json">
+[
+ {"name": "Change", "chapter": "1 · The change", "desc": "Title: your DR is about to change; a DR3 → DR4 card with the December 1, 2026 date."},
+ {"name": "WhatDR", "chapter": "2 · What DR is", "desc": "A 0–100 score; moving 70 to 80 takes far more than 10 to 20; Ahrefs' score, not Google's."},
+ {"name": "Metaphor", "chapter": "3 · A second look", "desc": "Sales example: 20% becomes 40% with the same 20 sales; then a DR badge with three questions."},
+ {"name": "Changes", "chapter": "4 · What DR4 changes", "desc": "Two cards: more weight on sites with search traffic; more subdomains scored on their own."},
+ {"name": "Screening", "chapter": "5 · How Pesty picks sites", "desc": "Checklist of what Pesty checks before earning a link on a site."},
+ {"name": "Checks", "chapter": "6 · Four checks", "desc": "Four numbered steps for an owner whose DR moved."},
+ {"name": "Question", "chapter": "7 · The question to ask", "desc": "Quote card: the question to ask your agency."},
+ {"name": "Close", "desc": "Dark end card: check your DR4 free at pestymarketing.com/dr."}
+]
+</script>
+
+<!-- 2. SCRIPT — the voice-over, split into caption chunks (one caption each, max 2 lines). -->
+<script id="ev-script" type="application/json">
+{
+ "Change": [["c1", "Ahrefs is changing Domain Rating."], ["c2", "The new model, DR4, reaches the standard Ahrefs interface on December 1, 2026."], ["c3", "If you watch your DR, your next score may look different."]],
+ "WhatDR": [["d1", "Domain Rating scores the strength of a website's backlinks, from 0 to 100."], ["d2", "It's logarithmic, so moving from 70 to 80 is harder than moving from 10 to 20."], ["d3", "And it's an Ahrefs metric, not a score Google gives your business."]],
+ "Metaphor": [["s1", "Think about a number your sales team reports."], ["s2", "A rep closes 20 of 100 qualified leads. That's a 20% close rate."], ["s3", "Relabel 50 lost leads as unqualified, and it reads 40%, with the same 20 sales."], ["s4", "The number went up. The results didn't."], ["s5", "DR works the same way."], ["s6", "A high score alone doesn't tell you if a site has readers,"], ["s7", "what it publishes, or why anyone would trust it."]],
+ "Changes": [["g1", "DR4 makes two big changes."], ["g2", "Links from sites with organic search traffic count for more."], ["g3", "And more subdomains get their own score, instead of borrowing the main site's."], ["g4", "So your score can move because the model changed, even if your links didn't."]],
+ "Screening": [["p1", "Pesty has screened publishers for traffic for years."], ["p2", "We check for a real audience, a relevant subject, and a real business or author,"], ["p3", "along with the quality of the content."], ["p4", "DR4 now puts more weight on a signal we were already checking."]],
+ "Checks": [["k1", "If your number moved, start here."], ["k2", "Check the right domain, and note the model and date."], ["k3", "Compare competitors using DR4 too."], ["k4", "Label the change in your reports."], ["k5", "And review the actual sites that linked to you."]],
+ "Question": [["q1", "Then ask your agency one question:"], ["q2", "\"Which work have you completed, why were those publishers worth pursuing,"], ["q3", "and how are we evaluating whether that work helps us compete?\""]],
+ "Close": [["e1", "Check your website's DR4 for free. The link is on screen."]]
+}
+</script>
+
+<!-- 3. VOICE-OVER TIMES — written by scripts/voice.mjs. Leave empty. -->
+<script id="ev-vo" type="application/json"></script>
+
+<!-- 4. CLAIMS — every evidence string, and every number shown or spoken, must be on this page. -->
+<script id="ev-claims" type="application/json">
+{
+ "page": "https://pestymarketing.com/ahrefs-dr4-pest-control/",
+ "evidence": [
+  "is scheduled to reach the standard Ahrefs interface on December 1, 2026",
+  "It runs from 0 to 100 on a logarithmic scale, so moving from 70 to 80 is harder than moving from 10 to 20.",
+  "It is a third-party metric, not a score Google assigns to your business.",
+  "An inside salesperson closes 20 of 100 qualified leads. Their close rate is 20%.",
+  "Now suppose they relabel 50 qualified leads they lost as unqualified. Their reported close rate doubles to 40%.",
+  "Both reports describe the same 20 sales.",
+  "Does the publisher attract an audience? What does it publish? Why would a relevant business or reader trust it?",
+  "it is putting more weight on links from websites and individual subdomains that it estimates receive organic search traffic",
+  "more subdomains will receive their own scores instead of inheriting the strength of the root domain",
+  "Since Pesty’s inception, traffic has been part of how we vet websites for link building.",
+  "DR4 gives more weight to a signal we were already considering.",
+  "Check the right domain and record the model and date.",
+  "Compare competitors using DR4 too.",
+  "Label the change in your reporting.",
+  "Review the actual placements.",
+  "Which work have you completed, why were those publishers worth pursuing, and how are we evaluating whether that work helps us compete?"
+ ]
+}
+</script>
+
+<script type="text/babel" data-presets="react">
+const { useVideo, Scene, Captions, ChapterLabel, M } = EV;
+const K = KIT, C = KIT.C, F = KIT.F;
+
+// Motion-graphics explainer: no camera layers; every beat is keyed to a narration chunk (V).
+function plan() {}
+
+const card = { background: '#fff', borderRadius: 28, boxShadow: '0 30px 70px rgba(0,35,48,0.12), 0 0 0 1px rgba(0,35,48,0.06)' };
+
+// "How hard is a 10-point move?" — two effort bars, the high-end one far longer.
+function EffortRow({ T, at, from, to, frac, hot }) {
+  const p = M.draw(T, at + 0.2, at + 1.2);
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 32, ...M.enter(T, at) }}>
+      <div style={{ width: 300, fontFamily: F.head, fontWeight: 700, fontSize: 52, color: hot ? C.brand : C.ink, whiteSpace: 'nowrap' }}>{from} → {to}</div>
+      <div style={{ flex: 1, height: 36, borderRadius: 999, background: C.n200, overflow: 'hidden' }}>
+        <div style={{ width: `${(frac * p * 100).toFixed(2)}%`, height: '100%', borderRadius: 999, background: hot ? C.brand : C.ink }} />
+      </div>
+    </div>
+  );
+}
+
+function RateCard({ T, at, value, line, tag, style }) {
+  return (
+    <div style={{ width: 640, padding: '48px 52px', display: 'flex', flexDirection: 'column', gap: 18, ...card, ...M.enter(T, at, 0.5, 24), ...style }}>
+      <div style={{ fontFamily: F.head, fontWeight: 700, fontSize: 150, lineHeight: 1, letterSpacing: '-0.03em', color: tag ? C.brand : C.ink }}>{value}</div>
+      <div style={{ fontSize: 30, fontWeight: 500, color: C.n600 }}>{line}</div>
+      {tag ? <div style={M.pop(T, at + 0.8)}><K.Pill tone="brand" style={{ height: 50, fontSize: 24, padding: '0 22px' }}>{tag}</K.Pill></div> : null}
+    </div>
+  );
+}
+
+function Piece() {
+  const { T, V, CUES } = useVideo();
+  const dark = (t) => t >= CUES.Close;
+  return (
+    <>
+      {/* 1 · The change */}
+      <Scene from={0} to={CUES.WhatDR} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={0.3} kicker="Ahrefs DR4 · Pest control SEO" style={{ position: 'absolute', left: 140, top: 300 }} maxWidth={980} size={96}
+            title={<>Your <K.Hl T={T} at={V.c1 + 0.8}>DR</K.Hl> is about to change.</>}
+            sub="What the new Domain Rating model means for your SEO reports." />
+          <div style={{ position: 'absolute', left: 1220, top: 290, width: 560, padding: 48, display: 'flex', flexDirection: 'column', gap: 28, alignItems: 'flex-start', ...card, ...M.enter(T, V.c2, 0.6, 30) }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontFamily: F.head, fontWeight: 700, fontSize: 96, letterSpacing: '-0.03em' }}>
+              <span style={{ color: C.n400 }}>DR3</span>
+              <span style={{ ...M.enter(T, V.c2 + 0.5, 0.4, 0), color: C.n400, fontSize: 64 }}>→</span>
+              <span style={{ ...M.pop(T, V.c2 + 0.8), color: C.brand }}>DR4</span>
+            </div>
+            <div style={M.pop(T, V.c2 + 2.4)}><K.Pill style={{ height: 52, fontSize: 24, padding: '0 22px' }}><K.Ic n="calendar" s={22} color={C.brand} /> December 1, 2026</K.Pill></div>
+          </div>
+        </>
+      )} />
+
+      {/* 2 · What DR is */}
+      <Scene from={CUES.WhatDR} to={CUES.Metaphor} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={CUES.WhatDR + 0.2} kicker="Domain Rating" title={<>A backlink score from <K.Hl T={T} at={V.d1 + 2.6}>0 to 100</K.Hl></>} size={72} style={{ position: 'absolute', left: 140, top: 170 }} maxWidth={1500} />
+          <div style={{ position: 'absolute', left: 140, right: 140, top: 460, padding: '48px 56px', display: 'flex', flexDirection: 'column', gap: 34, ...card, ...M.enter(T, V.d2, 0.5, 24) }}>
+            <div style={{ fontFamily: F.head, fontWeight: 600, fontSize: 28, color: C.n600 }}>Effort to gain 10 points</div>
+            <EffortRow T={T} at={V.d2 + 1.4} from={10} to={20} frac={0.16} />
+            <EffortRow T={T} at={V.d2 + 2.6} from={70} to={80} frac={1} hot />
+          </div>
+          <div style={{ position: 'absolute', left: 140, top: 850, ...M.pop(T, V.d3 + 0.6) }}>
+            <K.Pill style={{ height: 56, fontSize: 26, padding: '0 24px' }}><K.Ic n="info" s={24} color={C.brand} /> An Ahrefs score, not Google's</K.Pill>
+          </div>
+        </>
+      )} />
+
+      {/* 3 · A second look (the sales comparison, tied back to DR) */}
+      <Scene from={CUES.Metaphor} to={CUES.Changes} render={(T) => {
+        const out = 1 - M.draw(T, V.s5 - 0.1, V.s5 + 0.4);
+        return (
+          <>
+            <K.Backdrop T={T} />
+            {out > 0 ? (
+              <div style={{ position: 'absolute', inset: 0, opacity: out }}>
+                <div style={{ position: 'absolute', left: 140, top: 170, ...M.enter(T, CUES.Metaphor + 0.2) }}><K.Pill><K.Ic n="bar-chart" s={20} color={C.brand} /> A sales example</K.Pill></div>
+                <RateCard T={T} at={V.s2 + 0.3} value="20%" line="20 sales ÷ 100 qualified leads" style={{ position: 'absolute', left: 140, top: 280 }} />
+                <div style={{ position: 'absolute', left: 820, top: 470, fontSize: 64, color: C.n400, ...M.enter(T, V.s3, 0.4, 0) }}>→</div>
+                <RateCard T={T} at={V.s3 + 0.3} value="40%" line="20 sales ÷ 50 remaining qualified leads" tag="Same 20 sales" style={{ position: 'absolute', left: 940, top: 280 }} />
+                <div style={{ position: 'absolute', left: 140, top: 760, fontFamily: F.head, fontWeight: 700, fontSize: 48, color: C.ink, ...M.enter(T, V.s4 + 0.2) }}>
+                  The number went up. <K.Hl T={T} at={V.s4 + 1.1}>The results didn't.</K.Hl>
+                </div>
+              </div>
+            ) : null}
+            {T >= V.s5 - 0.1 ? (
+              <div style={{ position: 'absolute', inset: 0 }}>
+                <div style={{ position: 'absolute', left: 140, top: 300, width: 400, height: 400, borderRadius: 999, background: C.ink, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 30px 70px rgba(0,35,48,0.25)', ...M.pop(T, V.s5 + 0.2) }}>
+                  <span style={{ fontFamily: F.head, fontWeight: 800, fontSize: 170, color: '#fff', letterSpacing: '-0.03em' }}>DR</span>
+                </div>
+                {['Does the publisher attract an audience?', 'What does it publish?', 'Why would a relevant business or reader trust it?'].map((q, i) => (
+                  <div key={i} style={{ position: 'absolute', left: 660, top: 290 + i * 150, display: 'flex', alignItems: 'center', gap: 22, padding: '26px 34px', ...card, borderRadius: 22, ...M.enter(T, [V.s6 + 0.6, V.s7 + 0.1, V.s7 + 1.3][i], 0.45, 18) }}>
+                    <K.Ic n="circle-help" s={36} color={C.brand} />
+                    <span style={{ fontFamily: F.head, fontWeight: 600, fontSize: 36, color: C.ink }}>{q}</span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </>
+        );
+      }} />
+
+      {/* 4 · What DR4 changes */}
+      <Scene from={CUES.Changes} to={CUES.Screening} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <K.Title T={T} at={CUES.Changes + 0.2} kicker="What DR4 changes" title="Two big changes" size={72} style={{ position: 'absolute', left: 140, top: 170 }} />
+          <K.RuleCards T={T} columns={2} style={{ position: 'absolute', left: 140, right: 140, top: 400 }} rules={[
+            { kind: 'info', icon: 'trending-up', title: 'More weight on sites with search traffic', text: 'Links from sites with organic search traffic count for more.', at: V.g2 + 0.2 },
+            { kind: 'info', icon: 'globe', title: 'More subdomains scored on their own', text: "A small site on a big platform no longer borrows the platform's strength.", at: V.g3 + 0.2 },
+          ]} />
+          <div style={{ position: 'absolute', left: 140, top: 800, ...M.pop(T, V.g4 + 0.6) }}>
+            <K.Pill tone="brand" style={{ height: 56, fontSize: 26, padding: '0 24px' }}><K.Ic n="refresh-cw" s={24} /> Scores can move either way</K.Pill>
+          </div>
+        </>
+      )} />
+
+      {/* 5 · How Pesty picks sites */}
+      <Scene from={CUES.Screening} to={CUES.Checks} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <div style={{ position: 'absolute', left: 140, top: 170, ...M.enter(T, CUES.Screening + 0.2) }}><K.Kicker>How Pesty picks sites</K.Kicker></div>
+          <K.Checklist T={T} title="Before we earn a link on a site" size={1.2} style={{ position: 'absolute', left: 140, top: 250 }} items={[
+            { text: 'A real search audience', at: V.p1 + 1.0 },
+            { text: 'A relevant subject', at: V.p2 + 1.6 },
+            { text: 'A business or author behind it', at: V.p2 + 2.8 },
+            { text: 'Quality content', at: V.p3 + 0.4 },
+            { text: 'Not built to sell placements', at: V.p3 + 1.4 },
+          ]} />
+          <div style={{ position: 'absolute', left: 1180, top: 330, width: 600, padding: 44, display: 'flex', flexDirection: 'column', gap: 18, ...card, ...M.enter(T, V.p4, 0.5, 24) }}>
+            <K.Ic n="check-circle" s={48} color={C.brand} />
+            <div style={{ fontFamily: F.head, fontWeight: 700, fontSize: 40, lineHeight: 1.2, color: C.ink }}>DR4 gives more weight to a signal we were already considering.</div>
+          </div>
+        </>
+      )} />
+
+      {/* 6 · Four checks */}
+      <Scene from={CUES.Checks} to={CUES.Question} render={(T) => {
+        const at = [V.k2, V.k3, V.k4, V.k5];
+        let active = -1; at.forEach((a, i) => { if (T >= a) active = i; });
+        return (
+          <>
+            <K.Backdrop T={T} />
+            <K.Title T={T} at={CUES.Checks + 0.2} kicker="If your number moved" title="Start with four checks" size={68} style={{ position: 'absolute', left: 140, top: 140 }} />
+            <K.StepList T={T} at={at.map((a) => a + 0.1)} active={active} size={1.35} style={{ position: 'absolute', left: 120, top: 330, width: 1600 }} steps={[
+              { title: 'Check the right domain and record the model and date.', icon: 'globe' },
+              { title: 'Compare competitors using DR4 too.', icon: 'users' },
+              { title: 'Label the change in your reporting.', icon: 'file-text' },
+              { title: 'Review the actual placements.', icon: 'link' },
+            ]} />
+          </>
+        );
+      }} />
+
+      {/* 7 · The question to ask */}
+      <Scene from={CUES.Question} to={CUES.Close} render={(T) => (
+        <>
+          <K.Backdrop T={T} />
+          <div style={{ position: 'absolute', left: 140, top: 160, ...M.enter(T, CUES.Question + 0.2) }}><K.Kicker>Ask your agency</K.Kicker></div>
+          <div style={{ position: 'absolute', left: 140, right: 140, top: 250, padding: '64px 80px', display: 'flex', flexDirection: 'column', gap: 36, ...card, ...M.enter(T, V.q2 - 0.3, 0.55, 24) }}>
+            <div style={{ fontFamily: F.head, fontWeight: 800, fontSize: 160, lineHeight: 0.6, height: 70, color: C.brand }}>“</div>
+            <div style={{ fontFamily: F.head, fontWeight: 600, fontSize: 58, lineHeight: 1.25, letterSpacing: '-0.01em', color: C.ink, textWrap: 'balance' }}>
+              Which work have you completed, why were those publishers worth pursuing, and how are we evaluating whether that work <K.Hl T={T} at={V.q3 + 1.6}>helps us compete?</K.Hl>
+            </div>
+          </div>
+        </>
+      )} />
+
+      {/* 8 · Close */}
+      <Scene from={CUES.Close} bg={C.ink} render={(T) => (
+        <>
+          <K.Backdrop T={T} dark />
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 40, textAlign: 'center' }}>
+            <div style={M.enter(T, CUES.Close + 0.2)}><K.Logo white height={64} /></div>
+            <div style={{ fontFamily: F.head, fontWeight: 700, fontSize: 72, color: '#fff', ...M.enter(T, CUES.Close + 0.4, 0.55, 18) }}>Check your DR4 free</div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', height: 96, padding: '0 48px', borderRadius: 999, background: C.brand, fontFamily: F.head, fontWeight: 700, fontSize: 56, color: '#fff', ...M.pop(T, CUES.Close + 0.9) }}>pestymarketing.com/dr</div>
+            <div style={{ fontSize: 26, color: C.teal200, ...M.enter(T, CUES.Close + 1.4) }}>No email required</div>
+          </div>
+        </>
+      )} />
+
+      <ChapterLabel dark={dark} />
+      <Captions dark={dark} />
+    </>
+  );
+}
+
+EV.render(Piece, { plan });
+</script>
+</body>
+</html>
