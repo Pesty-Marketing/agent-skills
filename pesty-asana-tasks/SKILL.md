@@ -88,6 +88,7 @@ Format it so a person can scan it: short `##` headings, bullet lists, numbered s
 - **Client-safe.** The client may read it. No blame, no internal jargon, no guessing about causes. Write "The current implementation needs to be updated", not "the site is a mess".
 - **Matched to the assignee.** Developer: exact URLs, element names, and expected versus actual behaviour, with no backstory. Designer: the visual goal, reference examples and brand constraints. SEO: target keywords, URLs and current performance. Account manager: plain language, focused on the client relationship and what they need to do.
 - **Define the terms** the reader may not know, and **link** the sources: audit sheets, Slack threads, related tasks.
+- **Link only to sources the team can open.** Every link must work for any teammate who reads the task. Don't link to a source that only the user can see: their email, a private DM, a Drive file that isn't shared, a local file path or a Claude conversation. If the information came from a source like that, write the facts the reader needs into the task: who said it, when, and the key words. Or ask the user to put the source in a shared place, such as a shared Drive folder or a team Slack channel. If you don't know whether a source is shared, ask the user.
 - For multi-part work, include a **Done when** section with conditions the reader can check.
 
 [references/example.md](references/example.md) shows a complete ticket written this way. Read it when drafting an incident or enhancement description.
@@ -108,5 +109,6 @@ Format it so a person can scan it: short `##` headings, bullet lists, numbered s
 - [ ] Incident or enhancement titles have `P# |` and no `[Website Incident]` or `[Website Enhancement]`.
 - [ ] Findings at different severities are in separate tickets, and the user chose subtasks or separate tasks.
 - [ ] The description leads with the main point, is easy to scan, and is safe for the client to read.
+- [ ] Every link opens for any teammate. There are no links to the user's email, private DMs, unshared files or local paths.
 - [ ] The template was used for an incident or enhancement, and every field that can be decided is filled in.
 - [ ] The markup follows [references/asana-formatting.md](references/asana-formatting.md).
